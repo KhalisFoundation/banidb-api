@@ -117,7 +117,7 @@ exports.hukamnamas = (req, res) => {
     } else {
       error({
         error: 'badDate',
-        errordescription: 'Please specify a valid date. Archives go back to 2002-01-01',
+        errorDescription: 'Please specify a valid date. Archives go back to 2002-01-01',
       }, res);
       return false;
     }
@@ -148,7 +148,7 @@ exports.hukamnamas = (req, res) => {
       } else {
         error({
           error: 'noHukam',
-          errordescription: 'Hukamnama is missing for that date',
+          errorDescription: 'Hukamnama is missing for that date',
         }, res);
       }
     },
@@ -187,7 +187,7 @@ function getShabad(ShabadIDQ) {
         } else if (rows.length > 0) {
           const shabadinfo = {
             id: rows[0].ShabadID,
-            pageno: rows[0].PageNo,
+            pageNo: rows[0].PageNo,
             source: getSource(rows[0]),
             raag: getRaag(rows[0]),
             writer: getWriter(rows[0]),
@@ -244,9 +244,9 @@ function prepShabad(row) {
         spanish: row.Spanish,
       },
       transliteration: row.Transliteration,
-      shabadid: row.ShabadID,
-      pageno: row.PageNo,
-      lineno: row.LineNo,
+      shabadId: row.ShabadID,
+      pageNo: row.PageNo,
+      lineNo: row.LineNo,
       updated: row.Updated,
       firstletters: {
         ascii: row.FirstLetterStr,
@@ -267,7 +267,7 @@ function getSource(shabad) {
     gurmukhi: shabad.SourceGurmukhi,
     unicode: shabad.SourceUnicode,
     english: shabad.SourceEnglish,
-    pageno: shabad.PageNo,
+    pageNo: shabad.PageNo,
   };
 }
 
@@ -277,9 +277,9 @@ function getRaag(shabad) {
     gurmukhi: shabad.RaagGurmukhi,
     unicode: shabad.RaagUnicode,
     english: shabad.RaagEnglish,
-    startang: shabad.StartID,
-    endang: shabad.EndID,
-    raagwithpage: shabad.RaagWithPage,
+    startAng: shabad.StartID,
+    endAng: shabad.EndID,
+    raagWithPage: shabad.RaagWithPage,
   };
 }
 
