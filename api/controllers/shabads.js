@@ -69,13 +69,14 @@ exports.angs = (req, res) => {
   if (SourceID === 'G' && PageNo > 1430) {
     PageNo = 1430;
   }
+  const q = `SELECT ${allColumns}
+  WHERE
+    v.PageNo = ?
+    AND v.SourceID = ?
+    ${allColumnsWhere}
+  ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
   query(
-    `SELECT ${allColumns}
-    WHERE
-      v.PageNo = ?
-      AND v.SourceID = ?
-      ${allColumnsWhere}
-    ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`,
+    q,
     [PageNo, SourceID],
     (err, rows) => {
       if (rows.length > 0) {
@@ -194,11 +195,11 @@ function getShabad(ShabadIDQ) {
           };
 
           const gurbani = rows.map(prepShabad);
-
-          query(
-            `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
+          const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
-            (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`,
+            (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
+          query(
+            q1,
             [rows[0].ID - 1, rows[rows.length - 1].ID + 1],
             (err1, rows1) => {
               const navigation = {
