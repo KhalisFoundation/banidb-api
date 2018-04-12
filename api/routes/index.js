@@ -26,7 +26,7 @@ module.exports = (app) => {
 
   app.get('/rehats/:RehatID', rehats.chapterList);
 
-  app.get('/rehats/:RehatID/chapters/:ChapterID', rehats.chapters);
+  app.get('/rehats/:RehatID/chapters/:ChapterID?', rehats.chapters);
 
-  app.get('/rehats/search/:query', rehats.search);
+  app.get('/rehats/search/:string', rehats.search);
 };
