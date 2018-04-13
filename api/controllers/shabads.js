@@ -40,7 +40,7 @@ exports.search = (req, res) => {
 
 exports.shabads = (req, res) => {
   const ShabadID = parseInt(req.params.ShabadID, 10);
-  if (!Number.isNaN(ShabadID)) {
+  if (!isNaN(ShabadID)) {
     getShabad(ShabadID)
       .then((rows) => {
         res.json(rows);
@@ -180,7 +180,7 @@ function getShabad(ShabadIDQ) {
         if (err) {
           reject(err);
         } else if (rows.length > 0) {
-          const shabadinfo = {
+          const shabadInfo = {
             id: rows[0].ShabadID,
             pageNo: rows[0].PageNo,
             source: getSource(rows[0]),
@@ -212,7 +212,7 @@ function getShabad(ShabadIDQ) {
               };
 
               resolve({
-                shabadinfo,
+                shabadInfo,
                 navigation,
                 gurbani,
               });
