@@ -188,7 +188,7 @@ function getShabad(ShabadIDQ) {
             writer: getWriter(rows[0]),
           };
 
-          const gurbani = rows.map(prepShabad);
+          const bani = rows.map(prepShabad);
           const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
             (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
@@ -214,7 +214,7 @@ function getShabad(ShabadIDQ) {
               resolve({
                 shabadInfo,
                 navigation,
-                gurbani,
+                bani,
               });
             },
           );
@@ -226,42 +226,40 @@ function getShabad(ShabadIDQ) {
 
 function prepShabad(row) {
   return {
-    shabad: {
-      id: row.ID,
-      gurbani: {
-        gurmukhi: row.Gurmukhi,
-        unicode: row.GurmukhiUni,
+    id: row.ID,
+    bani: {
+      gurmukhi: row.Gurmukhi,
+      unicode: row.GurmukhiUni,
+    },
+    larivaar: {
+      gurmukhi: row.Gurmukhi.replace(/\s+/, ''),
+      unicode: row.GurmukhiUni.replace(/\s+/, ''),
+    },
+    translation: {
+      english: {
+        ssk: row.English,
       },
-      larivaar: {
-        gurmukhi: row.Gurmukhi.replace(/\s+/, ''),
-        unicode: row.GurmukhiUni.replace(/\s+/, ''),
-      },
-      translation: {
-        english: {
-          ssk: row.English,
+      punjabi: {
+        bms: {
+          gurmukhi: row.Punjabi,
+          unicode: row.PunjabiUni,
         },
-        punjabi: {
-          bms: {
-            gurmukhi: row.Punjabi,
-            unicode: row.PunjabiUni,
-          },
-        },
-        spanish: row.Spanish,
       },
-      transliteration: row.Transliteration,
-      shabadId: row.ShabadID,
-      pageNo: row.PageNo,
-      lineNo: row.LineNo,
-      updated: row.Updated,
-      firstletters: {
-        ascii: row.FirstLetterStr,
-        english: row.FirstLetterEng,
-      },
-      bisram: {
-        sttm: row.Bisram,
-        igurbani1: row.igurbani_bisram1,
-        igurbani2: row.igurbani_bisram2,
-      },
+      spanish: row.Spanish,
+    },
+    transliteration: row.Transliteration,
+    shabadId: row.ShabadID,
+    pageNo: row.PageNo,
+    lineNo: row.LineNo,
+    updated: row.Updated,
+    firstletters: {
+      ascii: row.FirstLetterStr,
+      english: row.FirstLetterEng,
+    },
+    bisram: {
+      sttm: row.Bisram,
+      igurbani1: row.igurbani_bisram1,
+      igurbani2: row.igurbani_bisram2,
     },
   };
 }
