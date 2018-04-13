@@ -1,9 +1,18 @@
+const os = require('os');
+const pjson = require('../../package.json');
 const shabads = require('../controllers/shabads');
 const banis = require('../controllers/banis');
 const rehats = require('../controllers/rehats');
 
 module.exports = (app) => {
-  app.get('/', shabads.default);
+  app.get('/', (req, res) => {
+    res.json({
+      name: 'BaniDB API',
+      docs: 'See https://www.banidb.com for more information and documentation.',
+      version: pjson.version,
+      endpoint: os.hostname().substr(0, 3),
+    });
+  });
 
   // Shabad Routes
   app.get('/search/:query', shabads.search);
