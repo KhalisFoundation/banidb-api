@@ -40,7 +40,7 @@ exports.search = (req, res) => {
 
 exports.shabads = (req, res) => {
   const ShabadID = parseInt(req.params.ShabadID, 10);
-  if (!isNaN(ShabadID)) {
+  if (!Number.isNaN(ShabadID)) {
     getShabad(ShabadID)
       .then((rows) => {
         res.json(rows);
