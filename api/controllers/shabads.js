@@ -196,9 +196,19 @@ function getShabad(ShabadIDQ) {
             q1,
             [rows[0].ID - 1, rows[rows.length - 1].ID + 1],
             (err1, rows1) => {
+              let previous = null;
+              let next = null;
+              rows1.forEach((row) => {
+                if (row.navigation === 'previous') {
+                  previous = row.ShabadID;
+                }
+                if (row.navigation === 'next') {
+                  next = row.ShabadID;
+                }
+              });
               const navigation = {
-                previous: rows1[0].ShabadID,
-                next: rows1[1].ShabadID,
+                previous,
+                next,
               };
 
               resolve({
