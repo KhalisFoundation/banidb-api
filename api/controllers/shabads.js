@@ -213,6 +213,7 @@ function getShabad(ShabadIDQ) {
 
               resolve({
                 shabadInfo,
+                count: bani.length,
                 navigation,
                 bani,
               });
