@@ -1,6 +1,11 @@
 const { createPool } = require('mysql');
 const os = require('os');
 const sources = require('shabados').SOURCES;
+const {
+  getSource,
+  getRaag,
+  getWriter,
+} = require('./getJSON');
 const pjson = require('../../package.json');
 const config = require('../config');
 
@@ -259,36 +264,5 @@ function prepShabad(row) {
         igurbani2: row.igurbani_bisram2,
       },
     },
-  };
-}
-
-function getSource(shabad) {
-  return {
-    id: shabad.SourceID,
-    gurmukhi: shabad.SourceGurmukhi,
-    unicode: shabad.SourceUnicode,
-    english: shabad.SourceEnglish,
-    pageNo: shabad.PageNo,
-  };
-}
-
-function getRaag(shabad) {
-  return {
-    id: shabad.RaagID,
-    gurmukhi: shabad.RaagGurmukhi,
-    unicode: shabad.RaagUnicode,
-    english: shabad.RaagEnglish,
-    startAng: shabad.StartID,
-    endAng: shabad.EndID,
-    raagWithPage: shabad.RaagWithPage,
-  };
-}
-
-function getWriter(shabad) {
-  return {
-    id: shabad.WriterID,
-    gurmukhi: shabad.WriterGurmukhi,
-    unicode: shabad.WriterUnicode,
-    english: shabad.WriterEnglish,
   };
 }
