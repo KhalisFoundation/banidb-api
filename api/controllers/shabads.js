@@ -1,12 +1,10 @@
 const { createPool } = require('mysql');
-const os = require('os');
 const sources = require('shabados').SOURCES;
 const {
   getSource,
   getRaag,
   getWriter,
 } = require('./getJSON');
-const pjson = require('../../package.json');
 const config = require('../config');
 
 const pool = createPool(config.mysql);
@@ -32,15 +30,6 @@ const allColumnsWhere = 'AND s.ShabadID < 5000000';
 function error(err, res) {
   res.json(err);
 }
-
-exports.default = (req, res) => {
-  res.json({
-    name: 'BaniDB API',
-    docs: 'See https://www.banidb.com for more information and documentation.',
-    version: pjson.version,
-    endpoint: os.hostname().substr(0, 3),
-  });
-};
 
 exports.search = (req, res) => {
   const url = 'found';
