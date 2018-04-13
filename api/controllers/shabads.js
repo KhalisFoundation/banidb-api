@@ -76,19 +76,45 @@ exports.angs = (req, res) => {
       if (rows.length > 0) {
         const source = getSource(rows[0]);
         const count = rows.length;
-        const navigation = [];
         const page = rows.map((row) => {
           const rowData = prepShabad(row);
-          rowData.shabad.writer = getWriter(row);
-          rowData.shabad.raag = getRaag(row);
+          rowData.writer = getWriter(row);
+          rowData.raag = getRaag(row);
           return rowData;
         });
-        res.json({
-          source,
-          count,
-          navigation,
-          page,
-        });
+        const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
+            UNION
+          (SELECT 'next' as navigation, PageNo FROM Verse WHERE PageNo= ? AND SourceID = ? LIMIT 1);`;
+        query(
+          q1,
+          [PageNo - 1, SourceID, PageNo + 1, SourceID],
+          (err1, rows1) => {
+            if (err) {
+              error(err1);
+            } else {
+              let previous = null;
+              let next = null;
+              rows1.forEach((row) => {
+                if (row.navigation === 'previous') {
+                  previous = row.PageNo;
+                }
+                if (row.navigation === 'next') {
+                  next = row.PageNo;
+                }
+              });
+              const navigation = {
+                previous,
+                next,
+              };
+              res.json({
+                source,
+                count,
+                navigation,
+                page,
+              });
+            }
+          },
+        );
       }
     },
   );
