@@ -207,14 +207,14 @@ function getShabad(ShabadIDQ) {
           reject(err);
         } else if (rows.length > 0) {
           const shabadInfo = {
-            id: rows[0].ShabadID,
+            shabadId: rows[0].ShabadID,
             pageNo: rows[0].PageNo,
             source: getSource(rows[0]),
             raag: getRaag(rows[0]),
             writer: getWriter(rows[0]),
           };
 
-          const bani = rows.map(prepShabad);
+          const verses = rows.map(prepShabad);
           const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
             (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
@@ -239,9 +239,9 @@ function getShabad(ShabadIDQ) {
 
               resolve({
                 shabadInfo,
-                count: bani.length,
+                count: verses.length,
                 navigation,
-                bani,
+                verses,
               });
             },
           );
@@ -253,8 +253,8 @@ function getShabad(ShabadIDQ) {
 
 function prepShabad(row) {
   return {
-    id: row.ID,
-    bani: {
+    verseId: row.ID,
+    verse: {
       gurmukhi: row.Gurmukhi,
       unicode: row.GurmukhiUni,
     },
@@ -274,12 +274,14 @@ function prepShabad(row) {
       },
       spanish: row.Spanish,
     },
-    transliteration: row.Transliteration,
+    transliteration: {
+      english: row.Transliteration,
+    },
     shabadId: row.ShabadID,
     pageNo: row.PageNo,
     lineNo: row.LineNo,
     updated: row.Updated,
-    firstletters: {
+    firstLetters: {
       ascii: row.FirstLetterStr,
       english: row.FirstLetterEng,
     },

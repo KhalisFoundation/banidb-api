@@ -1,6 +1,6 @@
 function getSource(shabad) {
   return {
-    id: shabad.SourceID,
+    sourceId: shabad.SourceID,
     gurmukhi: shabad.SourceGurmukhi,
     unicode: shabad.SourceUnicode,
     english: shabad.SourceEnglish,
@@ -10,7 +10,7 @@ function getSource(shabad) {
 
 function getRaag(shabad) {
   return {
-    id: shabad.RaagID,
+    raagId: shabad.RaagID,
     gurmukhi: shabad.RaagGurmukhi,
     unicode: shabad.RaagUnicode,
     english: shabad.RaagEnglish,
@@ -22,7 +22,7 @@ function getRaag(shabad) {
 
 function getWriter(shabad) {
   return {
-    id: shabad.WriterID,
+    writerId: shabad.WriterID,
     gurmukhi: shabad.WriterGurmukhi,
     unicode: shabad.WriterUnicode,
     english: shabad.WriterEnglish,
