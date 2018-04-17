@@ -34,7 +34,7 @@ exports.all = (req, res) => {
     [],
     (err, rows) => {
       res.json(rows);
-    },
+    }
   );
 };
 
@@ -61,7 +61,7 @@ exports.bani = (req, res) => {
         baniInfo,
         verses,
       });
-    },
+    }
   );
 };
 

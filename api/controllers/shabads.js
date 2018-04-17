@@ -114,10 +114,10 @@ exports.angs = (req, res) => {
                 page,
               });
             }
-          },
+          }
         );
       }
-    },
+    }
   );
 };
 
@@ -173,7 +173,7 @@ exports.hukamnamas = (req, res) => {
           errorDescription: 'Hukamnama is missing for that date',
         }, res);
       }
-    },
+    }
   );
 };
 
@@ -193,7 +193,7 @@ exports.random = (req, res) => {
         .then((rows) => {
           res.json(rows);
         });
-    },
+    }
   );
 };
 
@@ -244,10 +244,10 @@ function getShabad(ShabadIDQ) {
                 navigation,
                 verses,
               });
-            },
+            }
           );
         }
-      },
+      }
     );
   });
 }

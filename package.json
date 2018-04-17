@@ -27,15 +27,5 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "nodemon": "^1.15.1"
-  },
-  "eslintConfig": {
-    "extends": "airbnb-base",
-    "env": {
-      "node": true
-    },
-    "rules": {
-      "no-console": 0,
-      "no-use-before-define": 0
-    }
   }
 }

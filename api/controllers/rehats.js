@@ -18,7 +18,7 @@ exports.all = (req, res) => {
           maryadas,
         });
       }
-    },
+    }
   );
 };
 
@@ -34,7 +34,7 @@ exports.chapterList = (req, res) => {
         rehatID,
         chapters,
       });
-    },
+    }
   );
 };
 
@@ -60,7 +60,7 @@ exports.chapters = (req, res) => {
         rehatID: RehatID,
         chapters,
       });
-    },
+    }
   );
 };
 
@@ -75,6 +75,6 @@ exports.search = (req, res) => {
         count: rows.length,
         rows,
       });
-    },
+    }
   );
 };
