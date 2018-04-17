@@ -4,6 +4,7 @@
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
+    "start": "pm2 start app.js --name=\"banidb\"",
     "dev": "nodemon app",
     "test": "eslint ."
   },
