@@ -1,6 +1,7 @@
 const { createPool } = require('mysql');
 const sources = require('shabados').SOURCES;
 const {
+  prepVerse,
   getSource,
   getRaag,
   getWriter,
@@ -77,7 +78,7 @@ exports.angs = (req, res) => {
         const source = getSource(rows[0]);
         const count = rows.length;
         const page = rows.map((row) => {
-          const rowData = prepShabad(row);
+          const rowData = prepVerse(row);
           rowData.writer = getWriter(row);
           rowData.raag = getRaag(row);
           return rowData;
@@ -214,7 +215,7 @@ function getShabad(ShabadIDQ) {
             writer: getWriter(rows[0]),
           };
 
-          const verses = rows.map(prepShabad);
+          const verses = rows.map(prepVerse);
           const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
             (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
@@ -249,46 +250,4 @@ function getShabad(ShabadIDQ) {
       },
     );
   });
-}
-
-function prepShabad(row) {
-  return {
-    verseId: row.ID,
-    verse: {
-      gurmukhi: row.Gurmukhi,
-      unicode: row.GurmukhiUni,
-    },
-    larivaar: {
-      gurmukhi: row.Gurmukhi.replace(/\s+/, ''),
-      unicode: row.GurmukhiUni.replace(/\s+/, ''),
-    },
-    translation: {
-      english: {
-        ssk: row.English,
-      },
-      punjabi: {
-        bms: {
-          gurmukhi: row.Punjabi,
-          unicode: row.PunjabiUni,
-        },
-      },
-      spanish: row.Spanish,
-    },
-    transliteration: {
-      english: row.Transliteration,
-    },
-    shabadId: row.ShabadID,
-    pageNo: row.PageNo,
-    lineNo: row.LineNo,
-    updated: row.Updated,
-    firstLetters: {
-      ascii: row.FirstLetterStr,
-      english: row.FirstLetterEng,
-    },
-    bisram: {
-      sttm: row.Bisram,
-      igurbani1: row.igurbani_bisram1,
-      igurbani2: row.igurbani_bisram2,
-    },
-  };
 }

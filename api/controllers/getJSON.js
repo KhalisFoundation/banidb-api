@@ -1,3 +1,45 @@
+function prepVerse(row) {
+  return {
+    verseId: row.ID,
+    verse: {
+      gurmukhi: row.Gurmukhi,
+      unicode: row.GurmukhiUni,
+    },
+    larivaar: {
+      gurmukhi: row.Gurmukhi.replace(/\s+/, ''),
+      unicode: row.GurmukhiUni.replace(/\s+/, ''),
+    },
+    translation: {
+      english: {
+        ssk: row.English,
+      },
+      punjabi: {
+        bms: {
+          gurmukhi: row.Punjabi,
+          unicode: row.PunjabiUni,
+        },
+      },
+      spanish: row.Spanish,
+    },
+    transliteration: {
+      english: row.Transliteration,
+    },
+    shabadId: row.ShabadID,
+    pageNo: row.PageNo,
+    lineNo: row.LineNo,
+    updated: row.Updated,
+    firstLetters: {
+      ascii: row.FirstLetterStr,
+      english: row.FirstLetterEng,
+    },
+    bisram: {
+      sttm: row.Bisram,
+      igurbani1: row.igurbani_bisram1,
+      igurbani2: row.igurbani_bisram2,
+    },
+  };
+}
+
 function getSource(shabad) {
   return {
     sourceId: shabad.SourceID,
@@ -30,6 +72,7 @@ function getWriter(shabad) {
 }
 
 module.exports = {
+  prepVerse,
   getSource,
   getRaag,
   getWriter,
