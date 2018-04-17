@@ -124,6 +124,7 @@ exports.angs = (req, res) => {
 exports.hukamnamas = (req, res) => {
   let q;
   const args = [];
+  let exit = false;
   if (req.params.year && req.params.month && req.params.day) {
     const year = parseInt(req.params.year, 10);
     const month = parseInt(req.params.month, 10);
@@ -141,40 +142,42 @@ exports.hukamnamas = (req, res) => {
         error: 'badDate',
         errorDescription: 'Please specify a valid date. Archives go back to 2002-01-01',
       }, res);
-      return false;
+      exit = true;
     }
   }
   if (!q) {
     q = 'SELECT ID as hukamDate, ShabadID FROM Hukam ORDER BY ID DESC LIMIT 1';
   }
-  query(
-    q,
-    args,
-    (err, row) => {
-      if (row.length > 0) {
-        const { hukamDate, ShabadID } = row[0];
-        getShabad(ShabadID)
-          .then((rows) => {
-            const hukamGregorianDate = new Date(hukamDate);
-            const date = {
-              gregorian: {
-                month: hukamGregorianDate.getMonth(),
-                date: hukamGregorianDate.getDate(),
-                year: hukamGregorianDate.getFullYear(),
-              },
-            };
-            const output = Object.assign({ date }, rows);
+  if (!exit) {
+    query(
+      q,
+      args,
+      (err, row) => {
+        if (row.length > 0) {
+          const { hukamDate, ShabadID } = row[0];
+          getShabad(ShabadID)
+            .then((rows) => {
+              const hukamGregorianDate = new Date(hukamDate);
+              const date = {
+                gregorian: {
+                  month: hukamGregorianDate.getMonth(),
+                  date: hukamGregorianDate.getDate(),
+                  year: hukamGregorianDate.getFullYear(),
+                },
+              };
+              const output = Object.assign({ date }, rows);
 
-            res.json(output);
-          });
-      } else {
-        error({
-          error: 'noHukam',
-          errorDescription: 'Hukamnama is missing for that date',
-        }, res);
+              res.json(output);
+            });
+        } else {
+          error({
+            error: 'noHukam',
+            errorDescription: 'Hukamnama is missing for that date',
+          }, res);
+        }
       }
-    }
-  );
+    );
+  }
 };
 
 exports.random = (req, res) => {
