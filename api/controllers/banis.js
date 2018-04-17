@@ -1,6 +1,7 @@
 const { createPool } = require('mysql');
 const config = require('../config');
 const {
+  prepVerse,
   getSource,
   getRaag,
   getWriter,
@@ -9,7 +10,7 @@ const {
 const pool = createPool(config.mysql);
 const query = pool.query.bind(pool);
 
-const allColumns = `v.ID, b.Gurmukhi AS NameGurmukhi,
+const allColumns = `b.Gurmukhi AS NameGurmukhi,
   b.GurmukhiUni AS NameGurmukhiUni, b.Transliteration AS NameTransliteration,
   v.Gurmukhi, v.GurmukhiUni, v.English, v.Punjabi,
   v.PunjabiUni, v.Spanish, v.PageNo AS PageNo, v.LineNo,
@@ -27,7 +28,7 @@ LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
 exports.all = (req, res) => {
-  const q = 'SELECT * FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
+  const q = 'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliteration as transliteration, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
   query(
     q,
     [],
@@ -43,21 +44,36 @@ exports.bani = (req, res) => {
   query(
     q,
     [BaniID],
-    (err, gurbani) => {
+    (err, rows) => {
       const baniInfo = {
         baniID: BaniID,
-        name: gurbani[0].NameGurmukhi,
-        nameGurmukhi: gurbani[0].NameGurmukhiUni,
-        nameTransliteration: gurbani[0].NameTransliteration,
-        source: getSource(gurbani[0]),
-        raag: getRaag(gurbani[0]),
-        writer: getWriter(gurbani[0]),
+        gurmukhi: rows[0].NameGurmukhi,
+        unicode: rows[0].NameGurmukhiUni,
+        english: rows[0].NameTransliteration,
+        source: getSource(rows[0]),
+        raag: getRaag(rows[0]),
+        writer: getWriter(rows[0]),
       };
+
+      const verses = rows.map(prepBaniVerse);
 
       res.json({
         baniInfo,
-        gurbani,
+        verses,
       });
     },
   );
 };
+
+function prepBaniVerse(row) {
+  const verse = prepVerse(row);
+  delete verse.firstLetters;
+  return Object.assign(verse, {
+    header: row.header,
+    mangalPosition: row.MangalPosition,
+    existsStandard: row.existsStandard,
+    existsTaksal: row.existsTaksal,
+    existsBuddhaDal: row.existsBuddhaDal,
+    paragraph: row.Paragraph,
+  });
+}
