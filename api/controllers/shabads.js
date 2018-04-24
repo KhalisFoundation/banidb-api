@@ -1,5 +1,5 @@
-const { createPool } = require('mysql');
-const sources = require('shabados').SOURCES;
+const { createPool, format } = require('mysql');
+const banidb = require('shabados');
 const {
   prepVerse,
   getSource,
@@ -7,6 +7,9 @@ const {
   getWriter,
 } = require('./getJSON');
 const config = require('../config');
+
+const sources = banidb.SOURCES;
+const searchTypes = banidb.TYPES;
 
 const pool = createPool(config.mysql);
 const query = pool.query.bind(pool);
@@ -33,10 +36,176 @@ function error(err, res) {
 }
 
 exports.search = (req, res) => {
-  const url = 'found';
-  res.json({
-    url,
-  });
+  const searchQuery = req.params.query;
+  let SourceID = req.query.source || '';
+  let searchType = parseInt(req.query.searchtype, 10) || 1;
+  let writer = parseInt(req.query.writer, 10) || null;
+  let raag = parseInt(req.query.raag, 10) || null;
+  let ang = parseInt(req.query.ang, 10) || null;
+  let page = parseInt(req.query.page, 10) || 0;
+  let results = parseInt(req.query.results, 10) || 20;
+
+  SourceID = SourceID.substr(0, 1);
+
+  if (!searchTypes[searchType]) {
+    searchType = 1;
+  }
+
+  if (writer < 0) {
+    writer = 0;
+  }
+
+  if (raag < 0) {
+    raag = 0;
+  }
+
+  if (ang < 0) {
+    ang = 0;
+  }
+
+  if (page < 1) {
+    page = 1;
+  }
+
+  if (results < 1) {
+    results = 20;
+  }
+
+  let columns = allColumns;
+  let charCodeQuery = '';
+  const conditions = [];
+  const parameters = [];
+  let groupBy = '';
+  let orderBy = '';
+
+  for (let x = 0, len = searchQuery.length; x < len; x += 1) {
+    let charCode = searchQuery.charCodeAt(x);
+    if (charCode < 100) {
+      charCode = `0${charCode}`;
+    }
+    charCodeQuery += `,${charCode}`;
+  }
+  // Add trailing wildcard
+  charCodeQuery += '%';
+
+  if (sources[SourceID]) {
+    conditions.push('v.SourceID = ?');
+    parameters.push(SourceID);
+  }
+
+  if (searchQuery) {
+    if (searchType === 0) { // First letter start
+      conditions.push('v.FirstLetterStr LIKE ?');
+      parameters.push(charCodeQuery);
+      if (searchQuery.length < 3) {
+        orderBy = 'FirstLetterLen,';
+      }
+    } else if (searchType === 1) { // First letter anywhere
+      columns += ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID';
+      conditions.push('t.token LIKE BINARY ?');
+      parameters.push(charCodeQuery);
+      groupBy = 'GROUP BY v.ID';
+      if (searchQuery.length < 3) {
+        orderBy = 'FirstLetterLen,';
+      }
+    } else if (searchType === 2) { // Full word (Gurmukhi)
+      columns += ' LEFT JOIN tokenized_gurmukhi t ON t.verseid = v.ID';
+      conditions.push('t.token LIKE BINARY ?');
+      parameters.push(searchQuery.replace(/(\[|\])/g, ''));
+    } else if (searchType === 3) { // Full word (English)
+      columns += ' LEFT JOIN tokenized_english t ON t.verseid = v.ID';
+      conditions.push('t.token LIKE ?');
+      parameters.push(`${searchQuery}%`);
+      groupBy = 'GROUP BY v.ID';
+    } else if (searchType === 4) { // Full word (Romanized)
+      const spicy = searchQuery.toLowerCase().split(' ');
+      spicy.map(word => word.substr(0, 1));
+      conditions.push('v.FirstLetterEng LIKE ?');
+      parameters.push(`%${spicy.join('')}`);
+    } else if (searchType === 5) { // Ang
+      // Reserved for Ang search - ideally it should go to /angs
+      conditions.push('v.PageNo = ?');
+      parameters.push(searchQuery);
+    } else if (searchType === 6) { // Main letters
+      columns += ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID';
+      const words = searchQuery.split(' ').join('%');
+      conditions.push('t.token LIKE BINARY ?');
+      parameters.push(`${words}%`);
+      groupBy = 'GROUP BY v.ID';
+    }
+  }
+
+  if (writer > 0) {
+    conditions.push('v.WriterID = ?');
+    parameters.push(writer);
+  }
+
+  if (raag > 0) {
+    conditions.push('v.RaagID = ?');
+    parameters.push(raag);
+  }
+
+  if (ang > 0) {
+    conditions.push('v.PageNo = ?');
+    parameters.push(ang);
+  }
+
+  const q = `SELECT ${columns}
+    WHERE ${conditions.join(' AND ')}
+    ${groupBy}
+    ORDER BY ${orderBy} ShabadID ASC`;
+  const prepQ = format(q, parameters);
+  query(
+    `SELECT COUNT(*) FROM (${prepQ}) AS count`,
+    [],
+    (err, row) => {
+      if (err) {
+        error(err, res);
+      } else {
+        const totalResults = row[0]['COUNT(*)'];
+        const totalPages = Math.ceil(totalResults / results);
+        if (page > totalPages) {
+          page = totalPages;
+        }
+        const resultsInfo = {
+          totalResults,
+          pageResults: totalResults,
+          pages: {
+            page,
+            resultsPerPage: results,
+            totalPages
+          }
+        };
+        if (totalResults > 0) {
+          if (page < totalPages) {
+            req.query.page = page + 1;
+            resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${req.path}?${Object.keys(req.query).map(key => `${key}=${encodeURIComponent(req.query[key])}`).join('&')}`;
+          }
+          query(
+            `${prepQ} LIMIT ?, ?`,
+            [(page - 1) * results, results],
+            (err1, rows) => {
+              if (err1) {
+                error(err1, res);
+              } else {
+                const verses = rows.map(verse => prepVerse(verse, true));
+                resultsInfo.pageResults = verses.length;
+                res.json({
+                  resultsInfo,
+                  verses
+                });
+              }
+            }
+          );
+        } else {
+          res.json({
+            resultsInfo,
+            verses: []
+          });
+        }
+      }
+    }
+  );
 };
 
 exports.shabads = (req, res) => {
