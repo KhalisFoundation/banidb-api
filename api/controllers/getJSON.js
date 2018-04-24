@@ -1,5 +1,5 @@
-function prepVerse(row) {
-  return {
+function prepVerse(row, includeMeta = false) {
+  const verse = {
     verseId: row.ID,
     verse: {
       gurmukhi: row.Gurmukhi,
@@ -38,6 +38,12 @@ function prepVerse(row) {
       igurbani2: row.igurbani_bisram2,
     },
   };
+  if (includeMeta) {
+    verse.writer = getWriter(row);
+    verse.source = getSource(row);
+    verse.raag = getRaag(row);
+  }
+  return verse;
 }
 
 function getSource(shabad) {
