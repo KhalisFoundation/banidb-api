@@ -6,8 +6,8 @@ function prepVerse(row, includeMeta = false) {
       unicode: row.GurmukhiUni,
     },
     larivaar: {
-      gurmukhi: row.Gurmukhi.replace(/\s+/, ''),
-      unicode: row.GurmukhiUni.replace(/\s+/, ''),
+      gurmukhi: row.Gurmukhi.replace(/\s+/g, ''),
+      unicode: row.GurmukhiUni.replace(/\s+/g, ''),
     },
     translation: {
       english: {
