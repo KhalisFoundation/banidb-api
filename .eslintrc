@@ -4,14 +4,18 @@
     "node": true
   },
   "rules": {
-    "comma-dangle": ["error", {
-      "arrays": "ignore",
-      "objects": "ignore",
-      "imports": "ignore",
-      "exports": "ignore",
-      "functions": "never"
-    }],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "ignore",
+        "objects": "ignore",
+        "imports": "ignore",
+        "exports": "ignore",
+        "functions": "never"
+      }
+    ],
     "no-console": 0,
-    "no-use-before-define": 0
+    "no-use-before-define": 0,
+    "arrow-parens": ["warn", "as-needed"]
   }
 }
