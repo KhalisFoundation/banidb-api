@@ -4,7 +4,7 @@
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
-    "start": "env $(cat .env 2>/dev/null) pm2 start app.js --name=\"banidb\"",
+    "start": "pm2 start process.json",
     "dev": "nodemon app",
     "test": "eslint ."
   },
