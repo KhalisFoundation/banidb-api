@@ -28,8 +28,5 @@
     "eslint-plugin-import": "^2.9.0",
     "nodemon": "^1.15.1",
     "pm2": "^2.10.4"
-  },
-  "prettier": {
-    "singleQuote": true
   }
 }
