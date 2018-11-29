@@ -85,7 +85,7 @@ exports.search = async (req, res) => {
     charCodeQuery += `,${charCode}`;
   }
   // Add trailing wildcard
-  charCodeQuery += '%';
+  const charCodeQueryWildCard = `${charCodeQuery},z`;
 
   if (sources[SourceID]) {
     conditions.push('v.SourceID = ?');
@@ -94,23 +94,23 @@ exports.search = async (req, res) => {
 
   if (searchQuery) {
     if (searchType === 0) { // First letter start
-      conditions.push('v.FirstLetterStr LIKE ?');
-      parameters.push(charCodeQuery);
+      conditions.push('v.FirstLetterStr BETWEEN ? AND ?');
+      parameters.push(charCodeQuery, charCodeQueryWildCard);
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
       }
     } else if (searchType === 1) { // First letter anywhere
       columns += ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID';
-      conditions.push('t.token LIKE BINARY ?');
-      parameters.push(charCodeQuery);
+      conditions.push('t.token BETWEEN ? AND ?');
+      parameters.push(charCodeQuery, charCodeQueryWildCard);
       groupBy = 'GROUP BY v.ID';
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
       }
     } else if (searchType === 2) { // Full word (Gurmukhi)
-      columns += ' LEFT JOIN tokenized_gurmukhi t ON t.verseid = v.ID';
-      conditions.push('t.token LIKE BINARY ?');
-      parameters.push(searchQuery.replace(/(\[|\])/g, ''));
+      conditions.push('v.Gurmukhi LIKE BINARY ?');
+      parameters.push(`%${searchQuery.replace(/(\[|\])/g, '')}%`);
+      groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) { // Full word (English)
       columns += ' LEFT JOIN tokenized_english t ON t.verseid = v.ID';
       conditions.push('t.token LIKE ?');
@@ -154,56 +154,56 @@ exports.search = async (req, res) => {
   try {
     conn = await pool.getConnection();
 
-  const q = `SELECT ${columns}
-    WHERE ${conditions.join(' AND ')}
-    ${groupBy}
-    ORDER BY ${orderBy} ShabadID ASC`;
+    const q = `SELECT ${columns}
+      WHERE ${conditions.join(' AND ')}
+      ${groupBy}
+      ORDER BY ${orderBy} ShabadID ASC`;
 
     const row = await conn.query(
       `SELECT COUNT(*) FROM (${q}) AS count`,
       parameters
     );
 
-        const totalResults = row[0]['COUNT(*)'];
-        const totalPages = Math.ceil(totalResults / results);
-        if (page > totalPages) {
-          page = totalPages;
-        }
-        const resultsInfo = {
-          totalResults,
-          pageResults: totalResults,
-          pages: {
-            page,
-            resultsPerPage: results,
-            totalPages
-          }
-        };
-        if (totalResults > 0) {
-          if (page < totalPages) {
-            req.query.page = page + 1;
-            resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${req.path}?${Object.keys(req.query).map(key => `${key}=${encodeURIComponent(req.query[key])}`).join('&')}`;
-          }
+    const totalResults = row[0]['COUNT(*)'];
+    const totalPages = Math.ceil(totalResults / results);
+    if (page > totalPages) {
+      page = totalPages;
+    }
+    const resultsInfo = {
+      totalResults,
+      pageResults: totalResults,
+      pages: {
+        page,
+        resultsPerPage: results,
+        totalPages
+      }
+    };
+    if (totalResults > 0) {
+      if (page < totalPages) {
+        req.query.page = page + 1;
+        resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${req.path}?${Object.keys(req.query).map(key => `${key}=${encodeURIComponent(req.query[key])}`).join('&')}`;
+      }
       const rows = await conn.query(
         `${q} LIMIT ?, ?`,
         [...parameters, (page - 1) * results, results]
       );
-                const verses = rows.map(verse => prepVerse(verse, true));
-                resultsInfo.pageResults = verses.length;
-                res.json({
-                  resultsInfo,
-                  verses
-                });
-        } else {
-          res.json({
-            resultsInfo,
-            verses: []
-          });
-        }
+      const verses = rows.map(verse => prepVerse(verse, true));
+      resultsInfo.pageResults = verses.length;
+      res.json({
+        resultsInfo,
+        verses
+      });
+    } else {
+      res.json({
+        resultsInfo,
+        verses: []
+      });
+    }
   } catch (err) {
     error(err, res);
   } finally {
     if (conn) conn.end();
-      }
+  }
 };
 
 exports.shabads = async (req, res) => {
@@ -211,10 +211,10 @@ exports.shabads = async (req, res) => {
   if (!Number.isNaN(ShabadID)) {
     try {
       const rows = await getShabad(ShabadID);
-        res.json(rows);
+      res.json(rows);
     } catch (err) {
       error(err, res);
-  }
+    }
   } else {
     error('malformed url', res);
   }
@@ -239,58 +239,58 @@ exports.angs = async (req, res) => {
 
   try {
     conn = await pool.getConnection();
-  const q = `SELECT ${allColumns}
-  WHERE
-    v.PageNo = ?
-    AND v.SourceID = ?
-    ${allColumnsWhere}
-  ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
+    const q = `SELECT ${allColumns}
+      WHERE
+        v.PageNo = ?
+        AND v.SourceID = ?
+        ${allColumnsWhere}
+      ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
     const rows = await conn.query(
-    q,
+      q,
       [PageNo, SourceID]
     );
-      if (rows.length > 0) {
-        const source = getSource(rows[0]);
-        const count = rows.length;
+    if (rows.length > 0) {
+      const source = getSource(rows[0]);
+      const count = rows.length;
       const page = rows.map(row => {
-          const rowData = prepVerse(row);
-          rowData.writer = getWriter(row);
-          rowData.raag = getRaag(row);
-          return rowData;
-        });
-        const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
-            UNION
-          (SELECT 'next' as navigation, PageNo FROM Verse WHERE PageNo= ? AND SourceID = ? LIMIT 1);`;
+        const rowData = prepVerse(row);
+        rowData.writer = getWriter(row);
+        rowData.raag = getRaag(row);
+        return rowData;
+      });
+      const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
+          UNION
+        (SELECT 'next' as navigation, PageNo FROM Verse WHERE PageNo= ? AND SourceID = ? LIMIT 1);`;
       const rows1 = await conn.query(
-          q1,
+        q1,
         [PageNo - 1, SourceID, PageNo + 1, SourceID]
       );
-              let previous = null;
-              let next = null;
+      let previous = null;
+      let next = null;
       rows1.forEach(row => {
-                if (row.navigation === 'previous') {
-                  previous = row.PageNo;
-                }
-                if (row.navigation === 'next') {
-                  next = row.PageNo;
-                }
-              });
-              const navigation = {
-                previous,
-                next,
-              };
-              res.json({
-                source,
-                count,
-                navigation,
-                page,
-              });
-            }
+        if (row.navigation === 'previous') {
+          previous = row.PageNo;
+        }
+        if (row.navigation === 'next') {
+          next = row.PageNo;
+        }
+      });
+      const navigation = {
+        previous,
+        next,
+      };
+      res.json({
+        source,
+        count,
+        navigation,
+        page,
+      });
+    }
   } catch (err) {
     error(err, res);
   } finally {
     if (conn) conn.end();
-          }
+  }
 };
 
 exports.hukamnamas = async (req, res) => {
@@ -326,34 +326,34 @@ exports.hukamnamas = async (req, res) => {
     try {
       conn = await pool.getConnection();
       const row = conn.query(
-      q,
+        q,
         args
       );
-        if (row.length > 0) {
-          const { hukamDate, ShabadID } = row[0];
+      if (row.length > 0) {
+        const { hukamDate, ShabadID } = row[0];
         const rows = await getShabad(ShabadID);
-              const hukamGregorianDate = new Date(hukamDate);
-              const date = {
-                gregorian: {
-                  month: hukamGregorianDate.getMonth(),
-                  date: hukamGregorianDate.getDate(),
-                  year: hukamGregorianDate.getFullYear(),
-                },
-              };
-              const output = Object.assign({ date }, rows);
+        const hukamGregorianDate = new Date(hukamDate);
+        const date = {
+          gregorian: {
+            month: hukamGregorianDate.getMonth(),
+            date: hukamGregorianDate.getDate(),
+            year: hukamGregorianDate.getFullYear(),
+          },
+        };
+        const output = Object.assign({ date }, rows);
 
-              res.json(output);
-        } else {
-          error({
-            error: 'noHukam',
-            errorDescription: 'Hukamnama is missing for that date',
-          }, res);
-        }
+        res.json(output);
+      } else {
+        error({
+          error: 'noHukam',
+          errorDescription: 'Hukamnama is missing for that date',
+        }, res);
+      }
     } catch (err) {
       error(err, res);
     } finally {
       if (conn) conn.end();
-      }
+    }
   }
 };
 
@@ -366,27 +366,27 @@ exports.random = async (req, res) => {
   let conn;
   try {
     conn = await pool.getConnection();
-  const q = 'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
+    const q = 'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(
-    q,
+      q,
       [SourceID]
     );
-      const { ShabadID } = row[0];
+    const { ShabadID } = row[0];
     const rows = await getShabad(ShabadID);
-          res.json(rows);
+    res.json(rows);
   } catch (err) {
     error(err, res);
   } finally {
     if (conn) conn.end();
-    }
+  }
 };
 
 const getShabad = ShabadIDQ => new Promise((resolve, reject) => {
   pool.getConnection()
     .then(conn => {
-    const q = `SELECT ${allColumns} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
+      const q = `SELECT ${allColumns} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
       conn.query(
-      q,
+        q,
         [ShabadIDQ]
       ).then(rows => {
         if (rows.length > 0) {
@@ -406,30 +406,30 @@ const getShabad = ShabadIDQ => new Promise((resolve, reject) => {
             q1,
             [rows[0].ID - 1, rows[rows.length - 1].ID + 1]
           ).then(rows1 => {
-              let previous = null;
-              let next = null;
+            let previous = null;
+            let next = null;
             rows1.forEach(row => {
-                if (row.navigation === 'previous') {
-                  previous = row.ShabadID;
-                }
-                if (row.navigation === 'next') {
-                  next = row.ShabadID;
-                }
-              });
-              const navigation = {
-                previous,
-                next,
-              };
+              if (row.navigation === 'previous') {
+                previous = row.ShabadID;
+              }
+              if (row.navigation === 'next') {
+                next = row.ShabadID;
+              }
+            });
+            const navigation = {
+              previous,
+              next,
+            };
 
-              resolve({
-                shabadInfo,
-                count: verses.length,
-                navigation,
-                verses,
-              });
+            resolve({
+              shabadInfo,
+              count: verses.length,
+              navigation,
+              verses,
+            });
             conn.end();
           }).catch(err => reject(err));
-      }
+        }
       }).catch(err => reject(err));
     }).catch(err => reject(err));
-  });
+});
