@@ -1,4 +1,4 @@
-const { createPool, format } = require('mysql');
+const { createPool } = require('mariadb');
 const banidb = require('shabados');
 const {
   prepVerse,
@@ -12,7 +12,6 @@ const sources = banidb.SOURCES;
 const searchTypes = banidb.TYPES;
 
 const pool = createPool(config.mysql);
-const query = pool.query.bind(pool);
 
 const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.English, v.Punjabi,
     v.PunjabiUni, v.Spanish, v.PageNo AS PageNo, v.LineNo,
@@ -31,11 +30,11 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.English, v.Punjabi,
 
 const allColumnsWhere = 'AND s.ShabadID < 5000000';
 
-function error(err, res) {
-  res.json(err);
-}
+const error = (err, res) => {
+  res.status(400).json({ error: true, data: err });
+};
 
-exports.search = (req, res) => {
+exports.search = async (req, res) => {
   const searchQuery = req.params.query;
   let SourceID = req.query.source || '';
   let searchType = parseInt(req.query.searchtype, 10) || 1;
@@ -150,18 +149,21 @@ exports.search = (req, res) => {
     parameters.push(ang);
   }
 
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+
   const q = `SELECT ${columns}
     WHERE ${conditions.join(' AND ')}
     ${groupBy}
     ORDER BY ${orderBy} ShabadID ASC`;
-  const prepQ = format(q, parameters);
-  query(
-    `SELECT COUNT(*) FROM (${prepQ}) AS count`,
-    [],
-    (err, row) => {
-      if (err) {
-        error(err, res);
-      } else {
+
+    const row = await conn.query(
+      `SELECT COUNT(*) FROM (${q}) AS count`,
+      parameters
+    );
+
         const totalResults = row[0]['COUNT(*)'];
         const totalPages = Math.ceil(totalResults / results);
         if (page > totalPages) {
@@ -181,45 +183,44 @@ exports.search = (req, res) => {
             req.query.page = page + 1;
             resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${req.path}?${Object.keys(req.query).map(key => `${key}=${encodeURIComponent(req.query[key])}`).join('&')}`;
           }
-          query(
-            `${prepQ} LIMIT ?, ?`,
-            [(page - 1) * results, results],
-            (err1, rows) => {
-              if (err1) {
-                error(err1, res);
-              } else {
+      const rows = await conn.query(
+        `${q} LIMIT ?, ?`,
+        [...parameters, (page - 1) * results, results]
+      );
                 const verses = rows.map(verse => prepVerse(verse, true));
                 resultsInfo.pageResults = verses.length;
                 res.json({
                   resultsInfo,
                   verses
                 });
-              }
-            }
-          );
         } else {
           res.json({
             resultsInfo,
             verses: []
           });
         }
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
       }
-    }
-  );
 };
 
-exports.shabads = (req, res) => {
+exports.shabads = async (req, res) => {
   const ShabadID = parseInt(req.params.ShabadID, 10);
   if (!Number.isNaN(ShabadID)) {
-    getShabad(ShabadID)
-      .then((rows) => {
+    try {
+      const rows = await getShabad(ShabadID);
         res.json(rows);
-      })
-      .catch(err => error(err, res));
+    } catch (err) {
+      error(err, res);
+  }
+  } else {
+    error('malformed url', res);
   }
 };
 
-exports.angs = (req, res) => {
+exports.angs = async (req, res) => {
   let PageNo = parseInt(req.params.PageNo, 10);
   if (PageNo < 1) {
     PageNo = 1;
@@ -233,20 +234,25 @@ exports.angs = (req, res) => {
   if (SourceID === 'G' && PageNo > 1430) {
     PageNo = 1430;
   }
+
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
   const q = `SELECT ${allColumns}
   WHERE
     v.PageNo = ?
     AND v.SourceID = ?
     ${allColumnsWhere}
   ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
-  query(
+    const rows = await conn.query(
     q,
-    [PageNo, SourceID],
-    (err, rows) => {
+      [PageNo, SourceID]
+    );
       if (rows.length > 0) {
         const source = getSource(rows[0]);
         const count = rows.length;
-        const page = rows.map((row) => {
+      const page = rows.map(row => {
           const rowData = prepVerse(row);
           rowData.writer = getWriter(row);
           rowData.raag = getRaag(row);
@@ -255,16 +261,13 @@ exports.angs = (req, res) => {
         const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
             UNION
           (SELECT 'next' as navigation, PageNo FROM Verse WHERE PageNo= ? AND SourceID = ? LIMIT 1);`;
-        query(
+      const rows1 = await conn.query(
           q1,
-          [PageNo - 1, SourceID, PageNo + 1, SourceID],
-          (err1, rows1) => {
-            if (err) {
-              error(err1);
-            } else {
+        [PageNo - 1, SourceID, PageNo + 1, SourceID]
+      );
               let previous = null;
               let next = null;
-              rows1.forEach((row) => {
+      rows1.forEach(row => {
                 if (row.navigation === 'previous') {
                   previous = row.PageNo;
                 }
@@ -283,14 +286,14 @@ exports.angs = (req, res) => {
                 page,
               });
             }
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
           }
-        );
-      }
-    }
-  );
 };
 
-exports.hukamnamas = (req, res) => {
+exports.hukamnamas = async (req, res) => {
   let q;
   const args = [];
   let exit = false;
@@ -318,14 +321,17 @@ exports.hukamnamas = (req, res) => {
     q = 'SELECT ID as hukamDate, ShabadID FROM Hukam ORDER BY ID DESC LIMIT 1';
   }
   if (!exit) {
-    query(
+    let conn;
+
+    try {
+      conn = await pool.getConnection();
+      const row = conn.query(
       q,
-      args,
-      (err, row) => {
+        args
+      );
         if (row.length > 0) {
           const { hukamDate, ShabadID } = row[0];
-          getShabad(ShabadID)
-            .then((rows) => {
+        const rows = await getShabad(ShabadID);
               const hukamGregorianDate = new Date(hukamDate);
               const date = {
                 gregorian: {
@@ -337,48 +343,53 @@ exports.hukamnamas = (req, res) => {
               const output = Object.assign({ date }, rows);
 
               res.json(output);
-            });
         } else {
           error({
             error: 'noHukam',
             errorDescription: 'Hukamnama is missing for that date',
           }, res);
         }
+    } catch (err) {
+      error(err, res);
+    } finally {
+      if (conn) conn.end();
       }
-    );
   }
 };
 
-exports.random = (req, res) => {
+exports.random = async (req, res) => {
   let { SourceID } = req.params;
   // Check if SourceID is supported or default to 'G'
   if (!sources[SourceID]) {
     SourceID = 'G';
   }
+  let conn;
+  try {
+    conn = await pool.getConnection();
   const q = 'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
-  query(
+    const row = await conn.query(
     q,
-    [SourceID],
-    (err, row) => {
+      [SourceID]
+    );
       const { ShabadID } = row[0];
-      getShabad(ShabadID)
-        .then((rows) => {
+    const rows = await getShabad(ShabadID);
           res.json(rows);
-        });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
     }
-  );
 };
 
-function getShabad(ShabadIDQ) {
-  return new Promise((resolve, reject) => {
+const getShabad = ShabadIDQ => new Promise((resolve, reject) => {
+  pool.getConnection()
+    .then(conn => {
     const q = `SELECT ${allColumns} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
-    query(
+      conn.query(
       q,
-      [ShabadIDQ],
-      (err, rows) => {
-        if (err) {
-          reject(err);
-        } else if (rows.length > 0) {
+        [ShabadIDQ]
+      ).then(rows => {
+        if (rows.length > 0) {
           const shabadInfo = {
             shabadId: rows[0].ShabadID,
             pageNo: rows[0].PageNo,
@@ -391,13 +402,13 @@ function getShabad(ShabadIDQ) {
           const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
             (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
-          query(
+          conn.query(
             q1,
-            [rows[0].ID - 1, rows[rows.length - 1].ID + 1],
-            (err1, rows1) => {
+            [rows[0].ID - 1, rows[rows.length - 1].ID + 1]
+          ).then(rows1 => {
               let previous = null;
               let next = null;
-              rows1.forEach((row) => {
+            rows1.forEach(row => {
                 if (row.navigation === 'previous') {
                   previous = row.ShabadID;
                 }
@@ -416,10 +427,9 @@ function getShabad(ShabadIDQ) {
                 navigation,
                 verses,
               });
-            }
-          );
-        }
+            conn.end();
+          }).catch(err => reject(err));
       }
-    );
+      }).catch(err => reject(err));
+    }).catch(err => reject(err));
   });
-}

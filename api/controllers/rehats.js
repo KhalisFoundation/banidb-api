@@ -1,44 +1,56 @@
-const { createPool } = require('mysql');
+const { createPool } = require('mariadb');
 const config = require('../config');
 
 const pool = createPool(config.mysql);
-const query = pool.query.bind(pool);
 
-exports.all = (req, res) => {
-  const q = 'SELECT id as rehatID, maryada_name as rehatName, alphabet FROM maryadas';
-  query(
-    q,
-    [],
-    (err, maryadas) => {
-      if (err) {
-        res.json(err);
-      } else {
-        res.json({
-          count: maryadas.length,
-          maryadas,
-        });
-      }
-    }
-  );
+const error = (err, res) => {
+  res.status(400).json({ error: true, data: err });
 };
 
-exports.chapterList = (req, res) => {
-  const rehatID = parseInt(req.params.RehatID, 10);
-  const q = 'SELECT id as chapterID, chapter_name as chapterName, alphabet FROM maryada_chapters WHERE maryada_id = ?';
-  query(
-    q,
-    [rehatID],
-    (err, chapters) => {
-      res.json({
-        count: chapters.length,
-        rehatID,
-        chapters,
-      });
-    }
-  );
+exports.all = async (req, res) => {
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+    const q = 'SELECT id as rehatID, maryada_name as rehatName, alphabet FROM maryadas';
+    const maryadas = await conn.query(
+      q,
+      []
+    );
+    res.json({
+      count: maryadas.length,
+      maryadas,
+    });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
 };
 
-exports.chapters = (req, res) => {
+exports.chapterList = async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const rehatID = parseInt(req.params.RehatID, 10);
+    const q = 'SELECT id as chapterID, chapter_name as chapterName, alphabet FROM maryada_chapters WHERE maryada_id = ?';
+    const chapters = await conn.query(
+      q,
+      [rehatID]
+    );
+    res.json({
+      count: chapters.length,
+      rehatID,
+      chapters,
+    });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
+};
+
+exports.chapters = async (req, res) => {
   let { RehatID, ChapterID } = req.params;
   let where = '';
   RehatID = parseInt(RehatID, 10);
@@ -50,31 +62,43 @@ exports.chapters = (req, res) => {
       params.push(ChapterID);
     }
   }
-  const q = `SELECT id as chapterID, chapter_name as chapterName, chapter_content as chapterContent, alphabet FROM maryada_chapters WHERE maryada_id = ? ${where}`;
-  query(
-    q,
-    params,
-    (err, chapters) => {
-      res.json({
-        count: chapters.length,
-        rehatID: RehatID,
-        chapters,
-      });
-    }
-  );
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const q = `SELECT id as chapterID, chapter_name as chapterName, chapter_content as chapterContent, alphabet FROM maryada_chapters WHERE maryada_id = ? ${where}`;
+    const chapters = await conn.query(
+      q,
+      params
+    );
+    res.json({
+      count: chapters.length,
+      rehatID: RehatID,
+      chapters,
+    });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
 };
 
-exports.search = (req, res) => {
-  const { string } = req.params;
-  const q = 'SELECT c.id as chapterID, c.chapter_name as chapterName, c.chapter_content as chapterContent, c.maryada_id as rehatID, m.maryada_name as rehatName FROM maryada_chapters c JOIN maryadas m ON c.maryada_id = m.id WHERE chapter_content LIKE ?';
-  query(
-    q,
-    [`%${string}%`],
-    (err, rows) => {
-      res.json({
-        count: rows.length,
-        rows,
-      });
-    }
-  );
+exports.search = async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const { string } = req.params;
+    const q = 'SELECT c.id as chapterID, c.chapter_name as chapterName, c.chapter_content as chapterContent, c.maryada_id as rehatID, m.maryada_name as rehatName FROM maryada_chapters c JOIN maryadas m ON c.maryada_id = m.id WHERE chapter_content LIKE ?';
+    const rows = await conn.query(
+      q,
+      [`%${string}%`]
+    );
+    res.json({
+      count: rows.length,
+      rows,
+    });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
 };

@@ -1,4 +1,4 @@
-function prepVerse(row, includeMeta = false) {
+const prepVerse = (row, includeMeta = false) => {
   const verse = {
     verseId: row.ID,
     verse: {
@@ -44,38 +44,32 @@ function prepVerse(row, includeMeta = false) {
     verse.raag = getRaag(row);
   }
   return verse;
-}
+};
 
-function getSource(shabad) {
-  return {
-    sourceId: shabad.SourceID,
-    gurmukhi: shabad.SourceGurmukhi,
-    unicode: shabad.SourceUnicode,
-    english: shabad.SourceEnglish,
-    pageNo: shabad.PageNo,
-  };
-}
+const getSource = shabad => ({
+  sourceId: shabad.SourceID,
+  gurmukhi: shabad.SourceGurmukhi,
+  unicode: shabad.SourceUnicode,
+  english: shabad.SourceEnglish,
+  pageNo: shabad.PageNo,
+});
 
-function getRaag(shabad) {
-  return {
-    raagId: shabad.RaagID,
-    gurmukhi: shabad.RaagGurmukhi,
-    unicode: shabad.RaagUnicode,
-    english: shabad.RaagEnglish,
-    startAng: shabad.StartID,
-    endAng: shabad.EndID,
-    raagWithPage: shabad.RaagWithPage,
-  };
-}
+const getRaag = shabad => ({
+  raagId: shabad.RaagID,
+  gurmukhi: shabad.RaagGurmukhi,
+  unicode: shabad.RaagUnicode,
+  english: shabad.RaagEnglish,
+  startAng: shabad.StartID,
+  endAng: shabad.EndID,
+  raagWithPage: shabad.RaagWithPage,
+});
 
-function getWriter(shabad) {
-  return {
-    writerId: shabad.WriterID,
-    gurmukhi: shabad.WriterGurmukhi,
-    unicode: shabad.WriterUnicode,
-    english: shabad.WriterEnglish,
-  };
-}
+const getWriter = shabad => ({
+  writerId: shabad.WriterID,
+  gurmukhi: shabad.WriterGurmukhi,
+  unicode: shabad.WriterUnicode,
+  english: shabad.WriterEnglish,
+});
 
 module.exports = {
   prepVerse,

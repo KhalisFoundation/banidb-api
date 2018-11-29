@@ -1,9 +1,17 @@
-const { createPool } = require('mysql');
+const { createPool } = require('mariadb');
 const config = require('../config');
-const { prepVerse, getSource, getRaag, getWriter } = require('./getJSON');
+const {
+  prepVerse,
+  getSource,
+  getRaag,
+  getWriter,
+} = require('./getJSON');
 
 const pool = createPool(config.mysql);
-const query = pool.query.bind(pool);
+
+const error = (err, res) => {
+  res.status(400).json({ error: true, data: err });
+};
 
 const allColumns = `
 b.Gurmukhi AS NameGurmukhi,
@@ -45,26 +53,28 @@ LEFT JOIN Writer w USING(WriterID)
 LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
-exports.all = (req, res) => {
-  const q =
-    'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliteration as transliteration, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
-  query(q, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: true, data: err });
-      return;
-    }
+exports.all = async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const q =
+      'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliteration as transliteration, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
+    const rows = await conn.query(q, []);
     res.json(rows);
-  });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
 };
 
-exports.bani = (req, res) => {
-  const BaniID = parseInt(req.params.BaniID, 10);
-  const q = `SELECT ${allColumns} WHERE v.Bani = ? ORDER BY Seq ASC`;
-  query(q, [BaniID], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: true, data: err });
-      return;
-    }
+exports.bani = async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const BaniID = parseInt(req.params.BaniID, 10);
+    const q = `SELECT ${allColumns} WHERE v.Bani = ? ORDER BY Seq ASC`;
+    const rows = await conn.query(q, [BaniID]);
     const baniInfo = {
       baniID: BaniID,
       gurmukhi: rows[0].NameGurmukhi,
@@ -81,10 +91,14 @@ exports.bani = (req, res) => {
       baniInfo,
       verses
     });
-  });
+  } catch (err) {
+    error(err, res);
+  } finally {
+    if (conn) conn.end();
+  }
 };
 
-function prepBaniVerse(row) {
+const prepBaniVerse = row => {
   const verse = prepVerse(row);
   delete verse.firstLetters;
   return Object.assign(verse, {
@@ -95,4 +109,4 @@ function prepBaniVerse(row) {
     existsBuddhaDal: row.existsBuddhaDal,
     paragraph: row.Paragraph
   });
-}
+};
