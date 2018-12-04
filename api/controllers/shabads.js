@@ -325,13 +325,15 @@ exports.hukamnamas = async (req, res) => {
 
     try {
       conn = await pool.getConnection();
-      const row = conn.query(
+      const row = await conn.query(
         q,
         args
       );
       if (row.length > 0) {
-        const { hukamDate, ShabadID } = row[0];
-        const rows = await getShabad(ShabadID);
+        const { hukamDate } = row[0];
+        const ShabadIDs = row[0].ShabadID.split(',');
+        const pArray = ShabadIDs.map(async ShabadID => getShabad(ShabadID));
+        const shabads = await Promise.all(pArray);
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
@@ -340,7 +342,11 @@ exports.hukamnamas = async (req, res) => {
             year: hukamGregorianDate.getFullYear(),
           },
         };
-        const output = Object.assign({ date }, rows);
+        const output = {
+          date,
+          shabadIds: ShabadIDs,
+          shabads,
+        };
 
         res.json(output);
       } else {
