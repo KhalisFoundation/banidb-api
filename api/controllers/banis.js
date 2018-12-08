@@ -101,12 +101,13 @@ exports.bani = async (req, res) => {
 const prepBaniVerse = row => {
   const verse = prepVerse(row);
   delete verse.firstLetters;
-  return Object.assign(verse, {
+  return {
     header: row.header,
     mangalPosition: row.MangalPosition,
     existsStandard: row.existsStandard,
     existsTaksal: row.existsTaksal,
     existsBuddhaDal: row.existsBuddhaDal,
-    paragraph: row.Paragraph
-  });
+    paragraph: row.Paragraph,
+    verse,
+  };
 };

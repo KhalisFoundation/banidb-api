@@ -1,5 +1,6 @@
 const os = require('os');
 const { Router } = require('express');
+const limiter = require('../controllers/limiter');
 const pjson = require('../../package.json');
 const shabads = require('../controllers/shabads');
 const banis = require('../controllers/banis');
@@ -7,7 +8,7 @@ const rehats = require('../controllers/rehats');
 
 const route = Router();
 
-route.get('/', (req, res) => {
+route.get('/', limiter.rate100, (req, res) => {
   res.json({
     name: 'BaniDB API',
     docs: 'See https://www.banidb.com for more information and documentation.',
@@ -17,28 +18,28 @@ route.get('/', (req, res) => {
 });
 
 // Shabad Routes
-route.get('/search/:query', shabads.search);
+route.get('/search/:query', limiter.rate250, shabads.search);
 
-route.get('/shabads/:ShabadID', shabads.shabads);
+route.get('/shabads/:ShabadID', limiter.rate100, shabads.shabads);
 
-route.get('/angs/:PageNo/:SourceID?', shabads.angs);
+route.get('/angs/:PageNo/:SourceID?', limiter.rate100, shabads.angs);
 
-route.get('/hukamnamas/:year?/:month?/:day?', shabads.hukamnamas);
+route.get('/hukamnamas/:year?/:month?/:day?', limiter.rate100, shabads.hukamnamas);
 
-route.get('/random/:SourceID?', shabads.random);
+route.get('/random/:SourceID?', limiter.rate100, shabads.random);
 
 // Bani Routes
-route.get('/banis', banis.all);
+route.get('/banis', limiter.rate100, banis.all);
 
-route.get('/banis/:BaniID', banis.bani);
+route.get('/banis/:BaniID', limiter.rate100, banis.bani);
 
 // Rehat Routes
-route.get('/rehats', rehats.all);
+route.get('/rehats', limiter.rate100, rehats.all);
 
-route.get('/rehats/:RehatID', rehats.chapterList);
+route.get('/rehats/:RehatID', limiter.rate100, rehats.chapterList);
 
-route.get('/rehats/:RehatID/chapters/:ChapterID?', rehats.chapters);
+route.get('/rehats/:RehatID/chapters/:ChapterID?', limiter.rate100, rehats.chapters);
 
-route.get('/rehats/search/:string', rehats.search);
+route.get('/rehats/search/:string', limiter.rate250, rehats.search);
 
 module.exports = route;
