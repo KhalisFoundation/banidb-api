@@ -42,10 +42,10 @@ src.SourceUnicode,
 src.SourceEnglish,
 v.header,
 v.MangalPosition,
-v.existsStandard,
+v.existsMedium,
 v.existsTaksal,
 v.existsBuddhaDal,
-v.ParagraphShort,
+v.Paragraph,
 v.Updated
 FROM mv_Banis_Shabad v
 LEFT JOIN Banis b ON b.ID=v.Bani
@@ -104,7 +104,7 @@ const prepBaniVerse = row => {
   return {
     header: row.header,
     mangalPosition: row.MangalPosition,
-    existsStandard: row.existsStandard,
+    existsStandard: row.existsMedium,
     existsTaksal: row.existsTaksal,
     existsBuddhaDal: row.existsBuddhaDal,
     paragraph: row.Paragraph,
