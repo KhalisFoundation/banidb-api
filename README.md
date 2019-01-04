@@ -39,9 +39,10 @@ The table below outlines some stats about BaniDB, as of 1/3/19.
 | ----------------| -------- | ----------- | ---------- | ------------------------------- | --------------- | -------------- |
 | BaniDB          | ✅       | 38,000+     | ✅         | ✅                             | ✅              | ✅             |
 | SikhiToTheMax Web| Uses BaniDB| Uses BaniDB | Uses BaniDB | Uses BaniDB                 | Uses BaniDB     | Uses BaniDB    |
-| SikhiToTheMax II| 80-90%   | 6,000+      | ❌         | ❌                             | ❌              | ❌             |
-| Sikher          | ????     | ????        | ❌         | ❌                             | ❌              | ❌             |
+| SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌              | ❌             |
+| iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌              | ❌             |
 | ShabadOS        | ????     | ????        | ✅         | ❌                             | ❌              | ❌             |
+| Sikher          | ????     | ????        | ❌         | ❌                             | ❌              | ❌             |
 
 
 
