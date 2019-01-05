@@ -1,53 +1,43 @@
 # BaniDB API
 Active work ongoing under dev branch
 
-# Motivation & Aims
-A single, universally accessible Gurbani Database for websites and applications.
+# Vision Statement
+BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
-BaniDB is a tested, sustainable, and collaborative effort to provide a single, universally accessible Gurbani Database for websites and applications. It is the most accurate and complete Gurbani database ever created.
+In order to make this vision possible, members of this collaborative effort work to ensure that the platform is selfsustaining, tested, and secure. 
 
-Our mission is to allow others to focus on innovation and not spend time reinventing the wheel, while employing ethical licensing and open-source development practices. We want you to build something great!
+# Precision and Recall
 
-# Benefits
-You may be curious about the benefits of using our database. This section elaborates on several distinct key features that will convince you to go ahead and give it a go!
+BaniDB is the most preciese Gurbani database with over 38,000 corrections (and counting!). 
 
-# Quality
-With over 30,000 corrections, we've built upon the work of SikhiToTheMax II, iGurbani, Gursevak, and other databases. We've even consolidated our efforts with the iGurbani and Gursevak teams as part of our aim to maintain the most accurate Gurbani database. We'd love for others to work with us too.
+It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis. 
 
-This is the ONLY database that is SGPC compliant, allowing any software developed using this database to be used in Gurdwaras across the world.
+Furthermore, no change to the DB is approved without at least 3 peer reviews with full citations and audit trail. This exhaustive process ensures that no individual can tamper with Gurbani.  
 
-# Contributions
-This project welcomes contributors and contributons from invidiuals and organisations of all levels. We've determined to make it as easy as possible to contribute, and are working on ways to further improve this.
+We have worked closely with Gursikhs and Sikh scholars around the world to build upon their previous work. These partners and collaborators include SHARE Charity UK, iGurbani, Gursevak, and others. This has allowed us to ensure we have high recall of Gurbani and Panthic sources typically sung in Kirtan or referenced in Katha.
 
-Not a programmer? You can still contribute. Not a Gurmukhi expert? You can still contribute.
+# A Living DB
 
-Work with us and contribute via the GitHub Repo to discuss issues, add corrections, and contribute to the roadmap of the ultimate Gurbani consolidation project.
+BaniDB is a collective effort up of a group of dozens of volunteers who ensure that the DB continues to grow, and is properly vetted. 
+
+# Get Involved
+Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. reach out to us and join our active Slack Channel today!
 
 
-# Transparency & Accountability
-All work is done with a full audit trail and requires multiple approvals before a change is published. This process is rigorous and ensures no tampering with Gurbani.
+# Feature Comparison
+The table below outlines some stats about BaniDB, as of 1/5/19.
 
-Anyone is free to join our open Slack channel, where you can chat with us, receive support, and give your feedback.
-
-# Content
-The database contains content from a variety of academic and online sources. 
-
-# Features & Stats 
-The table below outlines some stats about BaniDB, as of 1/3/19.
-
-| Source          | Accurate | Corrections | Maintained | Multiple Raters for Every Change| SGPC Compatible | DSGMC Approval |
-| ----------------| -------- | ----------- | ---------- | ------------------------------- | --------------- | -------------- |
-| BaniDB          | ✅       | 38,000+     | ✅         | ✅                             | ✅              | ✅             |
+| Source          | Accurate | Corrections | Maintained | Multiple Raters per Change| SGPC Compatible Lagamatras & Padh Chhedh| DSGMC Approval |
+| ----------------| -------- | ----------- | ---------- | ------------------------- | --------------- | -------------- |
+| BaniDB          | ✅       | 38,000+     | ✅         | ✅                             | ✅✅            | ✅             |
 | SikhiToTheMax Web| Uses BaniDB| Uses BaniDB | Uses BaniDB | Uses BaniDB                 | Uses BaniDB     | Uses BaniDB    |
-| SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌              | ❌             |
-| iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌              | ❌             |
-| ShabadOS        | ????     | ????        | ✅         | ❌                             | ✅              | ❌             |
-| Sikher          | ????     | ????        | ❌         | ❌                             | ❌              | ❌             |
+| SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌❌            | ❌             |
+| iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌❌            | ❌             |
+| Sikher          | ????     | ????        | ❌         | ❌                             | ❌❌            | ❌             |
+| Others          | ????     | ????        | ✅         | ❌                             | ✅❌            | ❌             |
 
 
-
-
-# Users
+# Current Users
 
 * [Sundar Gutka - STTM Web](https://www.sikhitothemax.org/sundar-gutka)
 
