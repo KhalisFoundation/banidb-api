@@ -23,6 +23,8 @@ BaniDB is a collective effort up of a group of dozens of volunteers who ensure t
 # Get Involved
 Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. reach out to us and join our active Slack Channel today!
 
+Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
+
 
 # Feature Comparison
 The table below outlines some stats about BaniDB, as of 1/5/19.
