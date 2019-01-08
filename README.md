@@ -20,6 +20,10 @@ We have worked closely with Gursikhs and Sikh scholars around the world to build
 
 BaniDB is a collective effort up of a group of dozens of volunteers who ensure that the DB continues to grow, and is properly vetted. 
 
+# Secure
+
+While BaniDB is a collaborative and collective effort, it is imperative that we also ensure it is an effort that secures the sanctity of Gurbani. As a result, we have chosen to take a controlled approach in order to allow for collaboration but also ensure fidelity of Gurbani data. We welcome others to get involved, but have seen too many instances of Gurbani being misused and altered to feel comfortable making the data completely open. This approach is modeled on the approach Sikhs have traditionally taken with Gurbani.
+
 # Get Involved
 Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. reach out to us and join our active Slack Channel today!
 
@@ -42,7 +46,7 @@ Das Granthi as published by SGPC in March 2006
 (http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf)
 
 Secondary Source(s):
-Sri Dasam Granth Bhag 1 and Bhag 2 as published by Chattar Singh Jeevan Singh
+Sri Dasam Granth Volumes 1 and 2 as published by Chattar Singh Jeevan Singh
 
 Nitnem, Das Granthi, ate Hor Bania(n) as published by Hazoori Taksaal in 2006
 (http://vidhia.com/Bani/Das_Granthi_Pothi.pdf)
@@ -54,9 +58,18 @@ Sri Dasam Granth Sahib Steek Parts 1 and 2 by Giani Bishan Singh Ji (Khalsa Coll
 Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi
 (http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
 
-## Sarabloh Granth + Amrit Keertan Shabads
+## Bhai Gurdaas Ji
+Vaaran Bhai Gurdaas Ji as published by SGPC
+
+
+## Sarabloh Granth, Amrit Keertan, and Rehatname
+
 Primary Source(s):
+Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1 and 2 as published by Budha Dal in June 2000
+(https://www.scribd.com/document/28563324/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek)
+
 Amrit Keertan as published by Khalsa Brothers Amritsar in multiple editions and years
+(http://sikhbookclub.com/Book/Amrit-Kirtan1)
 
 
 # Feature Comparison
