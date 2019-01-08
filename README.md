@@ -25,6 +25,39 @@ Interested in coding? Have a love for Gurbani? Want to help with Marketing? What
 
 Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
 
+# Sources
+Below is a list of sources used as ground truth for Gurbani accuracy
+
+## Sri Guru Granth Sahib Ji
+Primary Source(s):
+Sri Guru Granth Sahib Ji as published by SGPC 
+(http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf)
+
+Panj Granthi as published by SGPC in September 2010
+(http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf)
+
+## Sri Dasam Granth Sahib
+Primary Source(s):
+Das Granthi as published by SGPC in March 2006
+(http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf)
+
+Secondary Source(s):
+Sri Dasam Granth Bhag 1 and Bhag 2 as published by Chattar Singh Jeevan Singh
+
+Nitnem, Das Granthi, ate Hor Bania(n) as published by Hazoori Taksaal in 2006
+(http://vidhia.com/Bani/Das_Granthi_Pothi.pdf)
+
+Sri Dasam Granth Sahib Steek Parts 1 and 2 by Giani Bishan Singh Ji (Khalsa College Amritsar) in 1941
+(http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
+(http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
+
+Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi
+(http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
+
+## Sarabloh Granth + Amrit Keertan Shabads
+Primary Source(s):
+Amrit Keertan as published by Khalsa Brothers Amritsar in multiple editions and years
+
 
 # Feature Comparison
 The table below outlines some stats about BaniDB, as of 1/5/19.
