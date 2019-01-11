@@ -307,7 +307,7 @@ exports.hukamnamas = async (req, res) => {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     if (validDate >= archiveDate && validDate <= tomorrow.getTime()) {
-      q = 'SELECT ID as hukamDate, ShabadID FROM Hukam WHERE ID = ?';
+      q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama WHERE ID = ?';
       args.push(`${year}-${month}-${day}`);
     } else {
       error({
@@ -318,7 +318,7 @@ exports.hukamnamas = async (req, res) => {
     }
   }
   if (!q) {
-    q = 'SELECT ID as hukamDate, ShabadID FROM Hukam ORDER BY ID DESC LIMIT 1';
+    q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama ORDER BY ID DESC LIMIT 1';
   }
   if (!exit) {
     let conn;
@@ -331,7 +331,7 @@ exports.hukamnamas = async (req, res) => {
       );
       if (row.length > 0) {
         const { hukamDate } = row[0];
-        const ShabadIDs = row[0].ShabadID.split(',');
+        const ShabadIDs = JSON.parse(row[0].ShabadID);
         const pArray = ShabadIDs.map(async ShabadID => getShabad(ShabadID));
         const shabads = await Promise.all(pArray);
         const hukamGregorianDate = new Date(hukamDate);
