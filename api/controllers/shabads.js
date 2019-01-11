@@ -337,7 +337,7 @@ exports.hukamnamas = async (req, res) => {
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
-            month: hukamGregorianDate.getMonth(),
+            month: hukamGregorianDate.getMonth() + 1,
             date: hukamGregorianDate.getDate(),
             year: hukamGregorianDate.getFullYear(),
           },
