@@ -34,6 +34,10 @@ Below is a list of sources used as ground truth for Gurbani accuracy
 
 ## Sri Guru Granth Sahib Ji
 Primary Source(s):
+
+Sri Guru Granth Sahib Ji Lareevaar Sarroop as published by SGPC in September 2009
+(physical sarroop, no digital version available)
+
 Sri Guru Granth Sahib Ji as published by SGPC 
 (http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf)
 
