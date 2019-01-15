@@ -63,7 +63,7 @@ Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi
 (http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
 
 ## Bhai Gurdaas Ji
-Vaaran Bhai Gurdaas Ji as published by SGPC
+Vaaran Bhai Gurdaas Ji as published by SGPC in November 2011
 
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
