@@ -7,6 +7,13 @@ const {
   getWriter,
 } = require('./getJSON');
 
+const lengthExistsMap = {
+  s: 'existsSGPC',
+  m: 'existsMedium',
+  t: 'existsTaksal',
+  b: 'existsBuddhaDal',
+};
+
 const pool = createPool(config.mysql);
 
 const error = (err, res) => {
@@ -18,6 +25,7 @@ b.Gurmukhi AS NameGurmukhi,
 b.GurmukhiUni AS NameGurmukhiUni,
 b.Transliteration AS NameTransliteration,
 v.Gurmukhi,
+v.GurmukhiBisram,
 v.GurmukhiUni,
 v.English,
 v.Punjabi,
@@ -26,7 +34,6 @@ v.Spanish,
 v.PageNo AS PageNo,
 v.LineNo,
 v.SourceID,
-v.GurmukhiBisram,
 v.Transliteration,
 v.WriterID,
 w.WriterEnglish,
@@ -42,6 +49,7 @@ src.SourceUnicode,
 src.SourceEnglish,
 v.header,
 v.MangalPosition,
+v.existsSGPC,
 v.existsMedium,
 v.existsTaksal,
 v.existsBuddhaDal,
@@ -73,7 +81,12 @@ exports.bani = async (req, res) => {
   try {
     conn = await pool.getConnection();
     const BaniID = parseInt(req.params.BaniID, 10);
-    const q = `SELECT ${allColumns} WHERE v.Bani = ? ORDER BY Seq ASC`;
+    const exists = lengthExistsMap[req.query.length] || false;
+    let existsQuery = '';
+    if (exists) {
+      existsQuery = `AND v.${exists} = 1`;
+    }
+    const q = `SELECT ${allColumns} WHERE v.Bani = ? ${existsQuery} ORDER BY Seq ASC`;
     const rows = await conn.query(q, [BaniID]);
     const baniInfo = {
       baniID: BaniID,
@@ -85,7 +98,7 @@ exports.bani = async (req, res) => {
       writer: getWriter(rows[0])
     };
 
-    const verses = rows.map(prepBaniVerse);
+    const verses = rows.map(row => prepBaniVerse(row, exists));
 
     res.json({
       baniInfo,
@@ -98,15 +111,20 @@ exports.bani = async (req, res) => {
   }
 };
 
-const prepBaniVerse = row => {
+const prepBaniVerse = (row, existsFlag) => {
   const verse = prepVerse(row);
   delete verse.firstLetters;
+  const exists = {};
+  if (!existsFlag) {
+    exists.existsSGPC = row.existsSGPC;
+    exists.existsMedium = row.existsMedium;
+    exists.existsTaksal = row.existsTaksal;
+    exists.existsBuddhaDal = row.existsBuddhaDal;
+  }
   return {
     header: row.header,
     mangalPosition: row.MangalPosition,
-    existsStandard: row.existsMedium,
-    existsTaksal: row.existsTaksal,
-    existsBuddhaDal: row.existsBuddhaDal,
+    ...exists,
     paragraph: row.Paragraph,
     verse,
   };
