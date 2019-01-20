@@ -1,3 +1,5 @@
+[<img height="100" src="http://www.banidb.com/wp-content/uploads/2018/03/full-banidb-logo.png">](http://banidb.com)
+
 # BaniDB API
 Active work ongoing under dev branch
 
