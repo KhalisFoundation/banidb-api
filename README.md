@@ -38,42 +38,35 @@ Primary Source(s):
 Sri Guru Granth Sahib Ji Lareevaar Sarroop as published by SGPC in September 2009
 (physical sarroop, no digital version available)
 
-Sri Guru Granth Sahib Ji as published by SGPC 
-(http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf)
+[Sri Guru Granth Sahib Ji as published by SGPC](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf)
 
-Panj Granthi as published by SGPC in September 2010
-(http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf)
+[Panj Granthi as published by SGPC in September 2010](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf)
 
 ## Sri Dasam Granth Sahib
 Primary Source(s):
-Das Granthi as published by SGPC in March 2006
-(http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf)
+[Das Granthi as published by SGPC in March 2006](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf)
 
 Secondary Source(s):
 Sri Dasam Granth Volumes 1 and 2 as published by Chattar Singh Jeevan Singh
 
-Nitnem, Das Granthi, ate Hor Bania(n) as published by Hazoori Taksaal in 2006
-(http://vidhia.com/Bani/Das_Granthi_Pothi.pdf)
+[Nitnem, Das Granthi, ate Hor Bania(n) as published by Hazoori Taksaal in 2006](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf)
 
-Sri Dasam Granth Sahib Steek Parts 1 and 2 by Giani Bishan Singh Ji (Khalsa College Amritsar) in 1941
-(http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
-(http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
+Sri Dasam Granth Sahib Steek by Giani Bishan Singh Ji (Khalsa College Amritsar) in 1941
+[Part 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
+[Part 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
 
-Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi
-(http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
+[Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
 
 ## Bhai Gurdaas Ji
-Vaaran Bhai Gurdaas Ji as published by SGPC in November 2011
+[Vaaran Bhai Gurdaas Ji as published by SGPC in November 2011](https://vidhia.com/Bhai%20Gurdaas%20Ji/Vaaran%20Bhai%20Gurdaas%20Ji%20-%20SGPC.pdf)
 
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
 
 Primary Source(s):
-Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1 and 2 as published by Budha Dal in June 2000
-(https://www.scribd.com/document/28563324/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek)
+[Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1 and 2 as published by Budha Dal in June 2000](https://www.scribd.com/document/28563324/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek)
 
-Amrit Keertan as published by Khalsa Brothers Amritsar in multiple editions and years
-(http://sikhbookclub.com/Book/Amrit-Kirtan1)
+[Amrit Keertan as published by Khalsa Brothers Amritsar in multiple editions and years](http://sikhbookclub.com/Book/Amrit-Kirtan1)
 
 
 # Feature Comparison
