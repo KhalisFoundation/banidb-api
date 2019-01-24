@@ -1,5 +1,8 @@
 [<img height="100" src="http://www.banidb.com/wp-content/uploads/2018/03/full-banidb-logo.png">](http://banidb.com)
 
+[![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org) 
+[![Slack](https://img.shields.io/badge/Slack-join%20the%20conversation-red.svg)](https://khalis.slack.com)
+
 # BaniDB API
 Active work ongoing under dev branch
 
