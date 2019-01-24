@@ -45,6 +45,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Sri Guru Granth Sahib Ji | Primary | Multiple | SGPC | Unknown | [Link](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf) |
 | Sri Guru Granth Sahib Ji Shabadarth | Primary | SGPC | SGPC | October 2009 | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Guru+Granth+Sahib+Ji+Shabadarth+%28SGPC%29) |
 | Panj Granthi | Primary | Multiple | SGPC | September 2010 | [Link](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf) |
+| Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
 | Santhya Sri Guru Granth Sahib Ji Volumes 1-7 | Secondary | Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | October 2007 | [Link](http://vidhia.com/index.php?q=f&f=%2FBhai+Veer+Singh+Ji%2FSanthya+Sri+Guru+Granth+Sahib+Ji) |
 | Teeka Anek Bania(n) Volumes 1-3 | Secondary | Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | 4th edition, April 2008 | [Volume 1](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%201%29-Bhai%20Vir%20Singh%20Punjabi.pdf) [Volume 2](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%202%29-Bhai%20Vir%20Singh%20Punjabi.pdf) [Volume 3](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%203%29-Bhai%20Vir%20Singh%20Punjabi.pdf) |
 
@@ -56,6 +57,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Das Granthi | Primary | Guru Gobind Singh Ji | SGPC | March 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf) |
 | Sri Dasam Granth Volumes 1-2 | Secondary | Guru Gobind Singh Ji | Chattar Singh Jeevan Singh | Unknown | No Link Available |
 | Akal Ustat                              | Primary | Guru Gobind Singh Ji | SGPC | 5th edition, December 1995 | [Link](http://vidhia.com/Bani/Akal%20Ustat-Punjabi.PDF) |
+| Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
 | Nitnem, Das Granthi, ate Hor Bania(n) | Secondary | Multiple | Hazoori Taksaal | 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf) |
 | Sri Dasam Granth Sahib Steek Volumes 1-2 | Secondary | Giani Bishan Singh Ji | Khalsa College Amritsar | 1941 | [Volume 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf) [Volume 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf) |
 | Sri Dasam Granth Sahib Teeka Volumes 1-4 | Secondary | Rattan Singh Jaggi |  |  | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings) |
