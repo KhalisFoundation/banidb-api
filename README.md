@@ -32,63 +32,42 @@ Interested in coding? Have a love for Gurbani? Want to help with Marketing? What
 Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
 
 # Sources
-Below is a list of sources used as ground truth for Gurbani accuracy
+Below is a list of sources used as ground truth for Gurbani accuracy. We have digitized sources via manual scanning, and have consolidated existing digital sources and uploaded these to www.vidhia.com to help facilitate sudhaee (correction) efforts.
 
 ## Sri Guru Granth Sahib Ji
 
-### Primary Source(s):
-
-Sri Guru Granth Sahib Ji Lareevaar Sarroop as published by SGPC in September 2009
-(physical sarroop, no digital version available)
-
-[Sri Guru Granth Sahib Ji as published by SGPC](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf)
-
-[Panj Granthi as published by SGPC in September 2010](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf)
-
-### Secondary Source(s):
-Santhya Sri Guru Granth Sahib Ji 5th edition as published by Vhai Veer Singh Sahit Sadan in October 2007
-* [Volume 1](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-1.pdf)
-* [Volume 2](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-2.pdf)
-* [Volume 3](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-3.pdf)
-* [Volume 4](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-4.pdf)
-* [Volume 5](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-5.pdf)
-* [Volume 6](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-6.pdf)
-* [Volume 7](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Santhya%20Sri%20Guru%20Granth%20Sahib%20Ji%20Vol.-7.pdf)
+| Source | Source Type | Author | Publisher | Edition | Link |
+| ------ | ----------- | -------| --------- | ------- | ---- |
+| Sri Guru Granth Sahib Ji Lareevar Sarroop | Primary | Multiple | SGPC | September 2009 | No Link Available |
+| Sri Guru Granth Sahib Ji | Primary | Multiple | SGPC | Unknown | [Link](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf) |
+| Sri Guru Granth Sahib Ji Shabadarth | Primary | SGPC | SGPC | October 2009 | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Guru+Granth+Sahib+Ji+Shabadarth+%28SGPC%29) |
+| Panj Granthi | Primary | Multiple | SGPC | September 2010 | [Link](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf) |
+| Santhya Sri Guru Granth Sahib Ji Volumes 1-7 | Secondary | Bhai Veerj Singh Ji | Bhai Veer Singh Sahit Sadan | October 2007 | [Link](http://vidhia.com/index.php?q=f&f=%2FBhai+Veer+Singh+Ji%2FSanthya+Sri+Guru+Granth+Sahib+Ji) |
 
 
 ## Sri Dasam Granth Sahib
 
-### Primary Source(s):
-
-[Das Granthi as published by SGPC in March 2006](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf)
-
-### Secondary Source(s):
-
-Sri Dasam Granth Volumes 1 and 2 as published by Chattar Singh Jeevan Singh
-
-[Nitnem, Das Granthi, ate Hor Bania(n) as published by Hazoori Taksaal in 2006](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf)
-
-Sri Dasam Granth Sahib Steek by Giani Bishan Singh Ji (Khalsa College Amritsar) in 1941
-[Part 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
-[Part 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf)
-
-[Sri Dasam Granth Sahib Teeka Volumes 1-4 by Rattan Singh Jaggi](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings)
+| Source | Source Type | Author | Publisher | Edition | Link |
+| ------ | ----------- | -------| --------- | ------- | ---- |
+| Das Granthi | Primary | Guru Gobind Singh Ji | SGPC | March 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf) |
+| Sri Dasam Granth Volumes 1-2 | Secondary | Guru Gobind Singh Ji | Chattar Singh Jeevan Singh | Unknown | No Link Available |
+| Nitnem, Das Granthi, ate Hor Bania(n) | Secondary | Multiple | Hazoori Taksaal | 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf) |
+| Sri Dasam Granth Sahib Steek Volumes 1-2 | Secondary | Giani Bishan Singh Ji | Khalsa College Amritsar | 1941 | [Volume 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf) [Volume 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf) |
+| Sri Dasam Granth Sahib Teeka Volumes 1-4 | Secondary | Rattan Singh Jaggi |  |  | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings) |
 
 ## Bhai Gurdaas Ji
 
-### Primary Source(s):
-
-[Vaaran Bhai Gurdaas Ji as published by SGPC in November 2011](https://vidhia.com/Bhai%20Gurdaas%20Ji/Vaaran%20Bhai%20Gurdaas%20Ji%20-%20SGPC.pdf)
+| Source | Source Type | Author | Publisher | Edition | Link |
+| ------ | ----------- | -------| --------- | ------- | ---- |
+| Vaaran Bhai Gurdaas Ji | Primary | Bhai Gurdaas Ji | SGPC | November 2011 | [Link](https://vidhia.com/Bhai%20Gurdaas%20Ji/Vaaran%20Bhai%20Gurdaas%20Ji%20-%20SGPC.pdf) |
 
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
 
-### Primary Source(s):
-
-[Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1 and 2 as published by Budha Dal in June 2000](https://www.scribd.com/document/28563324/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek)
-
-[Amrit Keertan as published by Khalsa Brothers Amritsar in multiple editions and years](http://sikhbookclub.com/Book/Amrit-Kirtan1)
-
+| Source | Source Type | Author | Publisher | Edition | Link |
+| ------ | ----------- | -------| --------- | ------- | ---- |
+| Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1-2 | Primary | Santa Singh | Buddha Dal | June 2000 | [Link](http://vidhia.com/Bani/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek.pdf) |
+| Amrit Keertan | Primary | Multiple | Khalsa Brothers | 40th - July 2011 | [Link](http://vidhia.com/Bani/Amrit%20Keertan%20%28Khalsa%20Brothers%29.pdf) |
 
 # Feature Comparison
 The table below outlines some stats about BaniDB, as of 1/5/19.
