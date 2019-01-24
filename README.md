@@ -51,6 +51,9 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Nitnem Steek | Secondary | Professor Sahib Singh | Singh Brothers | 29th edition, April 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
 | Jap Ji Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |36th edition, July 2011| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Japji%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
 | Sukhmani Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |40th edition, February 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Sukhmani%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
+| Bhagat Bani Steek Volumes 1-5 | Secondary | Professor Sahib Singh | Singh Brothers | 13th edition, July 2011 | [Volume 1](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%201-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 2](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%202-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 3](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%203-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 4](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%204-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 5](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%205-Prof%20Sahib%20Singh-Punjabi.pdf) |
+| Bhagat Bani Steek | Secondary | Giani Bishan Singh | Bhai Partap Singh Sundar Singh | 6th edition, May 1930 | [Link](http://vidhia.com/Bhagat_Bani_Steek_1930_Gyani_Bishan_Singh_Ji%281%29.pdf) |
+
 
 ## Sri Dasam Granth Sahib
 
@@ -58,7 +61,8 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | ------ | ----------- | -------| --------- | ------- | ---- |
 | Das Granthi | Primary | Guru Gobind Singh Ji | SGPC | March 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf) |
 | Sri Dasam Granth Volumes 1-2 | Secondary | Guru Gobind Singh Ji | Chattar Singh Jeevan Singh | Unknown | No Link Available |
-| Akal Ustat                              | Primary | Guru Gobind Singh Ji | SGPC | 5th edition, December 1995 | [Link](http://vidhia.com/Bani/Akal%20Ustat-Punjabi.PDF) |
+| Akal Ustat | Primary | Guru Gobind Singh Ji | SGPC | 5th edition, December 1995 | [Link](http://vidhia.com/Bani/Akal%20Ustat-Punjabi.PDF) |
+| Bachitar Natak | Primary | Guru Gobind Singh Ji | SGPC | 7th edition, July 2000 | [Link](http://vidhia.com/Bani/Bachitar%20Natak-Punjabi.pdf) |
 | Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
 | Nitnem, Das Granthi, ate Hor Bania(n) | Secondary | Multiple | Hazoori Taksaal | 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf) |
 | Sri Dasam Granth Sahib Steek Volumes 1-2 | Secondary | Giani Bishan Singh Ji | Khalsa College Amritsar | 1941 | [Volume 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf) [Volume 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf) |
