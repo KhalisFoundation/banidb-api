@@ -77,7 +77,8 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Source | Source Type | Author | Publisher | Edition | Link |
 | ------ | ----------- | -------| --------- | ------- | ---- |
 | Vaaran Bhai Gurdaas Ji | Primary | Bhai Gurdaas Ji | SGPC | November 2011 | [Link](https://vidhia.com/Bhai%20Gurdaas%20Ji/Vaaran%20Bhai%20Gurdaas%20Ji%20-%20SGPC.pdf) |
-| Vaaran Bhai Gurdas Ji | Secondary | Giani Hazara Singh Ji Pandit & Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | 21st edition, June 2001 | [Link](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Vaaran%20Bhai%20Gurudas%20Ji-Bhai%20Vir%20Singh%20Punjabi.pdf) |
+| Vaaran Bhai Gurdaas Ji | Secondary | Giani Hazara Singh Ji Pandit & Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | 21st edition, June 2001 | [Link](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Vaaran%20Bhai%20Gurudas%20Ji-Bhai%20Vir%20Singh%20Punjabi.pdf) |
+|Vaaran Bhai Gurdaas Ji Steek | Secondary | Giani Harbans Singh | Khalsa Sahit Sadan | December 2004 | [Link](http://vidhia.com/Giani%20Harbans%20Singh/Varaan-Bhai-Gurdasji-Steek-By-Giani-Harbans-Singh.pdf) |
 
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
