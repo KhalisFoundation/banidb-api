@@ -6,13 +6,6 @@
 # BaniDB API
 Active work ongoing under dev branch
 
-# Metrics
-
-| Date      | Verified Changes vs SGPC |
-| --------- | ------------------------ |
-| 1/25/2019 | 39,000+                  |
-| 1/01/2019 | 38,000+                  |
-
 # Vision Statement
 BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
@@ -110,6 +103,13 @@ The table below outlines some stats about BaniDB, as of 1/5/19.
 # Current Users
 
 * [Sundar Gutka - STTM Web](https://www.sikhitothemax.org/sundar-gutka)
+
+# Metrics
+
+| Date      | Verified Changes vs SGPC |
+| --------- | ------------------------ |
+| 1/25/2019 | 39,000+                  |
+| 1/01/2019 | 38,000+                  |
 
 # Migration Guide for v1 to v2
 
