@@ -66,7 +66,6 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
 | Nitnem, Das Granthi, ate Hor Bania(n) | Secondary | Multiple | Hazoori Taksaal | 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf) |
 | Sri Dasam Granth Sahib Steek Volumes 1-2 | Secondary | Giani Bishan Singh Ji | Khalsa College Amritsar | 1941 | [Volume 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf) [Volume 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf) |
-| Sri Dasam Granth Sahib Teeka Volumes 1-5 | Secondary | Rattan Singh Jaggi | Gobind Sadan | April 1999 | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Dasam+Granth+Sahib+with+Meanings) |
 | Chandi Di Vaar Steek | Secondary | Pandit Narain Singh | Bh. Jvahar Singh, Kirpal Singh & Co | 20th century | [Link](http://vidhia.com/Bani/Chandi_Di_Vaar_Steek_-_Pandit_Narain_Singh_Ji.pdf) |
 | Nitnem Steek | Secondary | Professor Sahib Singh | Singh Brothers | 29th edition, April 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
 | Jaap Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |17th edition, August 2003| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Jaap%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
