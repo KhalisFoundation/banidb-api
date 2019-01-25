@@ -6,6 +6,13 @@
 # BaniDB API
 Active work ongoing under dev branch
 
+# Metrics
+
+| Date      | Verified Changes vs SGPC |
+| --------- | ------------------------ |
+| 1/25/2019 | 39,000+                  |
+| 1/01/2019 | 38,000+                  |
+
 # Vision Statement
 BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
@@ -13,7 +20,7 @@ In order to make this vision possible, members of this collaborative effort work
 
 # Precision and Recall
 
-BaniDB is the most preciese Gurbani database with over 38,500 corrections (and counting!). 
+BaniDB is the most preciese Gurbani database with over 39,000 corrections (and counting!). 
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis. 
 
@@ -92,7 +99,7 @@ The table below outlines some stats about BaniDB, as of 1/5/19.
 
 | Source          | Accurate | Corrections | Maintained | Multiple Raters per Change| SGPC Compatible Lagamatras & Padh Chhedh| DSGMC Approval |
 | ----------------| -------- | ----------- | ---------- | ------------------------- | --------------- | -------------- |
-| BaniDB          | ✅       | 38,500+     | ✅         | ✅                             | ✅✅            | ✅             |
+| BaniDB          | ✅       | 39,000+     | ✅         | ✅                             | ✅✅            | ✅             |
 | SikhiToTheMax Web| Uses BaniDB| Uses BaniDB | Uses BaniDB | Uses BaniDB                 | Uses BaniDB     | Uses BaniDB    |
 | SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌❌            | ❌             |
 | iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌❌            | ❌             |
