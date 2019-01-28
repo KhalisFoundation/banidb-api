@@ -106,11 +106,12 @@ The table below outlines some stats about BaniDB, as of 1/5/19.
 
 # Metrics
 
-| Date      | Verified Changes  |
-| --------- | ----------------- |
-| 1/25/2019 | 39,000+           |
-| 1/01/2019 | 38,000+           |
-| 1/01/2018 | 12,000+           |
+| Date       | Verified Changes  |
+| ---------- | ----------------- |
+| 01/25/2019 | 39,000+           |
+| 01/01/2019 | 37,792            |
+| 07/01/2018 | 35,674            |
+| 01/01/2018 | 7,937             |
 
 # Migration Guide for v1 to v2
 
