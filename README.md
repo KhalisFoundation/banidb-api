@@ -13,7 +13,7 @@ In order to make this vision possible, members of this collaborative effort work
 
 # Precision and Recall
 
-BaniDB is the most preciese Gurbani database with over 39,000 corrections (and counting!). 
+BaniDB is the most preciese Gurbani database with over 39,500 corrections (and counting!). 
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis. 
 
@@ -108,7 +108,8 @@ The table below outlines some stats about BaniDB, as of 1/5/19.
 
 | Date       | Verified Changes  |
 | ---------- | ----------------- |
-| 01/25/2019 | 39,000+           |
+| 02/01/2019 | 39,500            |
+| 01/25/2019 | 39,000            |
 | 01/01/2019 | 37,792            |
 | 07/01/2018 | 35,674            |
 | 01/01/2018 | 7,937             |
