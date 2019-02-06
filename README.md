@@ -88,11 +88,11 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 | Amrit Keertan | Primary | Multiple | Khalsa Brothers | 40th edition,  July 2011 | [Link](http://vidhia.com/Bani/Amrit%20Keertan%20%28Khalsa%20Brothers%29.pdf) |
 
 # Feature Comparison
-The table below outlines some stats about BaniDB, as of 1/5/19.
+The table below outlines some stats about BaniDB, as of 2/1/19.
 
 | Source          | Accurate | Corrections | Maintained | Multiple Raters per Change| SGPC Compatible Lagamatras & Padh Chhedh| DSGMC Approval |
 | ----------------| -------- | ----------- | ---------- | ------------------------- | --------------- | -------------- |
-| BaniDB          | ✅       | 39,000+     | ✅         | ✅                             | ✅✅            | ✅             |
+| BaniDB          | ✅       | 39,500+     | ✅         | ✅                             | ✅✅            | ✅             |
 | SikhiToTheMax Web| Uses BaniDB| Uses BaniDB | Uses BaniDB | Uses BaniDB                 | Uses BaniDB     | Uses BaniDB    |
 | SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌❌            | ❌             |
 | iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌❌            | ❌             |
@@ -108,6 +108,7 @@ The table below outlines some stats about BaniDB, as of 1/5/19.
 
 | Date       | Verified Changes  |
 | ---------- | ----------------- |
+| 02/05/2019 | 39,750            |
 | 02/01/2019 | 39,500            |
 | 01/25/2019 | 39,000            |
 | 01/01/2019 | 37,792            |
