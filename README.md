@@ -37,15 +37,15 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 
 ## Sri Guru Granth Sahib Ji
 
-<table cellspacing="0" cellpadding="0">
+<table cellspacing="0" cellpadding="0" class="sggs01">
 
   <tr>
-    <td width="40%"> Source </td>
-    <td width="12%"> Source   Type </td>
-    <td width="12%"> Author </td>
-    <td width="12%"> Publisher </td>
-    <td width="12%"> Edition </td>
-    <td width="12%"> Link </td>
+    <th> Source </th>
+    <th> Source   Type </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
   </tr>
   <tr>
     <td> Sri Guru Granth Sahib Ji Lareevar   Sarroop </td>
@@ -61,7 +61,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Multiple </td>
     <td> SGPC </td>
     <td> Unknown </td>
-    <td> [Link](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf) </td>
+    <td> [<a href="http://old.sgpc.net/files/Siri Guru Granth Sahib without Index (Uni).pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Sri Guru Granth Sahib Ji Shabadarth </td>
@@ -69,7 +69,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> SGPC </td>
     <td> SGPC </td>
     <td> October 2009 </td>
-    <td> [Link](http://vidhia.com/index.php?q=f&amp;f=%2FBani%2FSri+Guru+Granth+Sahib+Ji+Shabadarth+%28SGPC%29) </td>
+    <td> [<a href="tp://vidhia.com/index.php?q=f&f=/Bani/Sri+Guru+Granth+Sahib+Ji+Shabadarth+(SGPC)">Link</a>]</td>
   </tr>
   <tr>
     <td> Panj Granthi </td>
@@ -77,7 +77,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Multiple </td>
     <td> SGPC </td>
     <td> September 2010 </td>
-    <td> [Link](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Bani/Panj Granthi-Punjabi.pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Nitnem te Hor Bania(n) </td>
@@ -85,7 +85,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Mulitple </td>
     <td> SGPC </td>
     <td> May 2017 </td>
-    <td> [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) </td>
+    <td> [<a href="http://vidhia.com/Bani/Nitnem (SGPC).pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Santhya Sri Guru Granth Sahib Ji Volumes   1-7 </td>
@@ -93,7 +93,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Bhai Sahib Bhai Veer Singh Ji </td>
     <td> Bhai Veer Singh Sahit Sadan </td>
     <td> October 2007 </td>
-    <td> [Link](http://vidhia.com/index.php?q=f&amp;f=%2FBhai+Veer+Singh+Ji%2FSanthya+Sri+Guru+Granth+Sahib+Ji) </td>
+    <td> [<a href="http://vidhia.com/index.php?q=f&f=/Bhai+Veer+Singh+Ji/Santhya+Sri+Guru+Granth+Sahib+Ji">Link</a>]</td>
   </tr>
   <tr>
     <td> Teeka Anek Bania(n) Volumes 1-3 </td>
@@ -101,7 +101,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Bhai Sahib Bhai Veer Singh Ji </td>
     <td> Bhai Veer Singh Sahit Sadan </td>
     <td> 4th edition, April 2008 </td>
-    <td> [Volume   1](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%201%29-Bhai%20Vir%20Singh%20Punjabi.pdf)   [Volume   2](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%202%29-Bhai%20Vir%20Singh%20Punjabi.pdf)   [Volume   3](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%203%29-Bhai%20Vir%20Singh%20Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Bhai Veer Singh Ji/Teeka Anek Banian (Part 1)-Bhai Vir Singh Punjabi.pdf">Volume   1</a>]   [<a href="http://vidhia.com/Bhai Veer Singh Ji/Teeka Anek Banian (Part 2)-Bhai Vir Singh Punjabi.pdf">Volume   2</a>]   [<a href="http://vidhia.com/Bhai Veer Singh Ji/Teeka Anek Banian (Part 3)-Bhai Vir Singh Punjabi.pdf">Volume   3</a>]</td>
   </tr>
   <tr>
     <td> Nitnem Steek </td>
@@ -109,7 +109,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td> 29th edition, April 2012</td>
-    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Nitnem Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Jap Ji Sahib Steek </td>
@@ -117,7 +117,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td>36th edition, July 2011</td>
-    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Japji%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Japji Sahib Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Sukhmani Sahib Steek </td>
@@ -125,7 +125,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td>40th edition, February 2012</td>
-    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Sukhmani%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Sukhmani Sahib Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Bhagat Bani Steek Volumes 1-5 </td>
@@ -133,7 +133,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td> 13th edition, July 2011 </td>
-    <td> [Volume   1](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%201-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   2](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%202-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   3](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%203-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   4](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%204-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   5](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%205-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Bhagat Bani Steek Part 1-Prof Sahib Singh-Punjabi.pdf">Volume   1</a>]   [<a href="http://vidhia.com/Professor Sahib Singh/Bhagat Bani Steek Part 2-Prof Sahib Singh-Punjabi.pdf">Volume   2</a>]   [<a href="http://vidhia.com/Professor Sahib Singh/Bhagat Bani Steek Part 3-Prof Sahib Singh-Punjabi.pdf">Volume   3</a>]   [<a href="http://vidhia.com/Professor Sahib Singh/Bhagat Bani Steek Part 4-Prof Sahib Singh-Punjabi.pdf">Volume   4</a>]   [<a href="http://vidhia.com/Professor Sahib Singh/Bhagat Bani Steek Part 5-Prof Sahib Singh-Punjabi.pdf">Volume   5</a>]</td>
   </tr>
   <tr>
     <td> Bhagat Bani Steek </td>
@@ -141,7 +141,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Giani Bishan Singh </td>
     <td> Bhai Partap Singh Sundar   Singh </td>
     <td> 6th edition, May 1930 </td>
-    <td> [Link](http://vidhia.com/Bhagat_Bani_Steek_1930_Gyani_Bishan_Singh_Ji%281%29.pdf) </td>
+    <td> [<a href="http://vidhia.com/Bhagat_Bani_Steek_1930_Gyani_Bishan_Singh_Ji(1).pdf">Link</a>]</td>
   </tr>
 </table>
 
