@@ -37,7 +37,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 
 ## Sri Guru Granth Sahib Ji
 
-<table cellspacing="0" cellpadding="0" class="sggs01">
+<table cellspacing="0" cellpadding="0" id="sggs01">
 
   <tr>
     <th> Source </th>
