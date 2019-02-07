@@ -37,21 +37,113 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 
 ## Sri Guru Granth Sahib Ji
 
-| Source | Source Type | Author | Publisher | Edition | Link |
-| ------ | ----------- | -------| --------- | ------- | ---- |
-| Sri Guru Granth Sahib Ji Lareevar Sarroop | Primary | Multiple | SGPC | September 2009 | No Link Available |
-| Sri Guru Granth Sahib Ji | Primary | Multiple | SGPC | Unknown | [Link](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf) |
-| Sri Guru Granth Sahib Ji Shabadarth | Primary | SGPC | SGPC | October 2009 | [Link](http://vidhia.com/index.php?q=f&f=%2FBani%2FSri+Guru+Granth+Sahib+Ji+Shabadarth+%28SGPC%29) |
-| Panj Granthi | Primary | Multiple | SGPC | September 2010 | [Link](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf) |
-| Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
-| Santhya Sri Guru Granth Sahib Ji Volumes 1-7 | Secondary | Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | October 2007 | [Link](http://vidhia.com/index.php?q=f&f=%2FBhai+Veer+Singh+Ji%2FSanthya+Sri+Guru+Granth+Sahib+Ji) |
-| Teeka Anek Bania(n) Volumes 1-3 | Secondary | Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | 4th edition, April 2008 | [Volume 1](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%201%29-Bhai%20Vir%20Singh%20Punjabi.pdf) [Volume 2](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%202%29-Bhai%20Vir%20Singh%20Punjabi.pdf) [Volume 3](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%203%29-Bhai%20Vir%20Singh%20Punjabi.pdf) |
-| Nitnem Steek | Secondary | Professor Sahib Singh | Singh Brothers | 29th edition, April 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
-| Jap Ji Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |36th edition, July 2011| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Japji%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
-| Sukhmani Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |40th edition, February 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Sukhmani%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
-| Bhagat Bani Steek Volumes 1-5 | Secondary | Professor Sahib Singh | Singh Brothers | 13th edition, July 2011 | [Volume 1](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%201-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 2](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%202-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 3](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%203-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 4](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%204-Prof%20Sahib%20Singh-Punjabi.pdf) [Volume 5](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%205-Prof%20Sahib%20Singh-Punjabi.pdf) |
-| Bhagat Bani Steek | Secondary | Giani Bishan Singh | Bhai Partap Singh Sundar Singh | 6th edition, May 1930 | [Link](http://vidhia.com/Bhagat_Bani_Steek_1930_Gyani_Bishan_Singh_Ji%281%29.pdf) |
+<table cellspacing="0" cellpadding="0">
 
+  <tr>
+    <td width="40%"> Source </td>
+    <td width="12%"> Source   Type </td>
+    <td width="12%"> Author </td>
+    <td width="12%"> Publisher </td>
+    <td width="12%"> Edition </td>
+    <td width="12%"> Link </td>
+  </tr>
+  <tr>
+    <td> Sri Guru Granth Sahib Ji Lareevar   Sarroop </td>
+    <td> Primary </td>
+    <td> Multiple </td>
+    <td> SGPC </td>
+    <td> September 2009 </td>
+    <td> No Link Available </td>
+  </tr>
+  <tr>
+    <td> Sri Guru Granth Sahib Ji </td>
+    <td> Primary </td>
+    <td> Multiple </td>
+    <td> SGPC </td>
+    <td> Unknown </td>
+    <td> [Link](http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf) </td>
+  </tr>
+  <tr>
+    <td> Sri Guru Granth Sahib Ji Shabadarth </td>
+    <td> Primary </td>
+    <td> SGPC </td>
+    <td> SGPC </td>
+    <td> October 2009 </td>
+    <td> [Link](http://vidhia.com/index.php?q=f&amp;f=%2FBani%2FSri+Guru+Granth+Sahib+Ji+Shabadarth+%28SGPC%29) </td>
+  </tr>
+  <tr>
+    <td> Panj Granthi </td>
+    <td> Primary </td>
+    <td> Multiple </td>
+    <td> SGPC </td>
+    <td> September 2010 </td>
+    <td> [Link](http://vidhia.com/Bani/Panj%20Granthi-Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Nitnem te Hor Bania(n) </td>
+    <td> Primary </td>
+    <td> Mulitple </td>
+    <td> SGPC </td>
+    <td> May 2017 </td>
+    <td> [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) </td>
+  </tr>
+  <tr>
+    <td> Santhya Sri Guru Granth Sahib Ji Volumes   1-7 </td>
+    <td> Secondary </td>
+    <td> Bhai Sahib Bhai Veer Singh Ji </td>
+    <td> Bhai Veer Singh Sahit Sadan </td>
+    <td> October 2007 </td>
+    <td> [Link](http://vidhia.com/index.php?q=f&amp;f=%2FBhai+Veer+Singh+Ji%2FSanthya+Sri+Guru+Granth+Sahib+Ji) </td>
+  </tr>
+  <tr>
+    <td> Teeka Anek Bania(n) Volumes 1-3 </td>
+    <td> Secondary </td>
+    <td> Bhai Sahib Bhai Veer Singh Ji </td>
+    <td> Bhai Veer Singh Sahit Sadan </td>
+    <td> 4th edition, April 2008 </td>
+    <td> [Volume   1](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%201%29-Bhai%20Vir%20Singh%20Punjabi.pdf)   [Volume   2](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%202%29-Bhai%20Vir%20Singh%20Punjabi.pdf)   [Volume   3](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Teeka%20Anek%20Banian%20%28Part%203%29-Bhai%20Vir%20Singh%20Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Nitnem Steek </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td> 29th edition, April 2012</td>
+    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Jap Ji Sahib Steek </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td>36th edition, July 2011</td>
+    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Japji%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Sukhmani Sahib Steek </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td>40th edition, February 2012</td>
+    <td> [Link](http://vidhia.com/Professor%20Sahib%20Singh/Sukhmani%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Bhagat Bani Steek Volumes 1-5 </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td> 13th edition, July 2011 </td>
+    <td> [Volume   1](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%201-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   2](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%202-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   3](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%203-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   4](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%204-Prof%20Sahib%20Singh-Punjabi.pdf)   [Volume   5](http://vidhia.com/Professor%20Sahib%20Singh/Bhagat%20Bani%20Steek%20Part%205-Prof%20Sahib%20Singh-Punjabi.pdf) </td>
+  </tr>
+  <tr>
+    <td> Bhagat Bani Steek </td>
+    <td> Secondary </td>
+    <td> Giani Bishan Singh </td>
+    <td> Bhai Partap Singh Sundar   Singh </td>
+    <td> 6th edition, May 1930 </td>
+    <td> [Link](http://vidhia.com/Bhagat_Bani_Steek_1930_Gyani_Bishan_Singh_Ji%281%29.pdf) </td>
+  </tr>
+</table>
 
 ## Sri Dasam Granth Sahib
 
