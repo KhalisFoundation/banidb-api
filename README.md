@@ -147,19 +147,98 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 
 ## Sri Dasam Granth Sahib
 
-| Source | Source Type | Author | Publisher | Edition | Link |
-| ------ | ----------- | -------| --------- | ------- | ---- |
-| Das Granthi | Primary | Guru Gobind Singh Ji | SGPC | March 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_%28SGPC%29.pdf) |
-| Sri Dasam Granth Volumes 1-2 | Secondary | Guru Gobind Singh Ji | Chattar Singh Jeevan Singh | Unknown | No Link Available |
-| Akal Ustat | Primary | Guru Gobind Singh Ji | SGPC | 5th edition, December 1995 | [Link](http://vidhia.com/Bani/Akal%20Ustat-Punjabi.PDF) |
-| Bachitar Natak | Primary | Guru Gobind Singh Ji | SGPC | 7th edition, July 2000 | [Link](http://vidhia.com/Bani/Bachitar%20Natak-Punjabi.pdf) |
-| Nitnem te Hor Bania(n) | Primary | Mulitple | SGPC | May 2017 | [Link](http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf) |
-| Nitnem, Das Granthi, ate Hor Bania(n) | Secondary | Multiple | Hazoori Taksaal | 2006 | [Link](http://vidhia.com/Bani/Das_Granthi_Pothi.pdf) |
-| Sri Dasam Granth Sahib Steek Volumes 1-2 | Secondary | Giani Bishan Singh Ji | Khalsa College Amritsar | 1941 | [Volume 1](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%201%20-%20Giani%20Bishan%20Singh%20Ji.pdf) [Volume 2](http://vidhia.com/Bani/Sri%20Dasam%20Granth%20Sahib%20Teeka%20Part%202%20-%20Giani%20Bishan%20Singh%20Ji.pdf) |
-| Chandi Di Vaar Steek | Secondary | Pandit Narain Singh | Bh. Jvahar Singh, Kirpal Singh & Co | 20th century | [Link](http://vidhia.com/Bani/Chandi_Di_Vaar_Steek_-_Pandit_Narain_Singh_Ji.pdf) |
-| Nitnem Steek | Secondary | Professor Sahib Singh | Singh Brothers | 29th edition, April 2012| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Nitnem%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
-| Jaap Sahib Steek | Secondary | Professor Sahib Singh | Singh Brothers |17th edition, August 2003| [Link](http://vidhia.com/Professor%20Sahib%20Singh/Jaap%20Sahib%20Steek-Prof%20Sahib%20Singh-Punjabi.pdf) |
+<table cellspacing="0" cellpadding="0" id="sri10">
 
+  <tr>
+    <td> Source </td>
+    <td> Source   Type </td>
+    <td> Author </td>
+    <td> Publisher </td>
+    <td> Edition </td>
+    <td> Link </td>
+  </tr>
+  
+  <tr>
+    <td> Das Granthi </td>
+    <td> Primary </td>
+    <td> Guru Gobind Singh Ji </td>
+    <td> SGPC </td>
+    <td> March 2006 </td>
+    <td> [<a href="http://vidhia.com/Bani/Das_Granthi_(SGPC).pdf">Link</a>]</td>
+  </tr>
+  <tr>
+    <td> Sri Dasam Granth Volumes 1-2 </td>
+    <td> Secondary </td>
+    <td> Guru Gobind Singh Ji </td>
+    <td> Chattar Singh Jeevan Singh </td>
+    <td> Unknown </td>
+    <td> No Link Available </td>
+  </tr>
+  <tr>
+    <td> Akal Ustat </td>
+    <td> Primary </td>
+    <td> Guru Gobind Singh Ji </td>
+    <td> SGPC </td>
+    <td> 5th edition, December 1995 </td>
+    <td> [<a href="http://vidhia.com/Bani/Akal%20Ustat-Punjabi.PDF">Link</a>]</td>
+  </tr>
+  <tr>
+    <td> Bachitar Natak </td>
+    <td> Primary </td>
+    <td> Guru Gobind Singh Ji </td>
+    <td> SGPC </td>
+    <td> 7th edition, July 2000 </td>
+    <td> [<a href="http://vidhia.com/Bani/Bachitar%20Natak-Punjabi.pdf">Link</a>]</td>
+  </tr>
+  <tr>
+    <td> Nitnem te Hor Bania(n) </td>
+    <td> Primary </td>
+    <td> Mulitple </td>
+    <td> SGPC </td>
+    <td> May 2017 </td>
+    <td> [<a href="http://vidhia.com/Bani/Nitnem%20%28SGPC%29.pdf">Link</a>]</td>
+  </tr>
+  <tr>
+    <td> Nitnem, Das Granthi, ate Hor Bania(n) </td>
+    <td> Secondary </td>
+    <td> Multiple </td>
+    <td> Hazoori Taksaal </td>
+    <td>2006</td>
+    <td> [<a href="http://vidhia.com/Bani/Das_Granthi_Pothi.pdf">Link</a>]</td>
+  </tr>
+  <tr>
+    <td> Sri Dasam Granth Sahib Steek Volumes   1-2 </td>
+    <td> Secondary </td>
+    <td> Giani Bishan Singh Ji </td>
+    <td> Khalsa College Amritsar </td>
+    <td>1941</td>
+    <td> [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 1 - Giani Bishan Singh Ji.pdf">Volume   1</a>]()   [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 2 - Giani Bishan Singh Ji.pdf">Volume   2</a>]() </td>
+  </tr>
+  <tr>
+    <td> Chandi Di Vaar Steek </td>
+    <td> Secondary </td>
+    <td> Pandit Narain Singh </td>
+    <td> Bh. Jvahar Singh, Kirpal Singh   &amp; Co </td>
+    <td> 20th century </td>
+    <td> [<a href="http://vidhia.com/Bani/Chandi_Di_Vaar_Steek_-_Pandit_Narain_Singh_Ji.pdf">Link</a>]() </td>
+  </tr>
+  <tr>
+    <td> Nitnem Steek </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td> 29th edition, April 2012</td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Nitnem Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]() </td>
+  </tr>
+  <tr>
+    <td> Jaap Sahib Steek </td>
+    <td> Secondary </td>
+    <td> Professor Sahib Singh </td>
+    <td> Singh Brothers </td>
+    <td>17th edition, August 2003</td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Jaap Sahib Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]() </td>
+  </tr>
+</table>
 
 ## Bhai Gurdaas Ji
 
