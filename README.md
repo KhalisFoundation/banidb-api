@@ -150,12 +150,12 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 <table cellspacing="0" cellpadding="0" id="sri10">
 
   <tr>
-    <td> Source </td>
-    <td> Source   Type </td>
-    <td> Author </td>
-    <td> Publisher </td>
-    <td> Edition </td>
-    <td> Link </td>
+    <th> Source </th>
+    <th> Source   Type </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
   </tr>
   
   <tr>
@@ -212,7 +212,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Giani Bishan Singh Ji </td>
     <td> Khalsa College Amritsar </td>
     <td>1941</td>
-    <td> [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 1 - Giani Bishan Singh Ji.pdf">Volume   1</a>]()   [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 2 - Giani Bishan Singh Ji.pdf">Volume   2</a>]() </td>
+    <td> [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 1 - Giani Bishan Singh Ji.pdf">Volume   1</a>]   [<a href="http://vidhia.com/Bani/Sri Dasam Granth Sahib Teeka Part 2 - Giani Bishan Singh Ji.pdf">Volume   2</a>] </td>
   </tr>
   <tr>
     <td> Chandi Di Vaar Steek </td>
@@ -220,7 +220,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Pandit Narain Singh </td>
     <td> Bh. Jvahar Singh, Kirpal Singh   &amp; Co </td>
     <td> 20th century </td>
-    <td> [<a href="http://vidhia.com/Bani/Chandi_Di_Vaar_Steek_-_Pandit_Narain_Singh_Ji.pdf">Link</a>]() </td>
+    <td> [<a href="http://vidhia.com/Bani/Chandi_Di_Vaar_Steek_-_Pandit_Narain_Singh_Ji.pdf">Link</a>] </td>
   </tr>
   <tr>
     <td> Nitnem Steek </td>
@@ -228,7 +228,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td> 29th edition, April 2012</td>
-    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Nitnem Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]() </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Nitnem Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>] </td>
   </tr>
   <tr>
     <td> Jaap Sahib Steek </td>
@@ -236,38 +236,149 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Professor Sahib Singh </td>
     <td> Singh Brothers </td>
     <td>17th edition, August 2003</td>
-    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Jaap Sahib Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>]() </td>
+    <td> [<a href="http://vidhia.com/Professor Sahib Singh/Jaap Sahib Steek-Prof Sahib Singh-Punjabi.pdf">Link</a>] </td>
   </tr>
 </table>
 
 ## Bhai Gurdaas Ji
 
-| Source | Source Type | Author | Publisher | Edition | Link |
-| ------ | ----------- | -------| --------- | ------- | ---- |
-| Vaaran Bhai Gurdaas Ji | Primary | Bhai Gurdaas Ji | SGPC | November 2011 | [Link](https://vidhia.com/Bhai%20Gurdaas%20Ji/Vaaran%20Bhai%20Gurdaas%20Ji%20-%20SGPC.pdf) |
-| Vaaran Bhai Gurdaas Ji | Secondary | Giani Hazara Singh Ji Pandit & Bhai Sahib Bhai Veer Singh Ji | Bhai Veer Singh Sahit Sadan | 21st edition, June 2001 | [Link](http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Vaaran%20Bhai%20Gurudas%20Ji-Bhai%20Vir%20Singh%20Punjabi.pdf) |
-|Vaaran Bhai Gurdaas Ji Steek | Secondary | Giani Harbans Singh | Khalsa Sahit Sadan | December 2004 | [Link](http://vidhia.com/Giani%20Harbans%20Singh/Varaan-Bhai-Gurdasji-Steek-By-Giani-Harbans-Singh.pdf) |
-
+<table cellspacing="0" cellpadding="0" id="bhaigurdas">
+  <tr>
+    <th> Source </th>
+    <th> Source   Type </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
+  </tr>
+  <tr>
+    <td> Vaaran Bhai Gurdaas Ji </td>
+    <td> Primary </td>
+    <td> Bhai Gurdaas Ji </td>
+    <td> SGPC </td>
+    <td> November 2011 </td>
+    <td> [<a href="https://vidhia.com/Bhai Gurdaas Ji/Vaaran Bhai Gurdaas Ji - SGPC.pdf">Link</a>] </td>
+  </tr>
+  <tr>
+    <td> Vaaran Bhai Gurdaas Ji </td>
+    <td> Secondary </td>
+    <td> Giani Hazara Singh Ji Pandit &amp;   Bhai Sahib Bhai Veer Singh Ji </td>
+    <td> Bhai Veer Singh Sahit Sadan </td>
+    <td> 21st edition, June 2001 </td>
+    <td> [<a href="http://vidhia.com/Bhai Veer Singh Ji/Vaaran Bhai Gurudas Ji-Bhai Vir Singh Punjabi.pdf">Link</a>] </td>
+  </tr>
+  <tr>
+    <td>Vaaran Bhai Gurdaas Ji Steek </td>
+    <td> Secondary </td>
+    <td> Giani Harbans Singh </td>
+    <td> Khalsa Sahit Sadan </td>
+    <td> December 2004 </td>
+    <td> [<a href="http://vidhia.com/Giani Harbans Singh/Varaan-Bhai-Gurdasji-Steek-By-Giani-Harbans-Singh.pdf">Link</a>] </td>
+  </tr>
+</table>
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
 
-| Source | Source Type | Author | Publisher | Edition | Link |
-| ------ | ----------- | -------| --------- | ------- | ---- |
-| Sri Sarabloh Granth Sahib Ji Sampooran Steek Volumes 1-2 | Primary | Santa Singh | Buddha Dal | June 2000 | [Link](http://vidhia.com/Bani/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek.pdf) |
-| Amrit Keertan | Primary | Multiple | Khalsa Brothers | 40th edition,  July 2011 | [Link](http://vidhia.com/Bani/Amrit%20Keertan%20%28Khalsa%20Brothers%29.pdf) |
+<table cellspacing="0" cellpadding="0" id="sarabloh">
+  <tr>
+    
+    <th> Source </th>
+    <th> Source   Type </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
+    <th></th>
+  </tr>
+
+  <tr>
+    
+    <td> Sri Sarabloh Granth Sahib Ji   Sampooran Steek Volumes 1-2 </td>
+    <td> Primary </td>
+    <td> Santa Singh </td>
+    <td> Buddha Dal </td>
+    <td> June 2000 </td>
+    <td colspan="2"> [<a href="http://vidhia.com/Bani/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek.pdf">Link</a>] </td>
+  </tr>
+  <tr>
+    
+    <td> Amrit Keertan </td>
+    <td> Primary </td>
+    <td> Multiple </td>
+    <td> Khalsa Brothers </td>
+    <td> 40th edition,  July 2011 </td>
+    <td colspan="2"> [<a href="http://vidhia.com/Bani/Amrit Keertan (Khalsa Brothers).pdf">Link</a>] </td>
+  </tr>
+</table>
 
 # Feature Comparison
 The table below outlines some stats about BaniDB, as of 2/1/19.
 
-| Source          | Accurate | Corrections | Maintained | Multiple Raters per Change| SGPC Compatible Lagamatras & Padh Chhedh| DSGMC Approval |
-| ----------------| -------- | ----------- | ---------- | ------------------------- | --------------- | -------------- |
-| BaniDB          | ✅       | 39,500+     | ✅         | ✅                             | ✅✅            | ✅             |
-| SikhiToTheMax Web| Uses BaniDB| Uses BaniDB | Uses BaniDB | Uses BaniDB                 | Uses BaniDB     | Uses BaniDB    |
-| SikhiToTheMax 2 | 80-90%   | 6,000+      | ❌         | ❌                             | ❌❌            | ❌             |
-| iGurbani        | 80-90%   | 1,000+      | ✅         | ❌                             | ❌❌            | ❌             |
-| Sikher          | ????     | ????        | ❌         | ❌                             | ❌❌            | ❌             |
-| Others          | ????     | ????        | ✅         | ❌                             | ✅❌            | ❌             |
-
+<table cellspacing="0" cellpadding="0" id="banidbapps">
+  <tr>
+    <th> Source</th>
+    <th> Accurate </th>
+    <th> Corrections </th>
+    <th> Maintained </th>
+    <th> Multiple Raters per Change</th>
+    <th> SGPC Compatible Lagamatras &amp; Padh Chhedh</th>
+    <th> DSGMC Approval </th>
+  </tr>
+  <tr>
+    <td> BaniDB          </td>
+    <td> ✅       </td>
+    <td> 39,500+     </td>
+    <td> ✅         </td>
+    <td> ✅                             </td>
+    <td> ✅✅            </td>
+    <td> ✅             </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax Web</td>
+    <td> Uses BaniDB</td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB                 </td>
+    <td> Uses BaniDB     </td>
+    <td> Uses BaniDB    </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax 2 </td>
+    <td> 80-90%   </td>
+    <td> 6,000+      </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> iGurbani        </td>
+    <td> 80-90%   </td>
+    <td> 1,000+      </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Sikher          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Others          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ✅❌            </td>
+    <td> ❌             </td>
+  </tr>
+</table>
 
 # Current Users
 
@@ -275,13 +386,36 @@ The table below outlines some stats about BaniDB, as of 2/1/19.
 
 # Metrics
 
-| Date       | Verified Changes  |
-| ---------- | ----------------- |
-| 02/05/2019 | 39,750            |
-| 02/01/2019 | 39,500            |
-| 01/25/2019 | 39,000            |
-| 01/01/2019 | 37,792            |
-| 07/01/2018 | 35,674            |
-| 01/01/2018 | 7,937             |
+<table cellspacing="0" cellpadding="0" id="changes">
+
+  <tr>
+    <th> Date       </th>
+    <th> Verified Changes  </th>
+  </tr>
+  <tr>
+    <td> 02/05/2019 </td>
+    <td align="right">39,750</td>
+  </tr>
+  <tr>
+    <td> 02/01/2019 </td>
+    <td align="right">39,500</td>
+  </tr>
+  <tr>
+    <td> 01/25/2019 </td>
+    <td align="right">39,000</td>
+  </tr>
+  <tr>
+    <td> 01/01/2019 </td>
+    <td align="right">37,792</td>
+  </tr>
+  <tr>
+    <td> 07/01/2018 </td>
+    <td align="right">35,674</td>
+  </tr>
+  <tr>
+    <td> 01/01/2018 </td>
+    <td align="right">7,937</td>
+  </tr>
+</table>
 
 
