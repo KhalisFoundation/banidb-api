@@ -281,7 +281,6 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 
 <table cellspacing="0" cellpadding="0" id="sarabloh">
   <tr>
-    
     <th> Source </th>
     <th> Source   Type </th>
     <th> Author </th>
@@ -292,7 +291,6 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
   </tr>
 
   <tr>
-    
     <td> Sri Sarabloh Granth Sahib Ji   Sampooran Steek Volumes 1-2 </td>
     <td> Primary </td>
     <td> Santa Singh </td>
@@ -301,7 +299,6 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td colspan="2"> [<a href="http://vidhia.com/Bani/Complete-Sri-Sarbloh-Granth-Sahib-Ji-Steek.pdf">Link</a>] </td>
   </tr>
   <tr>
-    
     <td> Amrit Keertan </td>
     <td> Primary </td>
     <td> Multiple </td>
