@@ -69,7 +69,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> SGPC </td>
     <td> SGPC </td>
     <td> October 2009 </td>
-    <td> [<a href="tp://vidhia.com/index.php?q=f&f=/Bani/Sri+Guru+Granth+Sahib+Ji+Shabadarth+(SGPC)">Link</a>]</td>
+    <td> [<a href="http://vidhia.com/index.php?q=f&f=/Bani/Sri+Guru+Granth+Sahib+Ji+Shabadarth+(SGPC)">Link</a>]</td>
   </tr>
   <tr>
     <td> Panj Granthi </td>
