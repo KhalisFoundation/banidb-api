@@ -28,10 +28,6 @@ const prepVerse = (row, includeMeta = false) => {
     pageNo: row.PageNo,
     lineNo: row.LineNo,
     updated: row.Updated,
-    firstLetters: {
-      ascii: row.FirstLetterStr,
-      english: row.FirstLetterEng,
-    },
     bisram: {
       sttm: row.Bisram,
       igurbani1: row.igurbani_bisram1,
