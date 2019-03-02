@@ -28,11 +28,7 @@ const prepVerse = (row, includeMeta = false) => {
     pageNo: row.PageNo,
     lineNo: row.LineNo,
     updated: row.Updated,
-    bisram: {
-      sttm: row.Bisram,
-      igurbani1: row.igurbani_bisram1,
-      igurbani2: row.igurbani_bisram2,
-    },
+    visraam: row.Visraam,
   };
   if (includeMeta) {
     verse.writer = getWriter(row);
