@@ -24,6 +24,7 @@ const allColumns = `
 b.Gurmukhi AS NameGurmukhi,
 b.GurmukhiUni AS NameGurmukhiUni,
 b.Transliteration AS NameTransliteration,
+v.ID,
 v.Gurmukhi,
 v.GurmukhiBisram,
 v.GurmukhiUni,
