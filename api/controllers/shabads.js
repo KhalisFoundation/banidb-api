@@ -13,10 +13,8 @@ const searchTypes = banidb.TYPES;
 
 const pool = createPool(config.mysql);
 
-const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.English, v.Punjabi,
-    v.PunjabiUni, v.Spanish, v.PageNo AS PageNo, v.LineNo,
-    v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters,
-    v.Bisram, v.igurbani_bisram1, v.igurbani_bisram2,
+const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS PageNo, v.LineNo,
+    v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
     v.FirstLetterEng, v.Transliteration, v.WriterID, w.WriterEnglish,
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
     r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,

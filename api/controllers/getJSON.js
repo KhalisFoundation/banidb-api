@@ -1,4 +1,5 @@
 const prepVerse = (row, includeMeta = false) => {
+  const translations = JSON.parse(row.Translations);
   const verse = {
     verseId: row.ID,
     verse: {
@@ -10,16 +11,18 @@ const prepVerse = (row, includeMeta = false) => {
       unicode: row.GurmukhiUni.replace(/\s+/g, ''),
     },
     translation: {
-      english: {
-        ssk: row.English,
+      en: {
+        ...translations.en,
       },
-      punjabi: {
-        bms: {
-          gurmukhi: row.Punjabi,
-          unicode: row.PunjabiUni,
+      pu: {
+        ss: {
+          gurmukhi: translations.pu.ss,
+          unicode: translations.puu.ss,
         },
       },
-      spanish: row.Spanish,
+      es: {
+        ...translations.es,
+      },
     },
     transliteration: {
       english: row.Transliteration,
@@ -28,11 +31,7 @@ const prepVerse = (row, includeMeta = false) => {
     pageNo: row.PageNo,
     lineNo: row.LineNo,
     updated: row.Updated,
-    bisram: {
-      sttm: row.Bisram,
-      igurbani1: row.igurbani_bisram1,
-      igurbani2: row.igurbani_bisram2,
-    },
+    visraam: JSON.parse(row.Visraam),
   };
   if (includeMeta) {
     verse.writer = getWriter(row);
