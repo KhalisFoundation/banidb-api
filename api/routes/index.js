@@ -13,7 +13,7 @@ route.get('/', limiter.rate100, (req, res) => {
     name: 'BaniDB API',
     docs: 'See https://www.banidb.com for more information and documentation.',
     version: pjson.version,
-    endpoint: os.hostname().substr(0, 3)
+    endpoint: os.hostname().substr(0, 3),
   });
 });
 

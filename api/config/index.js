@@ -4,6 +4,6 @@ module.exports = {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'root',
     database: 'khajana_khajana',
-    dateStrings: true
-  }
+    dateStrings: true,
+  },
 };

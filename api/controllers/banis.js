@@ -1,11 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const {
-  prepVerse,
-  getSource,
-  getRaag,
-  getWriter,
-} = require('./getJSON');
+const { getRaag, getSource, getWriter, prepVerse } = require('./getJSON');
 
 const lengthExistsMap = {
   s: 'existsSGPC',
@@ -93,14 +88,14 @@ exports.bani = async (req, res) => {
       english: rows[0].NameTransliteration,
       source: getSource(rows[0]),
       raag: getRaag(rows[0]),
-      writer: getWriter(rows[0])
+      writer: getWriter(rows[0]),
     };
 
     const verses = rows.map(row => prepBaniVerse(row, exists));
 
     res.json({
       baniInfo,
-      verses
+      verses,
     });
   } catch (err) {
     error(err, res);

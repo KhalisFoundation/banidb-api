@@ -27,8 +27,10 @@
   "devDependencies": {
     "eslint": "^4.18.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "nodemon": "^1.18.9",
-    "pm2": "^2.10.4"
+    "pm2": "^2.10.4",
+    "prettier": "^1.16.4"
   }
 }
