@@ -81,22 +81,27 @@ exports.bani = async (req, res) => {
     }
     const q = `SELECT ${allColumns} WHERE v.Bani = ? ${existsQuery} ORDER BY Seq ASC`;
     const rows = await conn.query(q, [BaniID]);
-    const baniInfo = {
-      baniID: BaniID,
-      gurmukhi: rows[0].NameGurmukhi,
-      unicode: rows[0].NameGurmukhiUni,
-      english: rows[0].NameTransliteration,
-      source: getSource(rows[0]),
-      raag: getRaag(rows[0]),
-      writer: getWriter(rows[0]),
-    };
+    if (rows && rows.length > 0) {
+      const baniInfo = {
+        baniID: BaniID,
+        gurmukhi: rows[0].NameGurmukhi,
+        unicode: rows[0].NameGurmukhiUni,
+        english: rows[0].NameTransliteration,
+        source: getSource(rows[0]),
+        raag: getRaag(rows[0]),
+        writer: getWriter(rows[0]),
+      };
 
-    const verses = rows.map(row => prepBaniVerse(row, exists));
+      const verses = rows.map(row => prepBaniVerse(row, exists));
 
-    res.json({
-      baniInfo,
-      verses,
-    });
+      res.json({
+        baniInfo,
+        verses,
+      });
+    } else {
+      const err = 'Bani does not exist';
+      throw err;
+    }
   } catch (err) {
     error(err, res);
   } finally {
