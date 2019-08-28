@@ -1,5 +1,5 @@
 # BaniDB API
-Active work ongoing under dev branch
+Active work ongoing under the dev branch
 
 # Vision Statement
 BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
