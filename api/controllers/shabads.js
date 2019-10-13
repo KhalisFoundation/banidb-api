@@ -30,7 +30,7 @@ const error = (err, res) => {
 exports.search = async (req, res) => {
   const searchQuery = req.params.query;
   let SourceID = req.query.source || '';
-  let searchType = parseInt(req.query.searchtype, 10) || 1;
+  let searchType = req.query.searchType ? parseInt(req.query.searchType, 10) : 1;
   let writer = parseInt(req.query.writer, 10) || null;
   let raag = parseInt(req.query.raag, 10) || null;
   let ang = parseInt(req.query.ang, 10) || null;
