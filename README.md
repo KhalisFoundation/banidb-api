@@ -309,7 +309,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 </table>
 
 # Feature Comparison
-The table below outlines some stats about BaniDB, as of 5/26/19.
+The table below outlines some stats about BaniDB, as of 11/6/19.
 
 <table cellspacing="0" cellpadding="0" id="banidbapps">
   <tr>
@@ -324,7 +324,7 @@ The table below outlines some stats about BaniDB, as of 5/26/19.
   <tr>
     <td> BaniDB          </td>
     <td> ✅       </td>
-    <td> 41,250+     </td>
+    <td> 41,500+     </td>
     <td> ✅         </td>
     <td> ✅                             </td>
     <td> ✅✅            </td>
@@ -388,6 +388,10 @@ The table below outlines some stats about BaniDB, as of 5/26/19.
   <tr>
     <th> Date       </th>
     <th> Verified Changes  </th>
+  </tr>
+  <tr>
+    <td> 11/6/2019 </td>
+    <td align="right">41,544</td>
   </tr>
   <tr>
     <td> 05/26/2019 </td>
