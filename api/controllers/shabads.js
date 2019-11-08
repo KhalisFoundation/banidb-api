@@ -10,7 +10,7 @@ const pool = createPool(config.mysql);
 
 const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS PageNo, v.LineNo,
     v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
-    v.FirstLetterEng, v.Transliteration, v.WriterID, w.WriterEnglish,
+    v.FirstLetterEng, v.Transliterations, v.WriterID, w.WriterEnglish,
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
     r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,
     src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,

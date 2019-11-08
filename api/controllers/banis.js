@@ -1,6 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const { getRaag, getSource, getWriter, prepVerse } = require('./getJSON');
+const { getRaag, getSource, getWriter, prepVerse, prepBanis } = require('./getJSON');
 
 const lengthExistsMap = {
   s: 'existsSGPC',
@@ -18,7 +18,7 @@ const error = (err, res) => {
 const allColumns = `
 b.Gurmukhi AS NameGurmukhi,
 b.GurmukhiUni AS NameGurmukhiUni,
-b.Transliteration AS NameTransliteration,
+b.Transliterations AS NameTransliterations,
 v.ID,
 v.Gurmukhi,
 v.Visraam,
@@ -27,7 +27,7 @@ v.Translations,
 v.PageNo AS PageNo,
 v.LineNo,
 v.SourceID,
-v.Transliteration,
+v.Transliterations,
 v.WriterID,
 w.WriterEnglish,
 w.WriterGurmukhi,
@@ -59,9 +59,9 @@ exports.all = async (req, res) => {
   try {
     conn = await pool.getConnection();
     const q =
-      'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliteration as transliteration, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
+      'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
-    res.json(rows);
+    res.json(rows.map(banis => prepBanis(banis)));
   } catch (err) {
     error(err, res);
   } finally {
@@ -80,13 +80,17 @@ exports.bani = async (req, res) => {
       existsQuery = `AND v.${exists} = 1`;
     }
     const q = `SELECT ${allColumns} WHERE v.Bani = ? ${existsQuery} ORDER BY Seq ASC`;
+    console.log(q);
     const rows = await conn.query(q, [BaniID]);
     if (rows && rows.length > 0) {
+      const nameTransliterations = JSON.parse(rows[0].NameTransliterations);
       const baniInfo = {
         baniID: BaniID,
         gurmukhi: rows[0].NameGurmukhi,
         unicode: rows[0].NameGurmukhiUni,
-        english: rows[0].NameTransliteration,
+        english: nameTransliterations.en,
+        hindi: nameTransliterations.hi,
+        ipa: nameTransliterations.ipa,
         source: getSource(rows[0]),
         raag: getRaag(rows[0]),
         writer: getWriter(rows[0]),
