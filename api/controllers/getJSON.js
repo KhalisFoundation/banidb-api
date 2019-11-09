@@ -76,7 +76,8 @@ const prepBanis = row => {
     token: row.token,
     gurmukhi: row.gurmukhi,
     gurmukhiUni: row.gurmukhiUni,
-    transliteration: {
+    transliteration: transliterations.en,
+    transliterations: {
       english: transliterations.en,
       hindi: transliterations.hi,
       ipa: transliterations.ipa,
