@@ -1,3 +1,7 @@
+# BaniDB API
+
+Active work ongoing under dev branch
+=======
 [<img height="100" src="http://www.banidb.com/wp-content/uploads/2018/03/full-banidb-logo.png">](http://banidb.com)
 
 [![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org) 
@@ -442,5 +446,4 @@ The table below outlines some stats about BaniDB, as of 11/06/19.
     <td align="right">7,937</td>
   </tr>
 </table>
-
 
