@@ -1,5 +1,6 @@
 const prepVerse = (row, includeMeta = false) => {
   const translations = JSON.parse(row.Translations);
+  const transliterations = JSON.parse(row.Transliterations);
   const verse = {
     verseId: row.ID,
     verse: {
@@ -25,7 +26,9 @@ const prepVerse = (row, includeMeta = false) => {
       },
     },
     transliteration: {
-      english: row.Transliteration,
+      english: transliterations.en,
+      hindi: transliterations.hi,
+      ipa: transliterations.ipa,
     },
     shabadId: row.ShabadID,
     pageNo: row.PageNo,
@@ -66,8 +69,26 @@ const getWriter = shabad => ({
   english: shabad.WriterEnglish,
 });
 
+const prepBanis = row => {
+  const transliterations = JSON.parse(row.transliterations);
+  const banis = {
+    ID: row.ID,
+    token: row.token,
+    gurmukhi: row.gurmukhi,
+    gurmukhiUni: row.gurmukhiUni,
+    transliteration: {
+      english: transliterations.en,
+      hindi: transliterations.hi,
+      ipa: transliterations.ipa,
+    },
+    updated: row.updated,
+  };
+  return banis;
+};
+
 module.exports = {
   prepVerse,
+  prepBanis,
   getSource,
   getRaag,
   getWriter,
