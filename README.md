@@ -65,7 +65,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> Multiple </td>
     <td> SGPC </td>
     <td> Unknown </td>
-    <td> [<a href="http://old.sgpc.net/files/Siri Guru Granth Sahib without Index (Uni).pdf">Link</a>]</td>
+    <td> [<a href="https://web.archive.org/web/20180714140742/http://old.sgpc.net/files/Siri%20Guru%20Granth%20Sahib%20without%20Index%20(Uni).pdf">Link</a>]</td>
   </tr>
   <tr>
     <td> Sri Guru Granth Sahib Ji Shabadarth </td>
