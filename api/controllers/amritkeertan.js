@@ -1,6 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const { getRaag, getSource, getWriter, prepVerse, prepAKIndex } = require('./getJSON');
+const { prepVerse, prepAKIndex } = require('./getJSON');
 
 const pool = createPool(config.mysql);
 
@@ -146,7 +146,7 @@ const getHeaderInfo = async (headerID, conn) => {
     const row = await conn.query(q, [headerID]);
     return row.map(items => prepAKIndex(items));
   } catch (err) {
-    error(err, res);
+    error(err);
   } finally {
     if (conn) conn.end();
   }
