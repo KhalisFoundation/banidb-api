@@ -87,9 +87,16 @@ const prepBanis = row => {
   return banis;
 };
 
+const prepAKIndex = row => {
+  row.Transliterations = JSON.parse(row.Transliterations);
+  row.Translations = JSON.parse(row.Translations);
+  return row;
+};
+
 module.exports = {
   prepVerse,
   prepBanis,
+  prepAKIndex,
   getSource,
   getRaag,
   getWriter,
