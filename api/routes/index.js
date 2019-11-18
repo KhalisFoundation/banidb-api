@@ -4,6 +4,7 @@ const limiter = require('../controllers/limiter');
 const pjson = require('../../package.json');
 const shabads = require('../controllers/shabads');
 const banis = require('../controllers/banis');
+const amritkeertan = require('../controllers/amritkeertan');
 const rehats = require('../controllers/rehats');
 
 const route = Router();
@@ -32,6 +33,15 @@ route.get('/random/:SourceID?', limiter.rate100, shabads.random);
 route.get('/banis', limiter.rate100, banis.all);
 
 route.get('/banis/:BaniID', limiter.rate100, banis.bani);
+
+// Amrit Keertan Routes
+route.get('/amritkeertan', limiter.rate100, amritkeertan.headers);
+
+route.get('/amritkeertan/index', limiter.rate100, amritkeertan.index);
+
+route.get('/amritkeertan/index/:HeaderID', limiter.rate100, amritkeertan.index);
+
+route.get('/amritkeertan/shabads/:ShabadID', limiter.rate100, amritkeertan.shabad);
 
 // Rehat Routes
 route.get('/rehats', limiter.rate100, rehats.all);
