@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start process.json",
-    "dev": "nodemon app",
+    "dev": "pm2 start process-dev.json",
     "test": "eslint ."
   },
   "repository": {
