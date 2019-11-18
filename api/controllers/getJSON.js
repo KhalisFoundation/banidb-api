@@ -94,9 +94,10 @@ const prepBanis = row => {
 };
 
 const prepAKIndex = row => {
-  row.Transliterations = JSON.parse(row.Transliterations);
-  row.Translations = JSON.parse(row.Translations);
-  return row;
+  const akIndexRow = row;
+  akIndexRow.Transliterations = JSON.parse(row.Transliterations);
+  akIndexRow.Translations = JSON.parse(row.Translations);
+  return akIndexRow;
 };
 
 module.exports = {

@@ -95,7 +95,7 @@ exports.index = async (req, res) => {
     conn = await pool.getConnection();
     let headerID = -1;
     let header = '';
-    let out = {};
+    const out = {};
     if (req.params.HeaderID) {
       headerID = parseInt(req.params.HeaderID, 10);
       header = 'WHERE b.headerID = ?';
@@ -139,6 +139,7 @@ exports.shabad = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 const getHeaderInfo = async (headerID, conn) => {
   try {
     const q =
