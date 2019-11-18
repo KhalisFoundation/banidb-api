@@ -28,7 +28,10 @@ const prepVerse = (row, includeMeta = false) => {
     transliteration: {
       english: transliterations.en,
       hindi: transliterations.hi,
+      en: transliterations.en,
+      hi: transliterations.hi,
       ipa: transliterations.ipa,
+      ur: transliterations.ur,
     },
     shabadId: row.ShabadID,
     pageNo: row.PageNo,
@@ -80,7 +83,10 @@ const prepBanis = row => {
     transliterations: {
       english: transliterations.en,
       hindi: transliterations.hi,
+      en: transliterations.en,
+      hi: transliterations.hi,
       ipa: transliterations.ipa,
+      ur: transliterations.ur,
     },
     updated: row.updated,
   };
@@ -88,9 +94,10 @@ const prepBanis = row => {
 };
 
 const prepAKIndex = row => {
-  row.Transliterations = JSON.parse(row.Transliterations);
-  row.Translations = JSON.parse(row.Translations);
-  return row;
+  const akIndexRow = row;
+  akIndexRow.Transliterations = JSON.parse(row.Transliterations);
+  akIndexRow.Translations = JSON.parse(row.Translations);
+  return akIndexRow;
 };
 
 module.exports = {
