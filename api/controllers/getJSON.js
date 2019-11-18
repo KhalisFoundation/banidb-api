@@ -28,7 +28,10 @@ const prepVerse = (row, includeMeta = false) => {
     transliteration: {
       english: transliterations.en,
       hindi: transliterations.hi,
+      en: transliterations.en,
+      hi: transliterations.hi,
       ipa: transliterations.ipa,
+      ur: transliterations.ur,
     },
     shabadId: row.ShabadID,
     pageNo: row.PageNo,
@@ -80,7 +83,10 @@ const prepBanis = row => {
     transliterations: {
       english: transliterations.en,
       hindi: transliterations.hi,
+      en: transliterations.en,
+      hi: transliterations.hi,
       ipa: transliterations.ipa,
+      ur: transliterations.ur,
     },
     updated: row.updated,
   };
