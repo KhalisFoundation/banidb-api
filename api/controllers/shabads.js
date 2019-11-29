@@ -40,7 +40,7 @@ exports.search = async (req, res) => {
   SourceID = SourceID.substr(0, 1);
 
   if (!searchTypes[searchType]) {
-    searchType = 1;
+    searchType = 0;
   }
 
   if (writer < 0) {
