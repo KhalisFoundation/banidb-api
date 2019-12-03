@@ -14,8 +14,11 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
     r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,
     src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,
-    GREATEST(s.Updated, v.Updated) AS Updated
-  FROM Verse v
+    GREATEST(s.Updated, v.Updated) AS Updated`;
+
+const liveColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, s.ShabadID, v.Visraam`;
+
+const allFrom = `FROM Verse v
   LEFT JOIN Shabad s ON s.VerseID = v.ID
   LEFT JOIN Writer w USING(WriterID)
   LEFT JOIN Raag r USING(RaagID)
@@ -36,6 +39,7 @@ exports.search = async (req, res) => {
   let ang = parseInt(req.query.ang, 10) || null;
   let page = parseInt(req.query.page, 10) || 0;
   let results = parseInt(req.query.results, 10) || 20;
+  let liveSearch = parseInt(req.query.livesearch, 1) || 0;
 
   SourceID = SourceID.substr(0, 1);
 
@@ -63,7 +67,7 @@ exports.search = async (req, res) => {
     results = 20;
   }
 
-  let columns = allColumns;
+  let columns = liveSearch ? `${liveColumns} ${allFrom}` : `${allColumns} ${allFrom}`;
   let charCodeQuery = '';
   const conditions = [];
   const parameters = [];
@@ -241,7 +245,7 @@ exports.angs = async (req, res) => {
 
   try {
     conn = await pool.getConnection();
-    const q = `SELECT ${allColumns}
+    const q = `SELECT ${allColumns} ${allFrom}
       WHERE
         v.PageNo = ?
         AND v.SourceID = ?
@@ -389,7 +393,7 @@ const getShabad = ShabadIDQ =>
     pool
       .getConnection()
       .then(conn => {
-        const q = `SELECT ${allColumns} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
+        const q = `SELECT ${allColumns} ${allFrom} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
         conn
           .query(q, [ShabadIDQ])
           .then(rows => {
