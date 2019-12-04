@@ -1,5 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
+const lib = require('../lib');
 const { getRaag, getSource, getWriter, prepVerse, prepBanis } = require('./getJSON');
 
 const lengthExistsMap = {
@@ -12,7 +13,15 @@ const lengthExistsMap = {
 const pool = createPool(config.mysql);
 
 const error = (err, res) => {
-  res.status(400).json({ error: true, data: err });
+  console.error(err);
+  Error.captureStackTrace(err);
+  res.status(400).json({
+    error: true,
+    data: {
+      error: JSON.stringify(err),
+      stack: JSON.stringify(err.stack),
+    },
+  });
 };
 
 const allColumns = `
@@ -72,16 +81,24 @@ exports.all = async (req, res) => {
 exports.bani = async (req, res) => {
   let conn;
   try {
+    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
     conn = await pool.getConnection();
     const BaniID = parseInt(req.params.BaniID, 10);
     const exists = lengthExistsMap[req.query.length] || false;
+    const parameters = [BaniID];
+
     let existsQuery = '';
     if (exists) {
       existsQuery = `AND v.${exists} = 1`;
     }
-    const q = `SELECT ${allColumns} WHERE v.Bani = ? ${existsQuery} ORDER BY Seq ASC`;
-    console.log(q);
-    const rows = await conn.query(q, [BaniID]);
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+    const q = `SELECT ${allColumns} WHERE v.Bani = ? ${sinceQuery} ${existsQuery} ORDER BY Seq ASC`;
+    console.log([q, parameters]);
+    const rows = await conn.query(q, parameters);
     if (rows && rows.length > 0) {
       const nameTransliterations = JSON.parse(rows[0].NameTransliterations);
       const baniInfo = {
@@ -106,8 +123,9 @@ exports.bani = async (req, res) => {
         verses,
       });
     } else {
-      const err = 'Bani does not exist';
-      throw err;
+      res.json({
+        error: 'Bani does not exist or no updates found for specified Bani.',
+      });
     }
   } catch (err) {
     error(err, res);
