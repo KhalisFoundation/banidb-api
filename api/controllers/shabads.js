@@ -39,7 +39,7 @@ const error = (err, res) => {
 };
 
 exports.search = async (req, res) => {
-  const searchQuery = req.params.query;
+  let searchQuery = req.params.query;
   let SourceID = req.query.source || '';
   let searchType = req.query.searchtype ? parseInt(req.query.searchtype, 10) : 0;
   let writer = parseInt(req.query.writer, 10) || null;
@@ -77,20 +77,27 @@ exports.search = async (req, res) => {
 
   let columns = liveSearch ? `${liveColumns} ${allFrom}` : `${allColumns} ${allFrom}`;
   let charCodeQuery = '';
+  let charCodeQueryWildCard = '';
   const conditions = [];
   const parameters = [];
   let groupBy = '';
   let orderBy = '';
 
-  for (let x = 0, len = searchQuery.length; x < len; x += 1) {
-    let charCode = searchQuery.charCodeAt(x);
-    if (charCode < 100) {
-      charCode = `0${charCode}`;
+  // only do for first letter searches
+  if (searchType === 0 || searchType === 1) {
+    // ignore spaces
+    searchQuery = searchQuery.replace(/\s+/g, '');
+
+    for (let x = 0, len = searchQuery.length; x < len; x += 1) {
+      let charCode = searchQuery.charCodeAt(x);
+      if (charCode < 100) {
+        charCode = `0${charCode}`;
+      }
+      charCodeQuery += `,${charCode}`;
     }
-    charCodeQuery += `,${charCode}`;
+    // Add trailing wildcard
+    charCodeQueryWildCard = `${charCodeQuery},z`;
   }
-  // Add trailing wildcard
-  const charCodeQueryWildCard = `${charCodeQuery},z`;
 
   if (sources[SourceID]) {
     conditions.push('v.SourceID = ?');
