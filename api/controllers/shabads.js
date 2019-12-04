@@ -2,6 +2,7 @@ const { createPool } = require('mariadb');
 const banidb = require('shabados');
 const { getRaag, getSource, getWriter, prepVerse } = require('./getJSON');
 const config = require('../config');
+const lib = require('../lib');
 
 const sources = banidb.SOURCES;
 const searchTypes = banidb.TYPES;
@@ -36,6 +37,7 @@ exports.search = async (req, res) => {
   let ang = parseInt(req.query.ang, 10) || null;
   let page = parseInt(req.query.page, 10) || 0;
   let results = parseInt(req.query.results, 10) || 20;
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
   SourceID = SourceID.substr(0, 1);
 
@@ -147,6 +149,11 @@ exports.search = async (req, res) => {
   if (ang > 0) {
     conditions.push('v.PageNo = ?');
     parameters.push(ang);
+  }
+
+  if (sinceDate) {
+    conditions.push('v.Updated > ?');
+    parameters.push(sinceDate);
   }
 
   let conn;
