@@ -32,8 +32,8 @@ const error = (err, res) => {
   res.status(400).json({
     error: true,
     data: {
-      error: JSON.stringify(err),
-      stack: JSON.stringify(err.stack),
+      error: err,
+      stack: err.stack,
     },
   });
 };
