@@ -14,8 +14,11 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
     r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,
     src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,
-    GREATEST(s.Updated, v.Updated) AS Updated
-  FROM Verse v
+    GREATEST(s.Updated, v.Updated) AS Updated`;
+
+const liveColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, s.ShabadID`;
+
+const allFrom = `FROM Verse v
   LEFT JOIN Shabad s ON s.VerseID = v.ID
   LEFT JOIN Writer w USING(WriterID)
   LEFT JOIN Raag r USING(RaagID)
@@ -24,7 +27,15 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS
 const allColumnsWhere = 'AND s.ShabadID < 5000000';
 
 const error = (err, res) => {
-  res.status(400).json({ error: true, data: err });
+  console.error(err);
+  Error.captureStackTrace(err);
+  res.status(400).json({
+    error: true,
+    data: {
+      error: err,
+      stack: err.stack,
+    },
+  });
 };
 
 exports.search = async (req, res) => {
@@ -36,6 +47,7 @@ exports.search = async (req, res) => {
   let ang = parseInt(req.query.ang, 10) || null;
   let page = parseInt(req.query.page, 10) || 0;
   let results = parseInt(req.query.results, 10) || 20;
+  const liveSearch = req.query.livesearch ? parseInt(req.query.livesearch, 10) : 0;
 
   SourceID = SourceID.substr(0, 1);
 
@@ -63,7 +75,7 @@ exports.search = async (req, res) => {
     results = 20;
   }
 
-  let columns = allColumns;
+  let columns = liveSearch ? `${liveColumns} ${allFrom}` : `${allColumns} ${allFrom}`;
   let charCodeQuery = '';
   const conditions = [];
   const parameters = [];
@@ -175,6 +187,7 @@ exports.search = async (req, res) => {
         totalPages,
       },
     };
+
     if (totalResults > 0) {
       if (page < totalPages) {
         req.query.page = page + 1;
@@ -189,7 +202,7 @@ exports.search = async (req, res) => {
         (page - 1) * results,
         results,
       ]);
-      const verses = rows.map(verse => prepVerse(verse, true));
+      const verses = rows.map(verse => prepVerse(verse, true, liveSearch));
       resultsInfo.pageResults = verses.length;
       res.json({
         resultsInfo,
@@ -241,7 +254,7 @@ exports.angs = async (req, res) => {
 
   try {
     conn = await pool.getConnection();
-    const q = `SELECT ${allColumns}
+    const q = `SELECT ${allColumns} ${allFrom}
       WHERE
         v.PageNo = ?
         AND v.SourceID = ?
@@ -389,7 +402,7 @@ const getShabad = ShabadIDQ =>
     pool
       .getConnection()
       .then(conn => {
-        const q = `SELECT ${allColumns} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
+        const q = `SELECT ${allColumns} ${allFrom} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
         conn
           .query(q, [ShabadIDQ])
           .then(rows => {
