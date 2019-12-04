@@ -1,5 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
+const lib = require('../lib');
 const { prepVerse, prepAKIndex } = require('./getJSON');
 
 const pool = createPool(config.mysql);
@@ -91,18 +92,30 @@ exports.headers = async (req, res) => {
 
 exports.index = async (req, res) => {
   let conn;
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+
   try {
     conn = await pool.getConnection();
     let headerID = -1;
     let header = '';
     const out = {};
+    const parameters = [];
+
     if (req.params.HeaderID) {
       headerID = parseInt(req.params.HeaderID, 10);
-      header = 'WHERE b.headerID = ?';
+      header = 'AND b.headerID = ?';
+      parameters.push(headerID);
       out.header = await getHeaderInfo(headerID, conn);
     }
-    const q = `SELECT ${allIndexColumns} ${header} ORDER BY IndexID ASC`;
-    const rows = await conn.query(q, [headerID]);
+
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+
+    const q = `SELECT ${allIndexColumns} WHERE 1 ${header} ${sinceQuery} ORDER BY IndexID ASC`;
+    const rows = await conn.query(q, parameters);
     out.index = rows.map(items => prepAKIndex(items));
     res.json(out);
   } catch (err) {
@@ -115,10 +128,19 @@ exports.index = async (req, res) => {
 exports.shabad = async (req, res) => {
   let conn;
   try {
+    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
     conn = await pool.getConnection();
     const ShabadID = parseInt(req.params.ShabadID, 10);
-    const q = `SELECT ${allColumns} WHERE v.IndexID = ?`;
-    const rows = await conn.query(q, [ShabadID]);
+    const parameters = [ShabadID];
+
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+
+    const q = `SELECT ${allColumns} WHERE v.IndexID = ? ${sinceQuery}`;
+    const rows = await conn.query(q, parameters);
 
     if (rows && rows.length > 0) {
       const header = await getHeaderInfo(rows[0].HeaderID, conn);
@@ -129,8 +151,7 @@ exports.shabad = async (req, res) => {
         verses,
       });
     } else {
-      const err = 'Shabad does not exist';
-      throw err;
+      lib.customError('Shabad does not exist or has no updates.', res, 404);
     }
   } catch (err) {
     error(err, res);

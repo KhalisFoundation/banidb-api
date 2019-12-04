@@ -18,8 +18,8 @@ const error = (err, res) => {
   res.status(400).json({
     error: true,
     data: {
-      error: JSON.stringify(err),
-      stack: JSON.stringify(err.stack),
+      error: err,
+      stack: err.stack,
     },
   });
 };
@@ -123,9 +123,7 @@ exports.bani = async (req, res) => {
         verses,
       });
     } else {
-      res.json({
-        error: 'Bani does not exist or no updates found for specified Bani.',
-      });
+      lib.customError('Bani does not exist or no updates found for specified Bani.', res, 404);
     }
   } catch (err) {
     error(err, res);

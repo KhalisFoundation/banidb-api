@@ -1,4 +1,23 @@
 module.exports = {
+  customError: (err, res, code) => {
+    res.status(code).json({
+      error: true,
+      data: {
+        error: err,
+      },
+    });
+  },
+  error: (err, res) => {
+    console.error(err);
+    Error.captureStackTrace(err);
+    res.status(400).json({
+      error: true,
+      data: {
+        error: err,
+        stack: err.stack,
+      },
+    });
+  },
   isValidDatetime: str => {
     if (typeof str !== 'string') {
       return null;
