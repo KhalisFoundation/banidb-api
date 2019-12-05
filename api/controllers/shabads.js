@@ -2,6 +2,7 @@ const { createPool } = require('mariadb');
 const banidb = require('shabados');
 const { getRaag, getSource, getWriter, prepVerse } = require('./getJSON');
 const config = require('../config');
+const lib = require('../lib');
 
 const sources = banidb.SOURCES;
 const searchTypes = banidb.TYPES;
@@ -47,6 +48,7 @@ exports.search = async (req, res) => {
   let ang = parseInt(req.query.ang, 10) || null;
   let page = parseInt(req.query.page, 10) || 0;
   let results = parseInt(req.query.results, 10) || 20;
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
   const liveSearch = req.query.livesearch ? parseInt(req.query.livesearch, 10) : 0;
 
   SourceID = SourceID.substr(0, 1);
@@ -168,6 +170,11 @@ exports.search = async (req, res) => {
     parameters.push(ang);
   }
 
+  if (sinceDate) {
+    conditions.push('v.Updated > ?');
+    parameters.push(sinceDate);
+  }
+
   let conn;
 
   try {
@@ -230,10 +237,20 @@ exports.search = async (req, res) => {
 
 exports.shabads = async (req, res) => {
   const ShabadID = parseInt(req.params.ShabadID, 10);
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+
   if (!Number.isNaN(ShabadID)) {
     try {
-      const rows = await getShabad(ShabadID);
-      res.json(rows);
+      const rows = await getShabad(ShabadID, sinceDate);
+      if (Object.entries(rows).length === 0) {
+        lib.customError(
+          'Shabad does not exist or no updates found for specified Shabad.',
+          res,
+          404,
+        );
+      } else {
+        res.json(rows);
+      }
     } catch (err) {
       error(err, res);
     }
@@ -244,6 +261,8 @@ exports.shabads = async (req, res) => {
 
 exports.angs = async (req, res) => {
   let PageNo = parseInt(req.params.PageNo, 10);
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+
   if (PageNo < 1) {
     PageNo = 1;
   }
@@ -257,6 +276,14 @@ exports.angs = async (req, res) => {
     PageNo = 1430;
   }
 
+  const parameters = [PageNo, SourceID];
+
+  let sinceQuery = '';
+  if (sinceDate) {
+    sinceQuery = 'AND GREATEST(s.Updated, v.Updated) > ?';
+    parameters.push(sinceDate);
+  }
+
   let conn;
 
   try {
@@ -265,9 +292,10 @@ exports.angs = async (req, res) => {
       WHERE
         v.PageNo = ?
         AND v.SourceID = ?
+        ${sinceQuery}
         ${allColumnsWhere}
       ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
-    const rows = await conn.query(q, [PageNo, SourceID]);
+    const rows = await conn.query(q, parameters);
     if (rows.length > 0) {
       const source = getSource(rows[0]);
       const count = rows.length;
@@ -301,6 +329,8 @@ exports.angs = async (req, res) => {
         navigation,
         page,
       });
+    } else {
+      lib.customError('That ang does not exist or no updates found.', res, 404);
     }
   } catch (err) {
     error(err, res);
@@ -326,13 +356,7 @@ exports.hukamnamas = async (req, res) => {
       q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama WHERE ID = ?';
       args.push(`${year}-${month}-${day}`);
     } else {
-      error(
-        {
-          error: 'badDate',
-          errorDescription: 'Please specify a valid date. Archives go back to 2002-01-01',
-        },
-        res,
-      );
+      lib.customError('Please specify a valid date. Archives go back to 2002-01-01', res, 404);
       exit = true;
     }
   }
@@ -366,13 +390,7 @@ exports.hukamnamas = async (req, res) => {
 
         res.json(output);
       } else {
-        error(
-          {
-            error: 'noHukam',
-            errorDescription: 'Hukamnama is missing for that date',
-          },
-          res,
-        );
+        lib.customError('Hukamnama is missing for that date', res, 404);
       }
     } catch (err) {
       error(err, res);
@@ -404,14 +422,25 @@ exports.random = async (req, res) => {
   }
 };
 
-const getShabad = ShabadIDQ =>
+const getShabad = (ShabadIDQ, sinceDate = null) =>
   new Promise((resolve, reject) => {
     pool
       .getConnection()
       .then(conn => {
-        const q = `SELECT ${allColumns} ${allFrom} WHERE s.ShabadID = ? ${allColumnsWhere} ORDER BY v.ID ASC`;
+        const parameters = [ShabadIDQ];
+
+        let sinceQuery = '';
+        if (sinceDate) {
+          sinceQuery = 'AND GREATEST(s.Updated, v.Updated) > ?';
+          parameters.push(sinceDate);
+        }
+
+        const q = `SELECT ${allColumns} ${allFrom}
+                    WHERE s.ShabadID = ? ${allColumnsWhere} ${sinceQuery}
+                    ORDER BY v.ID ASC`;
+
         conn
-          .query(q, [ShabadIDQ])
+          .query(q, parameters)
           .then(rows => {
             if (rows.length > 0) {
               const shabadInfo = {
@@ -453,6 +482,8 @@ const getShabad = ShabadIDQ =>
                   conn.end();
                 })
                 .catch(err => reject(err));
+            } else {
+              resolve({});
             }
           })
           .catch(err => reject(err));
