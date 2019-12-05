@@ -413,7 +413,7 @@ exports.random = async (req, res) => {
       'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(q, [SourceID]);
     const { ShabadID } = row[0];
-    const rows = await getShabad(ShabadID);
+    const rows = await getShabad([ShabadID]);
     res.json(rows);
   } catch (err) {
     error(err, res);
