@@ -1,7 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
 const lib = require('../lib');
-const { getRaag, getSource, getWriter, prepVerse, prepBanis } = require('./getJSON');
 
 const lengthExistsMap = {
   s: 'existsSGPC',
@@ -70,7 +69,7 @@ exports.all = async (req, res) => {
     const q =
       'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
-    res.json(rows.map(banis => prepBanis(banis)));
+    res.json(rows.map(banis => lib.prepBanis(banis)));
   } catch (err) {
     error(err, res);
   } finally {
@@ -111,9 +110,9 @@ exports.bani = async (req, res) => {
         hi: nameTransliterations.hi,
         ipa: nameTransliterations.ipa,
         ur: nameTransliterations.ur,
-        source: getSource(rows[0]),
-        raag: getRaag(rows[0]),
-        writer: getWriter(rows[0]),
+        source: lib.getSource(rows[0]),
+        raag: lib.getRaag(rows[0]),
+        writer: lib.getWriter(rows[0]),
       };
 
       const verses = rows.map(row => prepBaniVerse(row, exists));
@@ -133,7 +132,7 @@ exports.bani = async (req, res) => {
 };
 
 const prepBaniVerse = (row, existsFlag) => {
-  const verse = prepVerse(row);
+  const verse = lib.prepVerse(row);
   delete verse.firstLetters;
   const exists = {};
   if (!existsFlag) {
