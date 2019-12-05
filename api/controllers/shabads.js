@@ -341,6 +341,7 @@ exports.angs = async (req, res) => {
 
 exports.hukamnamas = async (req, res) => {
   let q;
+  const output = {};
   const args = [];
   let exit = false;
   if (req.params.year && req.params.month && req.params.day) {
@@ -362,6 +363,7 @@ exports.hukamnamas = async (req, res) => {
   }
   if (!q) {
     q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama ORDER BY ID DESC LIMIT 1';
+    output.is_latest = true;
   }
   if (!exit) {
     let conn;
@@ -382,11 +384,10 @@ exports.hukamnamas = async (req, res) => {
             year: hukamGregorianDate.getFullYear(),
           },
         };
-        const output = {
-          date,
-          shabadIds: ShabadIDs,
-          shabads,
-        };
+
+        output.date = date;
+        output.shabadIds = ShabadIDs;
+        output.shabads = shabads;
 
         res.json(output);
       } else {
