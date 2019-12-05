@@ -363,7 +363,7 @@ exports.hukamnamas = async (req, res) => {
   }
   if (!q) {
     q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama ORDER BY ID DESC LIMIT 1';
-    output.is_latest = true;
+    output.isLatest = true;
   }
   if (!exit) {
     let conn;
