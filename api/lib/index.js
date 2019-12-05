@@ -20,6 +20,20 @@ const lib = {
       },
     });
   },
+  isListOfNumbers: str => {
+    if (typeof str !== 'string' && Number.isNaN(str)) {
+      return false;
+    }
+
+    // will validate 123 or 123,123,... or 123+123+...
+    const numbersRegEx = /^(([0-9]+)([,+](?=[0-9]))?)+$/;
+
+    if (str.match(numbersRegEx)) {
+      return true;
+    }
+
+    return false;
+  },
   isValidDatetime: str => {
     if (typeof str !== 'string') {
       return null;

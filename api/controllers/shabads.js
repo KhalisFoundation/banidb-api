@@ -235,10 +235,11 @@ exports.search = async (req, res) => {
 };
 
 exports.shabads = async (req, res) => {
-  const ShabadID = parseInt(req.params.ShabadID, 10);
+  let { ShabadID } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
-  if (!Number.isNaN(ShabadID)) {
+  if (lib.isListOfNumbers(ShabadID)) {
+    ShabadID = ShabadID.split(/[,+]/g);
     try {
       const rows = await getShabad(ShabadID, sinceDate);
       if (Object.entries(rows).length === 0) {
@@ -427,7 +428,9 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
     pool
       .getConnection()
       .then(conn => {
-        const parameters = [ShabadIDQ];
+        const parameters = [...ShabadIDQ];
+        const ShabadIDQLength = ShabadIDQ.length;
+        const tokens = new Array(ShabadIDQLength).fill('?').join(',');
 
         let sinceQuery = '';
         if (sinceDate) {
@@ -435,9 +438,15 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
           parameters.push(sinceDate);
         }
 
+        let multipleShabad = '';
+        if (ShabadIDQLength > 1) {
+          multipleShabad = `FIELD(ShabadID, ${tokens}),`;
+          parameters.push(...ShabadIDQ);
+        }
+
         const q = `SELECT ${allColumns} ${allFrom}
-                    WHERE s.ShabadID = ? ${allColumnsWhere} ${sinceQuery}
-                    ORDER BY v.ID ASC`;
+                    WHERE s.ShabadID IN (${tokens}) ${allColumnsWhere} ${sinceQuery}
+                    ORDER BY ${multipleShabad} v.ID ASC`;
 
         conn
           .query(q, parameters)
