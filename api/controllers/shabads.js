@@ -1,6 +1,5 @@
 const { createPool } = require('mariadb');
 const banidb = require('shabados');
-const { getRaag, getSource, getWriter, prepVerse } = require('./getJSON');
 const config = require('../config');
 const lib = require('../lib');
 
@@ -216,7 +215,7 @@ exports.search = async (req, res) => {
         (page - 1) * results,
         results,
       ]);
-      const verses = rows.map(verse => prepVerse(verse, true, liveSearch));
+      const verses = rows.map(verse => lib.prepVerse(verse, true, liveSearch));
       resultsInfo.pageResults = verses.length;
       res.json({
         resultsInfo,
@@ -297,12 +296,12 @@ exports.angs = async (req, res) => {
       ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
     const rows = await conn.query(q, parameters);
     if (rows.length > 0) {
-      const source = getSource(rows[0]);
+      const source = lib.getSource(rows[0]);
       const count = rows.length;
       const page = rows.map(row => {
-        const rowData = prepVerse(row);
-        rowData.writer = getWriter(row);
-        rowData.raag = getRaag(row);
+        const rowData = lib.prepVerse(row);
+        rowData.writer = lib.getWriter(row);
+        rowData.raag = lib.getRaag(row);
         return rowData;
       });
       const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
@@ -447,12 +446,12 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
               const shabadInfo = {
                 shabadId: rows[0].ShabadID,
                 pageNo: rows[0].PageNo,
-                source: getSource(rows[0]),
-                raag: getRaag(rows[0]),
-                writer: getWriter(rows[0]),
+                source: lib.getSource(rows[0]),
+                raag: lib.getRaag(rows[0]),
+                writer: lib.getWriter(rows[0]),
               };
 
-              const verses = rows.map(prepVerse);
+              const verses = rows.map(lib.prepVerse);
               const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
               UNION
             (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;

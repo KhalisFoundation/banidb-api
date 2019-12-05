@@ -1,4 +1,6 @@
-module.exports = {
+const getJSON = require('./getJSON');
+
+const lib = {
   customError: (err, res, code) => {
     res.status(code).json({
       error: true,
@@ -31,4 +33,9 @@ module.exports = {
 
     return null;
   },
+};
+
+module.exports = {
+  ...lib,
+  ...getJSON,
 };
