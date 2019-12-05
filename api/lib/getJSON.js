@@ -51,6 +51,14 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   return verse;
 };
 
+const getShabadInfo = shabad => ({
+  shabadId: shabad.ShabadID,
+  pageNo: shabad.PageNo,
+  source: getSource(shabad),
+  raag: getRaag(shabad),
+  writer: getWriter(shabad),
+});
+
 const getSource = shabad => ({
   sourceId: shabad.SourceID,
   gurmukhi: shabad.SourceGurmukhi,
@@ -108,6 +116,7 @@ module.exports = {
   prepVerse,
   prepBanis,
   prepAKIndex,
+  getShabadInfo,
   getSource,
   getRaag,
   getWriter,
