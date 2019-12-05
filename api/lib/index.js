@@ -19,7 +19,7 @@ module.exports = {
     });
   },
   isListOfNumbers: str => {
-    if (typeof str !== 'string') {
+    if (typeof str !== 'string' && Number.isNaN(str)) {
       return false;
     }
 
