@@ -378,8 +378,7 @@ exports.hukamnamas = async (req, res) => {
       if (row.length > 0) {
         const { hukamDate } = row[0];
         const ShabadIDs = JSON.parse(row[0].ShabadID);
-        const pArray = ShabadIDs.map(async ShabadID => getShabad(ShabadID));
-        const shabads = await Promise.all(pArray);
+        const shabads = await getShabad(ShabadIDs);
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
@@ -391,7 +390,7 @@ exports.hukamnamas = async (req, res) => {
 
         output.date = date;
         output.shabadIds = ShabadIDs;
-        output.shabads = shabads;
+        output.shabads = shabads.shabads ? shabads.shabads : shabads;
 
         res.json(output);
       } else {
@@ -418,7 +417,7 @@ exports.random = async (req, res) => {
       'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(q, [SourceID]);
     const { ShabadID } = row[0];
-    const rows = await getShabad(ShabadID);
+    const rows = await getShabad([ShabadID]);
     res.json(rows);
   } catch (err) {
     error(err, res);
@@ -442,64 +441,92 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
           parameters.push(sinceDate);
         }
 
-        let multipleShabad = '';
+        let multipleShabadOrder = '';
         if (ShabadIDQLength > 1) {
-          multipleShabad = `FIELD(ShabadID, ${tokens}),`;
+          multipleShabadOrder = `FIELD(ShabadID, ${tokens}),`;
           parameters.push(...ShabadIDQ);
         }
 
         const q = `SELECT ${allColumns} ${allFrom}
                     WHERE s.ShabadID IN (${tokens}) ${allColumnsWhere} ${sinceQuery}
-                    ORDER BY ${multipleShabad} v.ID ASC`;
+                    ORDER BY ${multipleShabadOrder} v.ID ASC`;
 
         conn
           .query(q, parameters)
-          .then(rows => {
-            if (rows.length > 0) {
-              const shabadInfo = {
-                shabadId: rows[0].ShabadID,
-                pageNo: rows[0].PageNo,
-                source: lib.getSource(rows[0]),
-                raag: lib.getRaag(rows[0]),
-                writer: lib.getWriter(rows[0]),
+          .then(async rows => {
+            if (rows.length > 0 && ShabadIDQLength === 1) {
+              // single shabad
+              const retShabad = await getShabadSingle(rows);
+              resolve(retShabad);
+            } else if (rows.length > 0) {
+              // multiple shabads
+              const output = {
+                shabadIds: [],
+                shabads: [],
               };
+              let curShabadID = -1;
+              let counter = 0;
+              rows.forEach(row => {
+                if (row.ShabadID !== curShabadID) {
+                  curShabadID = row.ShabadID;
+                  output.shabadIds.push(row.ShabadID);
+                  counter = output.shabads.push([]) - 1;
+                }
+                output.shabads[counter].push(row);
+              });
 
-              const verses = rows.map(lib.prepVerse);
-              const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
-              UNION
-            (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
-              conn
-                .query(q1, [rows[0].ID - 1, rows[rows.length - 1].ID + 1])
-                .then(rows1 => {
-                  let previous = null;
-                  let next = null;
-                  rows1.forEach(row => {
-                    if (row.navigation === 'previous') {
-                      previous = row.ShabadID;
-                    }
-                    if (row.navigation === 'next') {
-                      next = row.ShabadID;
-                    }
-                  });
-                  const navigation = {
-                    previous,
-                    next,
-                  };
-
-                  resolve({
-                    shabadInfo,
-                    count: verses.length,
-                    navigation,
-                    verses,
-                  });
-                  conn.end();
-                })
-                .catch(err => reject(err));
+              const outputShabadPromises = output.shabads.map(getShabadSingle);
+              output.shabads = await Promise.all(outputShabadPromises);
+              resolve(output);
             } else {
               resolve({});
             }
+            if (conn) conn.end();
           })
           .catch(err => reject(err));
       })
       .catch(err => reject(err));
   });
+
+const getShabadSingle = async rows => {
+  const shabadInfo = lib.getShabadInfo(rows[0]);
+  const verses = rows.map(lib.prepVerse);
+  const navigation = await getShabadNavigation(rows[0].ID - 1, rows[rows.length - 1].ID + 1);
+
+  return {
+    shabadInfo,
+    count: verses.length,
+    navigation,
+    verses,
+  };
+};
+
+const getShabadNavigation = async (prevLine, nextLine) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
+                UNION
+                (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
+    const rows1 = await conn.query(q1, [prevLine, nextLine]);
+    let previous = null;
+    let next = null;
+    rows1.forEach(row => {
+      if (row.navigation === 'previous') {
+        previous = row.ShabadID;
+      }
+      if (row.navigation === 'next') {
+        next = row.ShabadID;
+      }
+    });
+    return {
+      previous,
+      next,
+    };
+  } catch (err) {
+    error(err);
+  } finally {
+    if (conn) conn.end();
+  }
+  return {};
+};
