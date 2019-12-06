@@ -297,42 +297,33 @@ exports.angs = async (req, res) => {
         AND v.SourceID = ?
         ${sinceQuery}
         ${allColumnsWhere}
-      ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
-    console.log({ q, parameters });
+      ORDER BY PageNo,v.LineNo ASC, ShabadID ASC, v.ID ASC`;
+
     const rows = await conn.query(q, parameters);
-    if (rows.length > 0) {
-      const source = lib.getSource(rows[0]);
-      const count = rows.length;
-      const page = rows.map(row => {
-        const rowData = lib.prepVerse(row);
-        rowData.writer = lib.getWriter(row);
-        rowData.raag = lib.getRaag(row);
-        return rowData;
-      });
-      const q1 = `(SELECT 'previous' as navigation, PageNo FROM Verse WHERE PageNo = ? AND SourceID = ? LIMIT 1)
-          UNION
-        (SELECT 'next' as navigation, PageNo FROM Verse WHERE PageNo= ? AND SourceID = ? LIMIT 1);`;
-      const rows1 = await conn.query(q1, [PageNo - 1, SourceID, PageNo + 1, SourceID]);
-      let previous = null;
-      let next = null;
-      rows1.forEach(row => {
-        if (row.navigation === 'previous') {
-          previous = row.PageNo;
-        }
-        if (row.navigation === 'next') {
-          next = row.PageNo;
-        }
-      });
-      const navigation = {
-        previous,
-        next,
+    if (rows.length > 0 && PageNoQuery.totalPages === 1) {
+      // single ang
+      const output = await getAngSingle(rows);
+      res.json(output);
+    } else if (rows.length > 0) {
+      // multiple ang
+      const output = {
+        pageNos: [],
+        pages: [],
       };
-      res.json({
-        source,
-        count,
-        navigation,
-        page,
+      let curPage = -1;
+      let counter = 0;
+      rows.forEach(row => {
+        if (row.PageNo !== curPage) {
+          curPage = row.PageNo;
+          output.pageNos.push(curPage);
+          counter = output.pages.push([]) - 1;
+        }
+        output.pages[counter].push(row);
       });
+
+      const outputPagePromises = output.pages.map(getAngSingle);
+      output.pages = await Promise.all(outputPagePromises);
+      res.json(output);
     } else {
       lib.customError('That ang does not exist or no updates found.', res, 404);
     }
@@ -469,7 +460,7 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
               rows.forEach(row => {
                 if (row.ShabadID !== curShabadID) {
                   curShabadID = row.ShabadID;
-                  output.shabadIds.push(row.ShabadID);
+                  output.shabadIds.push(curShabadID);
                   counter = output.shabads.push([]) - 1;
                 }
                 output.shabads[counter].push(row);
@@ -488,10 +479,31 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
       .catch(err => reject(err));
   });
 
+const getAngSingle = async rows => {
+  const { PageNo, SourceID } = rows[0];
+  const source = lib.getSource(rows[0]);
+  const count = rows.length;
+  const page = rows.map(row => {
+    const rowData = lib.prepVerse(row);
+    rowData.writer = lib.getWriter(row);
+    rowData.raag = lib.getRaag(row);
+    return rowData;
+  });
+
+  const navigation = await getNavigation('ang', PageNo, PageNo, SourceID);
+
+  return {
+    source,
+    count,
+    navigation,
+    page,
+  };
+};
+
 const getShabadSingle = async rows => {
   const shabadInfo = lib.getShabadInfo(rows[0]);
   const verses = rows.map(lib.prepVerse);
-  const navigation = await getNavigation(rows[0].ID - 1, rows[rows.length - 1].ID + 1);
+  const navigation = await getNavigation('shabad', rows[0].ID, rows[rows.length - 1].ID);
 
   return {
     shabadInfo,
@@ -501,30 +513,50 @@ const getShabadSingle = async rows => {
   };
 };
 
-const getNavigation = async (type, prev, next) => {
+const getNavigation = async (type, first, last, source = '') => {
   let conn;
+  let table = 'Verse';
+  let column = '';
+  let where = '';
+  let columnWhere = '';
+  let parameters = [first, last];
+
   if (type === 'shabad') {
+    table = 'Shabad';
+    column = 'ShabadID';
+    columnWhere = 'VerseID';
   } else if (type === 'ang') {
+    column = 'PageNo';
+    parameters = [first, source, last, source];
+    columnWhere = column;
+    where = 'AND SourceID = ?';
   } else {
     return false;
   }
 
   try {
     conn = await pool.getConnection();
-    const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
+    const q1 = `(SELECT 'previous' as navigation, ${column}
+                  FROM ${table}
+                  WHERE ${columnWhere} < ? ${where}
+                  ORDER BY ${columnWhere} DESC LIMIT 1)
                 UNION
-                (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
-    const rows1 = await conn.query(q1, [prev, next]);
+                (SELECT 'next' as navigation, ${column}
+                  FROM ${table}
+                  WHERE ${columnWhere} > ? ${where}
+                  ORDER BY ${columnWhere} LIMIT 1);`;
+    const rows1 = await conn.query(q1, parameters);
     let previous = null;
     let next = null;
     rows1.forEach(row => {
       if (row.navigation === 'previous') {
-        previous = row.ShabadID;
+        previous = row[column];
       }
       if (row.navigation === 'next') {
-        next = row.ShabadID;
+        next = row[column];
       }
     });
+
     return {
       previous,
       next,

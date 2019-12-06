@@ -6,6 +6,9 @@ module.exports = {
       return {
         q: 'v.PageNo = ?',
         parameters: [PageNo],
+        least: PageNo,
+        most: PageNo,
+        totalPages: 1,
       };
     }
 
@@ -13,18 +16,27 @@ module.exports = {
     const qAND = [];
     const qIn = [];
     const parameters = [];
+    let least = 0;
+    let most = 0;
 
     const ltgtRegEx = /[<>][0-9]+/gm;
 
     const ltgt = PageNo.match(ltgtRegEx);
     if (ltgt) {
-      ltgt.map(num => {
+      let loopnum = 0;
+      ltgt.forEach(num => {
         if (!num.match(/-$/)) {
-          parameters.push(num.slice(1));
+          loopnum = num.slice(1);
+          parameters.push(loopnum);
           const operator = num.slice(0, 1);
           qAND.push(`v.PageNo ${operator} ?`);
+          if (loopnum < least || loopnum === 0) {
+            least = loopnum;
+          }
+          if (loopnum > most) {
+            most = loopnum;
+          }
         }
-        return true;
       });
     }
 
@@ -33,25 +45,37 @@ module.exports = {
     const between = PageNo.match(betweenRegEx);
     if (between) {
       let numbers = [];
-      between.map(range => {
+      between.forEach(range => {
         numbers = range.match(/[0-9]+/g);
         parameters.push(...numbers);
         qOR.push('v.PageNo BETWEEN ? AND ?');
-        return true;
+        numbers.forEach(num => {
+          if (num < least || num === 0) {
+            least = num;
+          }
+          if (num > most) {
+            most = num;
+          }
+        });
       });
     }
 
-    const equalsRegEx = /\+([0-9]+)-?/g;
+    const equalsRegEx = /(^|\+)([0-9]+)-?/g;
 
     const equals = PageNo.match(equalsRegEx);
 
     if (equals) {
-      equals.map(num => {
+      equals.forEach(num => {
         if (!num.match(/-$/)) {
           parameters.push(num.replace(/\+/, ''));
           qIn.push('?');
+          if (num < least || num === 0) {
+            least = num;
+          }
+          if (num > most) {
+            most = num;
+          }
         }
-        return true;
       });
       if (qIn.length > 0) {
         const qInStr = qIn.join(',');
@@ -66,6 +90,9 @@ module.exports = {
     return {
       q: qOut,
       parameters,
+      least,
+      most,
+      totalPages: ltgt ? null : parameters.length,
     };
   },
 };
