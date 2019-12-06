@@ -452,7 +452,8 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
           .then(async rows => {
             if (rows.length > 0 && ShabadIDQLength === 1) {
               // single shabad
-              resolve(getShabadSingle(rows));
+              const retShabad = await getShabadSingle(rows);
+              resolve(retShabad);
             } else if (rows.length > 0) {
               // multiple shabads
               const output = {
