@@ -487,7 +487,7 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
 const getShabadSingle = async rows => {
   const shabadInfo = lib.getShabadInfo(rows[0]);
   const verses = rows.map(lib.prepVerse);
-  const navigation = await getShabadNavigation(rows[0].ID - 1, rows[rows.length - 1].ID + 1);
+  const navigation = await getShabadNavigation(rows[0].ID, rows[rows.length - 1].ID);
 
   return {
     shabadInfo,
@@ -497,14 +497,14 @@ const getShabadSingle = async rows => {
   };
 };
 
-const getShabadNavigation = async (prevLine, nextLine) => {
+const getShabadNavigation = async (firstLine, lastLine) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID = ? LIMIT 1)
+    const q1 = `(SELECT 'previous' as navigation,ShabadID FROM Shabad WHERE VerseID < ? ORDER BY VerseID DESC LIMIT 1)
                 UNION
-                (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID= ? LIMIT 1);`;
-    const rows1 = await conn.query(q1, [prevLine, nextLine]);
+                (SELECT 'next' as navigation,ShabadID FROM Shabad WHERE VerseID > ? ORDER BY VerseID LIMIT 1);`;
+    const rows1 = await conn.query(q1, [firstLine, lastLine]);
     let previous = null;
     let next = null;
     rows1.forEach(row => {
