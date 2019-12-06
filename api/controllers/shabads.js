@@ -260,12 +260,13 @@ exports.shabads = async (req, res) => {
 };
 
 exports.angs = async (req, res) => {
-  let PageNo = parseInt(req.params.PageNo, 10);
+  let { PageNo } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
-  if (PageNo < 1) {
+  if (!lib.isRangeOfNumbers) {
     PageNo = 1;
   }
+
   let { SourceID } = req.params;
   // Check if SourceID is supported or default to 'G'
   if (!sources[SourceID]) {
@@ -276,7 +277,9 @@ exports.angs = async (req, res) => {
     PageNo = 1430;
   }
 
-  const parameters = [PageNo, SourceID];
+  const PageNoQuery = lib.searchOperators.angToQuery(PageNo);
+
+  const parameters = [...PageNoQuery.parameters, SourceID];
 
   let sinceQuery = '';
   if (sinceDate) {
@@ -290,11 +293,12 @@ exports.angs = async (req, res) => {
     conn = await pool.getConnection();
     const q = `SELECT ${allColumns} ${allFrom}
       WHERE
-        v.PageNo = ?
+        ${PageNoQuery.q}
         AND v.SourceID = ?
         ${sinceQuery}
         ${allColumnsWhere}
       ORDER BY v.LineNo ASC, ShabadID ASC, v.ID ASC`;
+    console.log({ q, parameters });
     const rows = await conn.query(q, parameters);
     if (rows.length > 0) {
       const source = lib.getSource(rows[0]);

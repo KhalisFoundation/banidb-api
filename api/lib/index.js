@@ -1,4 +1,5 @@
 const getJSON = require('./getJSON');
+const searchOperators = require('./searchOperators');
 
 const lib = {
   customError: (err, res, code) => {
@@ -34,6 +35,20 @@ const lib = {
 
     return false;
   },
+  isRangeOfNumbers: str => {
+    if (typeof str !== 'string' && Number.isNaN(str)) {
+      return false;
+    }
+
+    // will validate 123 or 123+123... or 123-124
+    const numbersRegEx = /^[<>]?(([0-9]+)([+-](?=[0-9]))?)+$/;
+
+    if (str.match(numbersRegEx)) {
+      return true;
+    }
+
+    return false;
+  },
   isValidDatetime: str => {
     if (typeof str !== 'string') {
       return null;
@@ -52,4 +67,5 @@ const lib = {
 module.exports = {
   ...lib,
   ...getJSON,
+  searchOperators,
 };
