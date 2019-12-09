@@ -27,7 +27,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     },
   };
 
-  if (!liveSearch) {
+  if (liveSearch !== 1) {
     const transliterations = JSON.parse(row.Transliterations);
     verse.transliteration = {
       english: transliterations.en,
