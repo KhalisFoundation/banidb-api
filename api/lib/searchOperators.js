@@ -1,4 +1,21 @@
 module.exports = {
+  /**
+   * Convert ang search operators to database query
+   *
+   * @since 2.1.2
+   * @param {string} single page no, or page nos with operators
+   * @returns {string} Returns database WHERE clauses
+   * @example
+   *
+   * angToQuery: <1000+105+900-905
+   * // => {
+   *       q: 'v.PageNo < ? AND (v.PageNo BETWEEN ? AND ? OR v.PageNo IN (?))',
+   *       parameters: [ '1000', '900', '905', '105' ],
+   *       least: 0,
+   *       most: '905',
+   *       totalPages: null
+   *       }
+   */
   angToQuery: PageNo => {
     const hasOperatorsRegEx = /[<>+-]/gm;
 
@@ -86,7 +103,13 @@ module.exports = {
     const qOutOr = qOR.join(' OR ');
     qAND.push(`(${qOutOr})`);
     const qOut = qAND.join(' AND ');
-
+    console.log({
+      q: qOut,
+      parameters,
+      least,
+      most,
+      totalPages: ltgt ? null : parameters.length,
+    });
     return {
       q: qOut,
       parameters,
