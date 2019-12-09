@@ -76,7 +76,8 @@ exports.search = async (req, res) => {
     results = 20;
   }
 
-  let columns = liveSearch ? `${liveColumns} ${allFrom}` : `${allColumns} ${allFrom}`;
+  let columns = liveSearch === 1 ? `${liveColumns} ${allFrom}` : `${allColumns} ${allFrom}`;
+
   let charCodeQuery = '';
   let charCodeQueryWildCard = '';
   const conditions = [];
