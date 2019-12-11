@@ -264,7 +264,7 @@ exports.angs = async (req, res) => {
   let { PageNo } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
-  if (!lib.isRangeOfNumbers) {
+  if (!lib.isRangeOfNumbers(PageNo)) {
     PageNo = 1;
   }
 

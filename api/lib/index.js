@@ -22,7 +22,7 @@ const lib = {
     });
   },
   isListOfNumbers: str => {
-    if (typeof str !== 'string' && Number.isNaN(str)) {
+    if (typeof str !== 'string') {
       return false;
     }
 
@@ -36,7 +36,7 @@ const lib = {
     return false;
   },
   isRangeOfNumbers: str => {
-    if (typeof str !== 'string' && Number.isNaN(str)) {
+    if (typeof str !== 'string') {
       return false;
     }
 

@@ -17,7 +17,7 @@ module.exports = {
    *       }
    */
   angToQuery: PageNo => {
-    const hasOperatorsRegEx = /[<>+-]/gm;
+    const hasOperatorsRegEx = /[<>+-]/g;
 
     if (!PageNo.match(hasOperatorsRegEx)) {
       return {
@@ -36,7 +36,7 @@ module.exports = {
     let least = 0;
     let most = 0;
 
-    const ltgtRegEx = /[<>][0-9]+/gm;
+    const ltgtRegEx = /[<>][0-9]+/g;
 
     const ltgt = PageNo.match(ltgtRegEx);
     if (ltgt) {
@@ -47,7 +47,7 @@ module.exports = {
           parameters.push(loopnum);
           const operator = num.slice(0, 1);
           qAND.push(`v.PageNo ${operator} ?`);
-          if (loopnum < least || loopnum === 0) {
+          if (loopnum < least || loopnum === '0') {
             least = loopnum;
           }
           if (loopnum > most) {
@@ -67,7 +67,7 @@ module.exports = {
         parameters.push(...numbers);
         qOR.push('v.PageNo BETWEEN ? AND ?');
         numbers.forEach(num => {
-          if (num < least || num === 0) {
+          if (num < least || num === '0') {
             least = num;
           }
           if (num > most) {
@@ -86,7 +86,7 @@ module.exports = {
         if (!num.match(/-$/)) {
           parameters.push(num.replace(/\+/, ''));
           qIn.push('?');
-          if (num < least || num === 0) {
+          if (num < least || num === '0') {
             least = num;
           }
           if (num > most) {
