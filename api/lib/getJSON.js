@@ -1,8 +1,8 @@
-const prepVerse = (row, includeMeta = false) => {
+const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   const translations = JSON.parse(row.Translations);
-  const transliterations = JSON.parse(row.Transliterations);
   const verse = {
     verseId: row.ID,
+    shabadId: row.ShabadID,
     verse: {
       gurmukhi: row.Gurmukhi,
       unicode: row.GurmukhiUni,
@@ -25,27 +25,39 @@ const prepVerse = (row, includeMeta = false) => {
         ...translations.es,
       },
     },
-    transliteration: {
+  };
+
+  if (liveSearch !== 1) {
+    const transliterations = JSON.parse(row.Transliterations);
+    verse.transliteration = {
       english: transliterations.en,
       hindi: transliterations.hi,
       en: transliterations.en,
       hi: transliterations.hi,
       ipa: transliterations.ipa,
       ur: transliterations.ur,
-    },
-    shabadId: row.ShabadID,
-    pageNo: row.PageNo,
-    lineNo: row.LineNo,
-    updated: row.Updated,
-    visraam: JSON.parse(row.Visraam),
-  };
-  if (includeMeta) {
+    };
+    verse.pageNo = row.PageNo;
+    verse.lineNo = row.LineNo;
+    verse.updated = row.Updated;
+    verse.visraam = JSON.parse(row.Visraam);
+  }
+
+  if (includeMeta && !liveSearch) {
     verse.writer = getWriter(row);
     verse.source = getSource(row);
     verse.raag = getRaag(row);
   }
   return verse;
 };
+
+const getShabadInfo = shabad => ({
+  shabadId: shabad.ShabadID,
+  pageNo: shabad.PageNo,
+  source: getSource(shabad),
+  raag: getRaag(shabad),
+  writer: getWriter(shabad),
+});
 
 const getSource = shabad => ({
   sourceId: shabad.SourceID,
@@ -94,15 +106,17 @@ const prepBanis = row => {
 };
 
 const prepAKIndex = row => {
-  row.Transliterations = JSON.parse(row.Transliterations);
-  row.Translations = JSON.parse(row.Translations);
-  return row;
+  const akIndexRow = row;
+  akIndexRow.Transliterations = JSON.parse(row.Transliterations);
+  akIndexRow.Translations = JSON.parse(row.Translations);
+  return akIndexRow;
 };
 
 module.exports = {
   prepVerse,
   prepBanis,
   prepAKIndex,
+  getShabadInfo,
   getSource,
   getRaag,
   getWriter,

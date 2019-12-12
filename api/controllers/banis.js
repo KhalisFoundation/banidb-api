@@ -1,6 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const { getRaag, getSource, getWriter, prepVerse, prepBanis } = require('./getJSON');
+const lib = require('../lib');
 
 const lengthExistsMap = {
   s: 'existsSGPC',
@@ -12,7 +12,15 @@ const lengthExistsMap = {
 const pool = createPool(config.mysql);
 
 const error = (err, res) => {
-  res.status(400).json({ error: true, data: err });
+  console.error(err);
+  Error.captureStackTrace(err);
+  res.status(400).json({
+    error: true,
+    data: {
+      error: err,
+      stack: err.stack,
+    },
+  });
 };
 
 const allColumns = `
@@ -61,7 +69,7 @@ exports.all = async (req, res) => {
     const q =
       'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
-    res.json(rows.map(banis => prepBanis(banis)));
+    res.json(rows.map(banis => lib.prepBanis(banis)));
   } catch (err) {
     error(err, res);
   } finally {
@@ -72,16 +80,24 @@ exports.all = async (req, res) => {
 exports.bani = async (req, res) => {
   let conn;
   try {
+    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
     conn = await pool.getConnection();
     const BaniID = parseInt(req.params.BaniID, 10);
     const exists = lengthExistsMap[req.query.length] || false;
+    const parameters = [BaniID];
+
     let existsQuery = '';
     if (exists) {
       existsQuery = `AND v.${exists} = 1`;
     }
-    const q = `SELECT ${allColumns} WHERE v.Bani = ? ${existsQuery} ORDER BY Seq ASC`;
-    console.log(q);
-    const rows = await conn.query(q, [BaniID]);
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+    const q = `SELECT ${allColumns} WHERE v.Bani = ? ${sinceQuery} ${existsQuery} ORDER BY Seq ASC`;
+    console.log([q, parameters]);
+    const rows = await conn.query(q, parameters);
     if (rows && rows.length > 0) {
       const nameTransliterations = JSON.parse(rows[0].NameTransliterations);
       const baniInfo = {
@@ -94,9 +110,9 @@ exports.bani = async (req, res) => {
         hi: nameTransliterations.hi,
         ipa: nameTransliterations.ipa,
         ur: nameTransliterations.ur,
-        source: getSource(rows[0]),
-        raag: getRaag(rows[0]),
-        writer: getWriter(rows[0]),
+        source: lib.getSource(rows[0]),
+        raag: lib.getRaag(rows[0]),
+        writer: lib.getWriter(rows[0]),
       };
 
       const verses = rows.map(row => prepBaniVerse(row, exists));
@@ -106,8 +122,7 @@ exports.bani = async (req, res) => {
         verses,
       });
     } else {
-      const err = 'Bani does not exist';
-      throw err;
+      lib.customError('Bani does not exist or no updates found for specified Bani.', res, 404);
     }
   } catch (err) {
     error(err, res);
@@ -117,7 +132,7 @@ exports.bani = async (req, res) => {
 };
 
 const prepBaniVerse = (row, existsFlag) => {
-  const verse = prepVerse(row);
+  const verse = lib.prepVerse(row);
   delete verse.firstLetters;
   const exists = {};
   if (!existsFlag) {

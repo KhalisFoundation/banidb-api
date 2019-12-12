@@ -1,6 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const { prepVerse, prepAKIndex } = require('./getJSON');
+const lib = require('../lib');
 
 const pool = createPool(config.mysql);
 
@@ -80,7 +80,7 @@ exports.headers = async (req, res) => {
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders ORDER BY HeaderID ASC';
     const rows = await conn.query(q, []);
     res.json({
-      headers: rows.map(items => prepAKIndex(items)),
+      headers: rows.map(items => lib.prepAKIndex(items)),
     });
   } catch (err) {
     error(err, res);
@@ -91,19 +91,31 @@ exports.headers = async (req, res) => {
 
 exports.index = async (req, res) => {
   let conn;
+  const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+
   try {
     conn = await pool.getConnection();
     let headerID = -1;
     let header = '';
-    let out = {};
+    const out = {};
+    const parameters = [];
+
     if (req.params.HeaderID) {
       headerID = parseInt(req.params.HeaderID, 10);
-      header = 'WHERE b.headerID = ?';
+      header = 'AND b.headerID = ?';
+      parameters.push(headerID);
       out.header = await getHeaderInfo(headerID, conn);
     }
-    const q = `SELECT ${allIndexColumns} ${header} ORDER BY IndexID ASC`;
-    const rows = await conn.query(q, [headerID]);
-    out.index = rows.map(items => prepAKIndex(items));
+
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+
+    const q = `SELECT ${allIndexColumns} WHERE 1 ${header} ${sinceQuery} ORDER BY IndexID ASC`;
+    const rows = await conn.query(q, parameters);
+    out.index = rows.map(items => lib.prepAKIndex(items));
     res.json(out);
   } catch (err) {
     error(err, res);
@@ -115,22 +127,30 @@ exports.index = async (req, res) => {
 exports.shabad = async (req, res) => {
   let conn;
   try {
+    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
     conn = await pool.getConnection();
     const ShabadID = parseInt(req.params.ShabadID, 10);
-    const q = `SELECT ${allColumns} WHERE v.IndexID = ?`;
-    const rows = await conn.query(q, [ShabadID]);
+    const parameters = [ShabadID];
+
+    let sinceQuery = '';
+    if (sinceDate) {
+      sinceQuery = 'AND v.Updated > ?';
+      parameters.push(sinceDate);
+    }
+
+    const q = `SELECT ${allColumns} WHERE v.IndexID = ? ${sinceQuery}`;
+    const rows = await conn.query(q, parameters);
 
     if (rows && rows.length > 0) {
       const header = await getHeaderInfo(rows[0].HeaderID, conn);
-      const verses = rows.map(row => prepVerse(row));
+      const verses = rows.map(row => lib.prepVerse(row));
 
       res.json({
         header,
         verses,
       });
     } else {
-      const err = 'Shabad does not exist';
-      throw err;
+      lib.customError('Shabad does not exist or has no updates.', res, 404);
     }
   } catch (err) {
     error(err, res);
@@ -139,12 +159,13 @@ exports.shabad = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 const getHeaderInfo = async (headerID, conn) => {
   try {
     const q =
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders WHERE HeaderID = ? ORDER BY HeaderID ASC';
     const row = await conn.query(q, [headerID]);
-    return row.map(items => prepAKIndex(items));
+    return row.map(items => lib.prepAKIndex(items));
   } catch (err) {
     error(err);
   } finally {
