@@ -370,7 +370,7 @@ exports.hukamnamas = async (req, res) => {
       if (row.length > 0) {
         const { hukamDate } = row[0];
         const ShabadIDs = JSON.parse(row[0].ShabadID);
-        const shabads = await getShabad(ShabadIDs);
+        const shabads = await getShabad(ShabadIDs, null, true);
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
@@ -418,7 +418,7 @@ exports.random = async (req, res) => {
   }
 };
 
-const getShabad = (ShabadIDQ, sinceDate = null) =>
+const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
   new Promise((resolve, reject) => {
     pool
       .getConnection()
@@ -446,7 +446,7 @@ const getShabad = (ShabadIDQ, sinceDate = null) =>
         conn
           .query(q, parameters)
           .then(async rows => {
-            if (rows.length > 0 && ShabadIDQLength === 1) {
+            if (rows.length > 0 && ShabadIDQLength === 1 && forceMulti === false) {
               // single shabad
               const retShabad = await getShabadSingle(rows);
               resolve(retShabad);
