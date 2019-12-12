@@ -1,4 +1,5 @@
 const getJSON = require('./getJSON');
+const searchOperators = require('./searchOperators');
 
 const lib = {
   customError: (err, res, code) => {
@@ -21,12 +22,26 @@ const lib = {
     });
   },
   isListOfNumbers: str => {
-    if (typeof str !== 'string' && Number.isNaN(str)) {
+    if (typeof str !== 'string') {
       return false;
     }
 
     // will validate 123 or 123,123,... or 123+123+...
     const numbersRegEx = /^(([0-9]+)([,+](?=[0-9]))?)+$/;
+
+    if (str.match(numbersRegEx)) {
+      return true;
+    }
+
+    return false;
+  },
+  isRangeOfNumbers: str => {
+    if (typeof str !== 'string') {
+      return false;
+    }
+
+    // will validate 123 or 123+123... or 123-124
+    const numbersRegEx = /^[<>]?(([0-9]+)([+-](?=[0-9]))?)+$/;
 
     if (str.match(numbersRegEx)) {
       return true;
@@ -52,4 +67,5 @@ const lib = {
 module.exports = {
   ...lib,
   ...getJSON,
+  searchOperators,
 };
