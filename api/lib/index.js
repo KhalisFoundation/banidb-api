@@ -2,24 +2,19 @@ const getJSON = require('./getJSON');
 const searchOperators = require('./searchOperators');
 
 const lib = {
-  customError: (err, res, code) => {
-    res.status(code).json({
+  error: (err, res, code, stack = true) => {
+    ret = {
       error: true,
       data: {
         error: err,
       },
-    });
-  },
-  error: (err, res) => {
-    console.error(err);
-    Error.captureStackTrace(err);
-    res.status(400).json({
-      error: true,
-      data: {
-        error: err,
-        stack: err.stack,
-      },
-    });
+    };
+    if (stack === true) {
+      ret.data.stack = err.stack;
+      console.error(err);
+      Error.captureStackTrace(err);
+    }
+    res.status(code).json(ret);
   },
   isListOfNumbers: str => {
     if (typeof str !== 'string') {
