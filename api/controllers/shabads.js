@@ -384,6 +384,7 @@ exports.hukamnamas = async (req, res) => {
         output.shabadIds = ShabadIDs;
         output.shabads = shabads.shabads ? shabads.shabads : shabads;
 
+        res.cacheControl = { maxAge: 1800 };
         res.json(output);
       } else {
         lib.customError('Hukamnama is missing for that date', res, 404);
@@ -410,6 +411,7 @@ exports.random = async (req, res) => {
     const row = await conn.query(q, [SourceID]);
     const { ShabadID } = row[0];
     const rows = await getShabad([ShabadID]);
+    res.cacheControl = { noCache: true };
     res.json(rows);
   } catch (err) {
     error(err, res);
