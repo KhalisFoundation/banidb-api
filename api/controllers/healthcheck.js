@@ -1,6 +1,5 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
-const waitUntil = require('async-wait-until');
 const lib = require('../lib');
 
 exports.db = async (req, res) => {
