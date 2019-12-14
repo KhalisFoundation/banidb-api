@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const routes = require('./api/routes');
 const cacheControl = require('express-cache-controller');
+const routes = require('./api/routes');
 
 const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
