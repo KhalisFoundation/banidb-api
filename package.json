@@ -19,6 +19,7 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "express-cache-controller": "^1.1.0",
     "limiter": "^1.1.3",
     "mariadb": "^2.0.1-beta",
     "memory-cache": "^0.2.0",

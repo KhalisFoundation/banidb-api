@@ -3,7 +3,8 @@ const searchOperators = require('./searchOperators');
 
 const lib = {
   error: (err, res, code, stack = true) => {
-    ret = {
+    res.cacheControl = { noCache: true };
+    const ret = {
       error: true,
       data: {
         error: err,
