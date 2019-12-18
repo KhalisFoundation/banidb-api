@@ -1,5 +1,6 @@
 const { createPool } = require('mariadb');
 const banidb = require('shabados');
+const anvaad = require('anvaad-js');
 const config = require('../config');
 const lib = require('../lib');
 
@@ -78,6 +79,9 @@ exports.search = async (req, res) => {
     // ignore spaces
     searchQuery = searchQuery.replace(/\s+/g, '');
 
+    // convert unicode to ascii
+    searchQuery = anvaad.unicode(searchQuery, true);
+
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
       if (charCode < 100) {
@@ -114,6 +118,10 @@ exports.search = async (req, res) => {
     } else if (searchType === 2) {
       // Full word (Gurmukhi)
       conditions.push('v.Gurmukhi LIKE BINARY ?');
+
+      // convert unicode to ascii
+      searchQuery = anvaad.unicode(searchQuery, true);
+
       parameters.push(`%${searchQuery.replace(/(\[|\])/g, '')}%`);
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) {
@@ -136,6 +144,10 @@ exports.search = async (req, res) => {
     } else if (searchType === 6) {
       // Main letters
       columns += ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID';
+
+      // convert unicode to ascii
+      searchQuery = anvaad.unicode(searchQuery, true);
+
       const words = searchQuery.split(' ').join('%');
       conditions.push('t.token LIKE BINARY ?');
       parameters.push(`${words}%`);
