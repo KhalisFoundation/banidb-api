@@ -3,6 +3,7 @@ const searchOperators = require('./searchOperators');
 
 const lib = {
   customError: (err, res, code) => {
+    res.cacheControl = { noCache: true };
     res.status(code).json({
       error: true,
       data: {
@@ -11,6 +12,7 @@ const lib = {
     });
   },
   error: (err, res) => {
+    res.cacheControl = { noCache: true };
     console.error(err);
     Error.captureStackTrace(err);
     res.status(400).json({
