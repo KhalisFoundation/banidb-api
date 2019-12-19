@@ -1,5 +1,5 @@
 const { createPool } = require('mariadb');
-const banidb = require('banidb');
+const banidb = require('@sttm/banidb');
 const config = require('../config');
 const lib = require('../lib');
 
