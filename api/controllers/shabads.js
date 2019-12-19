@@ -1,5 +1,5 @@
 const { createPool } = require('mariadb');
-const banidb = require('shabados');
+const banidb = require('@sttm/banidb');
 const anvaad = require('anvaad-js');
 const config = require('../config');
 const lib = require('../lib');
@@ -152,6 +152,13 @@ exports.search = async (req, res) => {
       conditions.push('t.token LIKE BINARY ?');
       parameters.push(`${words}%`);
       groupBy = 'GROUP BY v.ID';
+    } else if (searchType === 7) {
+      // first letters english
+      // ignore spaces
+      searchQuery = searchQuery.replace(/\s+/g, '');
+      searchQuery = searchQuery.toLowerCase();
+      conditions.push('v.FirstLetterEng LIKE ?');
+      parameters.push(`%${searchQuery}%`);
     }
   }
 

@@ -1,5 +1,6 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
+const lib = require('../lib');
 
 const pool = createPool(config.mysql);
 
