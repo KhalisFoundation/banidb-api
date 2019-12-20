@@ -449,7 +449,8 @@ const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
           parameters.push(...ShabadIDQ);
         }
 
-        const q = `SELECT ${allColumns} ${allFrom}
+        const q = `SELECT ${allColumns}, sn.VerseID as ShabadName
+                    ${allFrom} LEFT JOIN ShabadName sn USING(ShabadID)
                     WHERE s.ShabadID IN (${tokens}) ${allColumnsWhere} ${sinceQuery}
                     ORDER BY ${multipleShabadOrder} v.ID ASC`;
 

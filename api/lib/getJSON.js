@@ -53,6 +53,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
 
 const getShabadInfo = shabad => ({
   shabadId: shabad.ShabadID,
+  shabadName: shabad.ShabadName,
   pageNo: shabad.PageNo,
   source: getSource(shabad),
   raag: getRaag(shabad),
