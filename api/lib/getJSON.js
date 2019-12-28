@@ -20,6 +20,10 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
           gurmukhi: translations.pu.ss,
           unicode: translations.puu.ss,
         },
+        ft: {
+          gurmukhi: translations.pu.ft,
+          unicode: translations.puu.ft,
+        },
       },
       es: {
         ...translations.es,
