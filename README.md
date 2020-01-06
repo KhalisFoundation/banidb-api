@@ -292,6 +292,14 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <th> Edition </th>
     <th> Link </th>
   </tr>
+   <tr>
+    <td> Bhai Nand Lal Granthavali </td>
+    <td> Primary </td>
+    <td> Dr. Ganda Singh </td>
+    <td> Punjabi University Patiala </td>
+    <td> 2009 </td>
+    <td> [<a href="http://sikhbookclub.com/Book/Bhai-Nand-Lal-Granthavali">Link</a>] </td>
+  </tr>
   <tr>
     <td> Ganj Namah Steek </td>
     <td> Secondary </td>
@@ -300,14 +308,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
     <td> 2012 </td>
     <td> [<a href="http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Ganj%20Namah%20Steek-Bhai%20Vir%20Singh%20Punjabi.pdf">Link</a>] </td>
   </tr>
-  <tr>
-    <td> Bhai Nand Lal Granthavali </td>
-    <td> Secondary </td>
-    <td> Dr. Ganda Singh </td>
-    <td> Punjabi University Patiala </td>
-    <td> 2009 </td>
-    <td> [<a href="http://sikhbookclub.com/Book/Bhai-Nand-Lal-Granthavali">Link</a>] </td>
-  </tr>
+ 
 </table>
 
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
