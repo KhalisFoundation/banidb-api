@@ -7,7 +7,7 @@ Active work ongoing under dev branch
 [![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org) 
 [![Slack](https://img.shields.io/badge/Slack-join%20the%20conversation-red.svg)](https://khalis.slack.com)
 
-
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/BJKALklMKao/0.jpg)](https://www.youtube.com/watch?v=BJKALklMKao)
 # Vision Statement
 BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
