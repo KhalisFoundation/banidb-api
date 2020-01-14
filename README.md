@@ -15,7 +15,7 @@ In order to make this vision possible, members of this collaborative effort work
 
 # Precision and Recall
 
-BaniDB is the most precise Gurbani database with over 42,500 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
+BaniDB is the most precise Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis.
 
@@ -343,7 +343,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 </table>
 
 # Feature Comparison
-The table below outlines some stats about BaniDB, as of 01/07/2020.
+The table below outlines some stats about BaniDB, as of 01/14/2020.
 
 <table cellspacing="0" cellpadding="0" id="banidbapps">
   <tr>
@@ -358,7 +358,7 @@ The table below outlines some stats about BaniDB, as of 01/07/2020.
   <tr>
     <td> BaniDB          </td>
     <td> ✅       </td>
-    <td> 42,500+     </td>
+    <td> 43,000+     </td>
     <td> ✅         </td>
     <td> ✅                             </td>
     <td> ✅✅            </td>
@@ -423,7 +423,11 @@ The table below outlines some stats about BaniDB, as of 01/07/2020.
     <th> Date       </th>
     <th> Verified Changes  </th>
   </tr>
-    <tr>
+  <tr>
+    <td> 01/14/2020 </td>
+    <td align="right">43,042</td>
+  </tr>
+  <tr>
     <td> 01/07/2020 </td>
     <td align="right">42,540</td>
   </tr>
