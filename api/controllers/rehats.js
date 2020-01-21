@@ -1,11 +1,8 @@
 const { createPool } = require('mariadb');
 const config = require('../config');
+const lib = require('../lib');
 
 const pool = createPool(config.mysql);
-
-const error = (err, res) => {
-  res.status(400).json({ error: true, data: err });
-};
 
 exports.all = async (req, res) => {
   let conn;
@@ -19,7 +16,7 @@ exports.all = async (req, res) => {
       maryadas,
     });
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -39,7 +36,7 @@ exports.chapterList = async (req, res) => {
       chapters,
     });
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -68,7 +65,7 @@ exports.chapters = async (req, res) => {
       chapters,
     });
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -87,7 +84,7 @@ exports.search = async (req, res) => {
       rows,
     });
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }

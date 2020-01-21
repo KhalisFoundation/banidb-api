@@ -7,7 +7,7 @@ Active work ongoing under dev branch
 [![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org) 
 [![Slack](https://img.shields.io/badge/Slack-join%20the%20conversation-red.svg)](https://khalis.slack.com)
 
-
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/BJKALklMKao/0.jpg)](https://www.youtube.com/watch?v=BJKALklMKao)
 # Vision Statement
 BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
@@ -15,7 +15,7 @@ In order to make this vision possible, members of this collaborative effort work
 
 # Precision and Recall
 
-BaniDB is the most precise Gurbani database with over 41,500 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
+BaniDB is the most precise Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis.
 
@@ -281,6 +281,36 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
   </tr>
 </table>
 
+## Bhai Nand Lal Ji
+
+<table cellspacing="0" cellpadding="0" id="bhainandlal">
+  <tr>
+    <th> Source </th>
+    <th> Source   Type </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
+  </tr>
+   <tr>
+    <td> Bhai Nand Lal Granthavali </td>
+    <td> Primary </td>
+    <td> Dr. Ganda Singh </td>
+    <td> Punjabi University Patiala </td>
+    <td> 2009 </td>
+    <td> [<a href="http://sikhbookclub.com/Book/Bhai-Nand-Lal-Granthavali">Link</a>] </td>
+  </tr>
+  <tr>
+    <td> Ganj Namah Steek </td>
+    <td> Secondary </td>
+    <td> Bhai Veer Singh Ji </td>
+    <td> Bhai Veer Singh Sahit Sadan </td>
+    <td> 2012 </td>
+    <td> [<a href="http://vidhia.com/Bhai%20Veer%20Singh%20Ji/Ganj%20Namah%20Steek-Bhai%20Vir%20Singh%20Punjabi.pdf">Link</a>] </td>
+  </tr>
+ 
+</table>
+
 ## Sarabloh Granth, Amrit Keertan, and Rehatname
 
 <table cellspacing="0" cellpadding="0" id="sarabloh">
@@ -313,7 +343,7 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
 </table>
 
 # Feature Comparison
-The table below outlines some stats about BaniDB, as of 11/06/19.
+The table below outlines some stats about BaniDB, as of 01/14/2020.
 
 <table cellspacing="0" cellpadding="0" id="banidbapps">
   <tr>
@@ -328,7 +358,7 @@ The table below outlines some stats about BaniDB, as of 11/06/19.
   <tr>
     <td> BaniDB          </td>
     <td> ✅       </td>
-    <td> 41,500+     </td>
+    <td> 43,000+     </td>
     <td> ✅         </td>
     <td> ✅                             </td>
     <td> ✅✅            </td>
@@ -392,6 +422,18 @@ The table below outlines some stats about BaniDB, as of 11/06/19.
   <tr>
     <th> Date       </th>
     <th> Verified Changes  </th>
+  </tr>
+  <tr>
+    <td> 01/14/2020 </td>
+    <td align="right">43,042</td>
+  </tr>
+  <tr>
+    <td> 01/07/2020 </td>
+    <td align="right">42,540</td>
+  </tr>
+  <tr>
+    <td> 01/05/2020 </td>
+    <td align="right">42,005</td>
   </tr>
   <tr>
     <td> 11/06/2019 </td>

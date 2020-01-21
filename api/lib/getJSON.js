@@ -20,6 +20,10 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
           gurmukhi: translations.pu.ss,
           unicode: translations.puu.ss,
         },
+        ft: {
+          gurmukhi: translations.pu.ft,
+          unicode: translations.puu.ft,
+        },
       },
       es: {
         ...translations.es,
@@ -53,6 +57,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
 
 const getShabadInfo = shabad => ({
   shabadId: shabad.ShabadID,
+  shabadName: shabad.ShabadName,
   pageNo: shabad.PageNo,
   source: getSource(shabad),
   raag: getRaag(shabad),
