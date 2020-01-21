@@ -265,7 +265,7 @@ exports.angs = async (req, res) => {
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
   if (!lib.isRangeOfNumbers(PageNo)) {
-    PageNo = 1;
+    PageNo = '1';
   }
 
   let { SourceID } = req.params;
@@ -275,7 +275,7 @@ exports.angs = async (req, res) => {
   }
   // If SGGS, check if within 1430
   if (SourceID === 'G' && PageNo > 1430) {
-    PageNo = 1430;
+    PageNo = '1430';
   }
 
   const PageNoQuery = lib.searchOperators.angToQuery(PageNo);
