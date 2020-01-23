@@ -4,10 +4,6 @@ const lib = require('../lib');
 
 const pool = createPool(config.mysql);
 
-const error = (err, res) => {
-  res.status(400).json({ error: true, data: err });
-};
-
 const allColumns = `
 aki.IndexID,
 aki.HeaderID,
@@ -83,7 +79,7 @@ exports.headers = async (req, res) => {
       headers: rows.map(items => lib.prepAKIndex(items)),
     });
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -104,7 +100,7 @@ exports.index = async (req, res) => {
       headerID = parseInt(req.params.HeaderID, 10);
       header = 'AND b.headerID = ?';
       parameters.push(headerID);
-      out.header = await getHeaderInfo(headerID, conn);
+      out.header = await getHeaderInfo(headerID, conn, res);
     }
 
     let sinceQuery = '';
@@ -118,7 +114,7 @@ exports.index = async (req, res) => {
     out.index = rows.map(items => lib.prepAKIndex(items));
     res.json(out);
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -150,24 +146,24 @@ exports.shabad = async (req, res) => {
         verses,
       });
     } else {
-      lib.customError('Shabad does not exist or has no updates.', res, 404);
+      lib.error('Shabad does not exist or has no updates.', res, 404, false);
     }
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
 };
 
 // eslint-disable-next-line consistent-return
-const getHeaderInfo = async (headerID, conn) => {
+const getHeaderInfo = async (headerID, conn, res) => {
   try {
     const q =
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders WHERE HeaderID = ? ORDER BY HeaderID ASC';
     const row = await conn.query(q, [headerID]);
     return row.map(items => lib.prepAKIndex(items));
   } catch (err) {
-    error(err);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }

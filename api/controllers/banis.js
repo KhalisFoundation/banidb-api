@@ -11,18 +11,6 @@ const lengthExistsMap = {
 
 const pool = createPool(config.mysql);
 
-const error = (err, res) => {
-  console.error(err);
-  Error.captureStackTrace(err);
-  res.status(400).json({
-    error: true,
-    data: {
-      error: err,
-      stack: err.stack,
-    },
-  });
-};
-
 const allColumns = `
 b.Gurmukhi AS NameGurmukhi,
 b.GurmukhiUni AS NameGurmukhiUni,
@@ -71,7 +59,7 @@ exports.all = async (req, res) => {
     const rows = await conn.query(q, []);
     res.json(rows.map(banis => lib.prepBanis(banis)));
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -122,10 +110,10 @@ exports.bani = async (req, res) => {
         verses,
       });
     } else {
-      lib.customError('Bani does not exist or no updates found for specified Bani.', res, 404);
+      lib.error('Bani does not exist or no updates found for specified Bani.', res, 404, false);
     }
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }

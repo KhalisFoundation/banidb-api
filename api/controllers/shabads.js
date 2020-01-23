@@ -1,5 +1,6 @@
 const { createPool } = require('mariadb');
-const banidb = require('shabados');
+const banidb = require('@sttm/banidb');
+const anvaad = require('anvaad-js');
 const config = require('../config');
 const lib = require('../lib');
 
@@ -25,18 +26,6 @@ const allFrom = `FROM Verse v
   LEFT JOIN Source src USING(SourceID)`;
 
 const allColumnsWhere = 'AND s.ShabadID < 5000000';
-
-const error = (err, res) => {
-  console.error(err);
-  Error.captureStackTrace(err);
-  res.status(400).json({
-    error: true,
-    data: {
-      error: err,
-      stack: err.stack,
-    },
-  });
-};
 
 exports.search = async (req, res) => {
   let searchQuery = req.params.query;
@@ -90,6 +79,9 @@ exports.search = async (req, res) => {
     // ignore spaces
     searchQuery = searchQuery.replace(/\s+/g, '');
 
+    // convert unicode to ascii
+    searchQuery = anvaad.unicode(searchQuery, true);
+
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
       if (charCode < 100) {
@@ -126,6 +118,10 @@ exports.search = async (req, res) => {
     } else if (searchType === 2) {
       // Full word (Gurmukhi)
       conditions.push('v.Gurmukhi LIKE BINARY ?');
+
+      // convert unicode to ascii
+      searchQuery = anvaad.unicode(searchQuery, true);
+
       parameters.push(`%${searchQuery.replace(/(\[|\])/g, '')}%`);
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) {
@@ -148,10 +144,21 @@ exports.search = async (req, res) => {
     } else if (searchType === 6) {
       // Main letters
       columns += ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID';
+
+      // convert unicode to ascii
+      searchQuery = anvaad.unicode(searchQuery, true);
+
       const words = searchQuery.split(' ').join('%');
       conditions.push('t.token LIKE BINARY ?');
       parameters.push(`${words}%`);
       groupBy = 'GROUP BY v.ID';
+    } else if (searchType === 7) {
+      // first letters english
+      // ignore spaces
+      searchQuery = searchQuery.replace(/\s+/g, '');
+      searchQuery = searchQuery.toLowerCase();
+      conditions.push('v.FirstLetterEng LIKE ?');
+      parameters.push(`%${searchQuery}%`);
     }
   }
 
@@ -229,7 +236,7 @@ exports.search = async (req, res) => {
       });
     }
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -242,21 +249,22 @@ exports.shabads = async (req, res) => {
   if (lib.isListOfNumbers(ShabadID)) {
     ShabadID = ShabadID.split(/[,+]/g);
     try {
-      const rows = await getShabad(ShabadID, sinceDate);
+      const rows = await getShabad(res, ShabadID, sinceDate);
       if (Object.entries(rows).length === 0) {
-        lib.customError(
+        lib.error(
           'Shabad does not exist or no updates found for specified Shabad.',
           res,
           404,
+          false,
         );
       } else {
         res.json(rows);
       }
     } catch (err) {
-      error(err, res);
+      lib.error(err, res, 500);
     }
   } else {
-    error('malformed url', res);
+    lib.error('Malformed URL', res, 400, false);
   }
 };
 
@@ -265,7 +273,7 @@ exports.angs = async (req, res) => {
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
   if (!lib.isRangeOfNumbers(PageNo)) {
-    PageNo = 1;
+    PageNo = '1';
   }
 
   let { SourceID } = req.params;
@@ -275,7 +283,7 @@ exports.angs = async (req, res) => {
   }
   // If SGGS, check if within 1430
   if (SourceID === 'G' && PageNo > 1430) {
-    PageNo = 1430;
+    PageNo = '1430';
   }
 
   const PageNoQuery = lib.searchOperators.angToQuery(PageNo);
@@ -303,7 +311,7 @@ exports.angs = async (req, res) => {
     const rows = await conn.query(q, parameters);
     if (rows.length > 0 && PageNoQuery.totalPages === 1) {
       // single ang
-      const output = await getAngSingle(rows);
+      const output = await getAngSingle(rows, res);
       res.json(output);
     } else if (rows.length > 0) {
       // multiple ang
@@ -322,14 +330,14 @@ exports.angs = async (req, res) => {
         output.pages[counter].push(row);
       });
 
-      const outputPagePromises = output.pages.map(getAngSingle);
+      const outputPagePromises = output.pages.map(row => getAngSingle(row, res));
       output.pages = await Promise.all(outputPagePromises);
       res.json(output);
     } else {
-      lib.customError('That ang does not exist or no updates found.', res, 404);
+      lib.error('That ang does not exist or no updates found.', res, 404, false);
     }
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
@@ -353,7 +361,7 @@ exports.hukamnamas = async (req, res) => {
       q = 'SELECT ID as hukamDate, ShabadID FROM Hukamnama WHERE ID = ?';
       args.push(`${year}-${month}-${day}`);
     } else {
-      lib.customError('Please specify a valid date. Archives go back to 2002-01-01', res, 404);
+      lib.error('Please specify a valid date. Archives go back to 2002-01-01', res, 404, false);
       exit = true;
     }
   }
@@ -370,7 +378,7 @@ exports.hukamnamas = async (req, res) => {
       if (row.length > 0) {
         const { hukamDate } = row[0];
         const ShabadIDs = JSON.parse(row[0].ShabadID);
-        const shabads = await getShabad(ShabadIDs, null, true);
+        const shabads = await getShabad(res, ShabadIDs, null, true);
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
@@ -384,12 +392,13 @@ exports.hukamnamas = async (req, res) => {
         output.shabadIds = ShabadIDs;
         output.shabads = shabads.shabads ? shabads.shabads : shabads;
 
+        res.cacheControl = { maxAge: 1800 };
         res.json(output);
       } else {
-        lib.customError('Hukamnama is missing for that date', res, 404);
+        lib.error('Hukamnama is missing for that date', res, 404, false);
       }
     } catch (err) {
-      error(err, res);
+      lib.error(err, res, 500);
     } finally {
       if (conn) conn.end();
     }
@@ -409,16 +418,17 @@ exports.random = async (req, res) => {
       'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(q, [SourceID]);
     const { ShabadID } = row[0];
-    const rows = await getShabad([ShabadID]);
+    const rows = await getShabad(res, [ShabadID]);
+    res.cacheControl = { noCache: true };
     res.json(rows);
   } catch (err) {
-    error(err, res);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }
 };
 
-const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
+const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
   new Promise((resolve, reject) => {
     pool
       .getConnection()
@@ -439,7 +449,8 @@ const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
           parameters.push(...ShabadIDQ);
         }
 
-        const q = `SELECT ${allColumns} ${allFrom}
+        const q = `SELECT ${allColumns}, sn.VerseID as ShabadName
+                    ${allFrom} LEFT JOIN ShabadName sn USING(ShabadID)
                     WHERE s.ShabadID IN (${tokens}) ${allColumnsWhere} ${sinceQuery}
                     ORDER BY ${multipleShabadOrder} v.ID ASC`;
 
@@ -448,7 +459,7 @@ const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
           .then(async rows => {
             if (rows.length > 0 && ShabadIDQLength === 1 && forceMulti === false) {
               // single shabad
-              const retShabad = await getShabadSingle(rows);
+              const retShabad = await getShabadSingle(res, rows);
               resolve(retShabad);
             } else if (rows.length > 0) {
               // multiple shabads
@@ -467,7 +478,7 @@ const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
                 output.shabads[counter].push(row);
               });
 
-              const outputShabadPromises = output.shabads.map(getShabadSingle);
+              const outputShabadPromises = output.shabads.map(row => getShabadSingle(res, row));
               output.shabads = await Promise.all(outputShabadPromises);
               resolve(output);
             } else {
@@ -480,7 +491,7 @@ const getShabad = (ShabadIDQ, sinceDate = null, forceMulti = false) =>
       .catch(err => reject(err));
   });
 
-const getAngSingle = async rows => {
+const getAngSingle = async (rows, res) => {
   const { PageNo, SourceID } = rows[0];
   const source = lib.getSource(rows[0]);
   const count = rows.length;
@@ -491,7 +502,7 @@ const getAngSingle = async rows => {
     return rowData;
   });
 
-  const navigation = await getNavigation('ang', PageNo, PageNo, SourceID);
+  const navigation = await getNavigation(res, 'ang', PageNo, PageNo, SourceID);
 
   return {
     source,
@@ -501,10 +512,10 @@ const getAngSingle = async rows => {
   };
 };
 
-const getShabadSingle = async rows => {
+const getShabadSingle = async (res, rows) => {
   const shabadInfo = lib.getShabadInfo(rows[0]);
   const verses = rows.map(lib.prepVerse);
-  const navigation = await getNavigation('shabad', rows[0].ID, rows[rows.length - 1].ID);
+  const navigation = await getNavigation(res, 'shabad', rows[0].ID, rows[rows.length - 1].ID);
 
   return {
     shabadInfo,
@@ -514,7 +525,7 @@ const getShabadSingle = async rows => {
   };
 };
 
-const getNavigation = async (type, first, last, source = '') => {
+const getNavigation = async (res, type, first, last, source = '') => {
   let conn;
   let table = 'Verse';
   let column = '';
@@ -563,7 +574,7 @@ const getNavigation = async (type, first, last, source = '') => {
       next,
     };
   } catch (err) {
-    error(err);
+    lib.error(err, res, 500);
   } finally {
     if (conn) conn.end();
   }

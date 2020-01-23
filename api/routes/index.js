@@ -6,6 +6,7 @@ const shabads = require('../controllers/shabads');
 const banis = require('../controllers/banis');
 const amritkeertan = require('../controllers/amritkeertan');
 const rehats = require('../controllers/rehats');
+const healthcheck = require('../controllers/healthcheck');
 
 const route = Router();
 
@@ -17,6 +18,9 @@ route.get('/', limiter.rate100, (req, res) => {
     endpoint: os.hostname().substr(0, 3),
   });
 });
+
+// Healthcheck Routes
+route.get('/health', limiter.rate250, healthcheck.db);
 
 // Shabad Routes
 route.get('/search/:query', limiter.rate250, shabads.search);
