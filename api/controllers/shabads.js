@@ -245,7 +245,7 @@ exports.shabads = async (req, res) => {
   if (lib.isListOfNumbers(ShabadID)) {
     ShabadID = ShabadID.split(/[,+]/g);
     try {
-      const rows = await getShabad(res, ShabadID, sinceDate);
+      const rows = await getShabad(req, res, ShabadID, sinceDate);
       if (Object.entries(rows).length === 0) {
         lib.error(
           'Shabad does not exist or no updates found for specified Shabad.',
@@ -307,7 +307,7 @@ exports.angs = async (req, res) => {
     const rows = await conn.query(q, parameters);
     if (rows.length > 0 && PageNoQuery.totalPages === 1) {
       // single ang
-      const output = await getAngSingle(rows, res);
+      const output = await getAngSingle(req, res, rows);
       res.json(output);
     } else if (rows.length > 0) {
       // multiple ang
@@ -326,7 +326,7 @@ exports.angs = async (req, res) => {
         output.pages[counter].push(row);
       });
 
-      const outputPagePromises = output.pages.map(row => getAngSingle(row, res));
+      const outputPagePromises = output.pages.map(row => getAngSingle(req, res, row));
       output.pages = await Promise.all(outputPagePromises);
       res.json(output);
     } else {
@@ -374,7 +374,7 @@ exports.hukamnamas = async (req, res) => {
       if (row.length > 0) {
         const { hukamDate } = row[0];
         const ShabadIDs = JSON.parse(row[0].ShabadID);
-        const shabads = await getShabad(res, ShabadIDs, null, true);
+        const shabads = await getShabad(req, res, ShabadIDs, null, true);
         const hukamGregorianDate = new Date(hukamDate);
         const date = {
           gregorian: {
@@ -414,7 +414,7 @@ exports.random = async (req, res) => {
       'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(q, [SourceID]);
     const { ShabadID } = row[0];
-    const rows = await getShabad(res, [ShabadID]);
+    const rows = await getShabad(req, res, [ShabadID]);
     res.cacheControl = { noCache: true };
     res.json(rows);
   } catch (err) {
@@ -424,7 +424,7 @@ exports.random = async (req, res) => {
   }
 };
 
-const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
+const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
   new Promise((resolve, reject) => {
     req.app.locals.pool
       .getConnection()
@@ -455,7 +455,7 @@ const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
           .then(async rows => {
             if (rows.length > 0 && ShabadIDQLength === 1 && forceMulti === false) {
               // single shabad
-              const retShabad = await getShabadSingle(res, rows);
+              const retShabad = await getShabadSingle(req, res, rows);
               resolve(retShabad);
             } else if (rows.length > 0) {
               // multiple shabads
@@ -474,7 +474,9 @@ const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
                 output.shabads[counter].push(row);
               });
 
-              const outputShabadPromises = output.shabads.map(row => getShabadSingle(res, row));
+              const outputShabadPromises = output.shabads.map(row =>
+                getShabadSingle(req, res, row),
+              );
               output.shabads = await Promise.all(outputShabadPromises);
               resolve(output);
             } else {
@@ -487,7 +489,7 @@ const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
       .catch(err => reject(err));
   });
 
-const getAngSingle = async (rows, res) => {
+const getAngSingle = async (req, res, rows) => {
   const { PageNo, SourceID } = rows[0];
   const source = lib.getSource(rows[0]);
   const count = rows.length;
@@ -498,7 +500,7 @@ const getAngSingle = async (rows, res) => {
     return rowData;
   });
 
-  const navigation = await getNavigation(res, 'ang', PageNo, PageNo, SourceID);
+  const navigation = await getNavigation(req, res, 'ang', PageNo, PageNo, SourceID);
 
   return {
     source,
@@ -508,10 +510,10 @@ const getAngSingle = async (rows, res) => {
   };
 };
 
-const getShabadSingle = async (res, rows) => {
+const getShabadSingle = async (req, res, rows) => {
   const shabadInfo = lib.getShabadInfo(rows[0]);
   const verses = rows.map(lib.prepVerse);
-  const navigation = await getNavigation(res, 'shabad', rows[0].ID, rows[rows.length - 1].ID);
+  const navigation = await getNavigation(req, res, 'shabad', rows[0].ID, rows[rows.length - 1].ID);
 
   return {
     shabadInfo,
@@ -521,7 +523,7 @@ const getShabadSingle = async (res, rows) => {
   };
 };
 
-const getNavigation = async (res, type, first, last, source = '') => {
+const getNavigation = async (req, res, type, first, last, source = '') => {
   let conn;
   let table = 'Verse';
   let column = '';
