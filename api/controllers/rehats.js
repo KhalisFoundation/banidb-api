@@ -1,14 +1,10 @@
-const { createPool } = require('mariadb');
-const config = require('../config');
 const lib = require('../lib');
-
-const pool = createPool(config.mysql);
 
 exports.all = async (req, res) => {
   let conn;
 
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q = 'SELECT id as rehatID, maryada_name as rehatName, alphabet FROM maryadas';
     const maryadas = await conn.query(q, []);
     res.json({
@@ -25,7 +21,7 @@ exports.all = async (req, res) => {
 exports.chapterList = async (req, res) => {
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const rehatID = parseInt(req.params.RehatID, 10);
     const q =
       'SELECT id as chapterID, chapter_name as chapterName, alphabet FROM maryada_chapters WHERE maryada_id = ?';
@@ -56,7 +52,7 @@ exports.chapters = async (req, res) => {
   }
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q = `SELECT id as chapterID, chapter_name as chapterName, chapter_content as chapterContent, alphabet FROM maryada_chapters WHERE maryada_id = ? ${where}`;
     const chapters = await conn.query(q, params);
     res.json({
@@ -74,7 +70,7 @@ exports.chapters = async (req, res) => {
 exports.search = async (req, res) => {
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const { string } = req.params;
     const q =
       'SELECT c.id as chapterID, c.chapter_name as chapterName, c.chapter_content as chapterContent, c.maryada_id as rehatID, m.maryada_name as rehatName FROM maryada_chapters c JOIN maryadas m ON c.maryada_id = m.id WHERE chapter_content LIKE ?';

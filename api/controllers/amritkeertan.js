@@ -1,8 +1,4 @@
-const { createPool } = require('mariadb');
-const config = require('../config');
 const lib = require('../lib');
-
-const pool = createPool(config.mysql);
 
 const allColumns = `
 aki.IndexID,
@@ -71,7 +67,7 @@ LEFT JOIN Source src USING(SourceID)`;
 exports.headers = async (req, res) => {
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q =
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders ORDER BY HeaderID ASC';
     const rows = await conn.query(q, []);
@@ -90,7 +86,7 @@ exports.index = async (req, res) => {
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     let headerID = -1;
     let header = '';
     const out = {};
@@ -124,7 +120,7 @@ exports.shabad = async (req, res) => {
   let conn;
   try {
     const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const ShabadID = parseInt(req.params.ShabadID, 10);
     const parameters = [ShabadID];
 

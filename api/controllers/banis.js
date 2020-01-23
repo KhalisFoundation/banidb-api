@@ -1,5 +1,3 @@
-const { createPool } = require('mariadb');
-const config = require('../config');
 const lib = require('../lib');
 
 const lengthExistsMap = {
@@ -8,8 +6,6 @@ const lengthExistsMap = {
   t: 'existsTaksal',
   b: 'existsBuddhaDal',
 };
-
-const pool = createPool(config.mysql);
 
 const allColumns = `
 b.Gurmukhi AS NameGurmukhi,
@@ -53,7 +49,7 @@ LEFT JOIN Source src USING(SourceID)`;
 exports.all = async (req, res) => {
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q =
       'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
@@ -69,7 +65,7 @@ exports.bani = async (req, res) => {
   let conn;
   try {
     const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const BaniID = parseInt(req.params.BaniID, 10);
     const exists = lengthExistsMap[req.query.length] || false;
     const parameters = [BaniID];

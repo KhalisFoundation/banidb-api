@@ -1,13 +1,9 @@
-const { createPool } = require('mariadb');
 const banidb = require('@sttm/banidb');
 const anvaad = require('anvaad-js');
-const config = require('../config');
 const lib = require('../lib');
 
 const sources = banidb.SOURCES;
 const searchTypes = banidb.TYPES;
-
-const pool = createPool(config.mysql);
 
 const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS PageNo, v.LineNo,
     v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
@@ -185,7 +181,7 @@ exports.search = async (req, res) => {
   let conn;
 
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
 
     const q = `SELECT ${columns}
       WHERE ${conditions.join(' AND ')}
@@ -299,7 +295,7 @@ exports.angs = async (req, res) => {
   let conn;
 
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q = `SELECT ${allColumns} ${allFrom}
       WHERE
         ${PageNoQuery.q}
@@ -373,7 +369,7 @@ exports.hukamnamas = async (req, res) => {
     let conn;
 
     try {
-      conn = await pool.getConnection();
+      conn = await req.app.locals.pool.getConnection();
       const row = await conn.query(q, args);
       if (row.length > 0) {
         const { hukamDate } = row[0];
@@ -413,7 +409,7 @@ exports.random = async (req, res) => {
   }
   let conn;
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q =
       'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
     const row = await conn.query(q, [SourceID]);
@@ -430,7 +426,7 @@ exports.random = async (req, res) => {
 
 const getShabad = (res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
   new Promise((resolve, reject) => {
-    pool
+    req.app.locals.pool
       .getConnection()
       .then(conn => {
         const parameters = [...ShabadIDQ];
@@ -547,7 +543,7 @@ const getNavigation = async (res, type, first, last, source = '') => {
   }
 
   try {
-    conn = await pool.getConnection();
+    conn = await req.app.locals.pool.getConnection();
     const q1 = `(SELECT 'previous' as navigation, ${column}
                   FROM ${table}
                   WHERE ${columnWhere} < ? ${where}
