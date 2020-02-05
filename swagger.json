@@ -1,0 +1,378 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Banidb-api docs",
+    "version": "1",
+    "title": "banidb-api"
+  },
+  "servers": [
+    {
+      "url": "http://api.banidb.com/v2",
+      "description": "prod"
+    },
+    {
+      "url": "http://api.khajna.com/v2",
+      "description": "stage"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Make sure api is up and running",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/search/{query}": {
+      "get": {
+        "summary": "Search",
+        "description": "Enter a search query and get lines that match.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "description": "Search query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "searchtype",
+            "in": "query",
+            "description": "Type of search. { 0: First letter each word from start (Gurmukhi), 1: First letter each word anywhere(Gurmukhi), 2: Full Word (Gurmukhi), 3: Full Word Translation (English), 4: Romanized Gurmukhi (English), 5: Ang, 6: Main Letter (Gurmukhi), 7: Romanized first letter anywhere (English) }",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SeaerchType"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Source"
+            }
+          },
+          {
+            "name": "ang",
+            "in": "query",
+            "description": "Which ang to return. Required if searchtype is 5",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Pagination param. Which page to return.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "results",
+            "in": "query",
+            "description": "Pagination param. How many results per page to return.",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/shabads/{shabadID}": {
+      "get": {
+        "summary": "Shabads by ID",
+        "description": "Get an entire Shabad from its ShabadID. More than one shabadID can be specificed with operators '+' or ','",
+        "parameters": [
+          {
+            "name": "shabadID",
+            "in": "path",
+            "description": "Shabad id(s)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Malformed URL"
+          }
+        }
+      }
+    },
+    "/angs/{pageNo}/{sourceID}": {
+      "get": {
+        "summary": "Ang",
+        "description": "Get an entire Ang(s) by number and optional source. More than one Ang can be specificed with operators '+' and '-'",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "path",
+            "description": "Ang number and/or range",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sourceID",
+            "in": "path",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Malformed URL"
+          }
+        }
+      }
+    },
+    "/hukamnamas/{year}/{month}/{day}": {
+      "get": {
+        "summary": "Hukamnama",
+        "description": "Get the Hukamnama from Sri Harmandir Sahib.",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year for specific date of hukamnama. Required if month and day is specified.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "description": "Month for specific date of hukamnama. Required if year and day is specified.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "day",
+            "in": "path",
+            "description": "Day for specific date of hukamnama. Required if year and month is specified.",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      },
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "404": {
+          "description": "Please specify a valid date. Archives go back to 2002-01-01"
+        }
+      }
+    },
+    "/random/{sourceID}": {
+      "get": {
+        "summary": "Retrieve a random Shabad",
+        "description": "Get Randomly selected  Shabad.",
+        "parameters": [
+          {
+            "name": "sourceID",
+            "in": "path",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Malformed URL"
+          }
+        }
+      }
+    },
+    "/banis": {
+      "get": {
+        "summary": "Banis List",
+        "description": "Get a list of banis found in sundar gutka.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/banis/{baniID}": {
+      "get": {
+        "summary": "Bani",
+        "description": "Get a specific bani found in sundar gutka by BaniID.",
+        "parameters": [
+          {
+            "name": "baniID",
+            "in": "path",
+            "description": "Bani id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "amritkeertan": {
+      "get": {
+        "summary": "Amrit Keertan List",
+        "description": "Get a list of all headers found in Amrit Keertan.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "amritkeertan/index": {
+      "get": {
+        "summary": "Amrit Keertan List",
+        "description": "Get a list of all indexes found in Amrit Keertan.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "amritkeertan/index/{headerID}": {
+      "get": {
+        "summary": "Amrit Keertan List",
+        "description": "Get a list of all indexes found in Amrit Keertan for a specific header.",
+        "parameters": [
+          {
+            "name": "headerID",
+            "in": "path",
+            "description": "Header id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "amritkeertan/shabads/{shabadID}": {
+      "get": {
+        "summary": "Amrit Keertan List",
+        "description": "Get shabads found in Amrit Keertan by number",
+        "parameters": [
+          {
+            "name": "shabadID",
+            "in": "path",
+            "description": "Shabad id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/kosh/{letter}": {
+      "get": {
+        "summary": "Kosh letter",
+        "description": "Get words in kosh table by letter.",
+        "parameters": [
+          {
+            "name": "letter",
+            "in": "path",
+            "description": "letter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/kosh/word/{word}": {
+      "get": {
+        "summary": "Kosh word",
+        "description": "Get words in kosh table by word.",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "path",
+            "description": "word to partial match",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/kosh/search/{query}": {
+      "get": {
+        "summary": "Kosh Search",
+        "description": "Get words in kosh table by query.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "description": "query to search on",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SeaerchType": {
+      "type": "number",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    "Source": {
+      "type": "string",
+      "enum": ["G", "D", "B", "A", "S", "N", "R", "all"]
+    },
+    "Sabad": {
+      "type": "object",
+      "properties": {
+        "shabadInfo": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
