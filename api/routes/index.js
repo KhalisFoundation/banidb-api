@@ -13,8 +13,10 @@ const route = Router();
 route.get('/', limiter.rate100, (req, res) => {
   res.json({
     name: 'BaniDB API',
-    docs: 'See https://www.banidb.com for more information and documentation.',
     version: pjson.version,
+    documentation: 'https://www.banidb.com',
+    'terms-of-service': 'https://www.banidb.com/tos',
+    'data-license': 'http://www.banidb.com/nposl',
     endpoint: os.hostname().substr(0, 3),
   });
 });
