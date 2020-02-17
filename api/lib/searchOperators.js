@@ -1,4 +1,26 @@
+// defining this as an object was the only way I could access
+// ASTERISK_MARIADB_TRANSLATION, and ASTERISK_ASCII_VALUE in the firstLetterStartToQuery function..
+const contantsObj = {
+  ASTERISK_ASCII_VALUE: 42,
+  ASTERISK_MARIADB_TRANSLATION: '%',
+};
+
 module.exports = {
+  ASTERISK_ASCII_VALUE: contantsObj.ASTERISK_ASCII_VALUE,
+  ASTERISK_MARIADB_TRANSLATION: contantsObj.ASTERISK_MARIADB_TRANSLATION,
+  firstLetterStartToQuery: (charCodeQuery, charCodeQueryWildcard) => {
+    // make sure node version > 6 to use includes
+    if (charCodeQuery.includes(contantsObj.ASTERISK_MARIADB_TRANSLATION)) {
+      return {
+        conditions: ['v.FirstLetterStr LIKE ?'],
+        parameters: [`${charCodeQuery}${contantsObj.ASTERISK_MARIADB_TRANSLATION}`],
+      };
+    }
+    return {
+      conditions: ['v.FirstLetterStr BETWEEN ? AND ?'],
+      parameters: [charCodeQuery, charCodeQueryWildcard],
+    };
+  },
   /**
    * Convert ang search operators to database query
    *

@@ -81,9 +81,23 @@ exports.search = async (req, res) => {
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
       if (charCode < 100) {
-        charCode = `0${charCode}`;
+        if (charCode === lib.searchOperators.ASTERISK_ASCII_VALUE) {
+          charCode = lib.searchOperators.ASTERISK_MARIADB_TRANSLATION;
+        } else {
+          charCode = `0${charCode}`;
+        }
       }
-      charCodeQuery += `,${charCode}`;
+
+      // don't pre-pend a ',' in the case of an % in the query
+      // also watch for edge case where last char was an asterisk but there are actually no other first letters in between
+      if (
+        charCode === lib.searchOperators.ASTERISK_MARIADB_TRANSLATION ||
+        (x > 0 && searchQuery.charCodeAt(x - 1) === lib.searchOperators.ASTERISK_ASCII_VALUE)
+      ) {
+        charCodeQuery += `${charCode}`;
+      } else {
+        charCodeQuery += `,${charCode}`;
+      }
     }
     // Add trailing wildcard
     charCodeQueryWildCard = `${charCodeQuery},z`;
@@ -97,8 +111,13 @@ exports.search = async (req, res) => {
   if (searchQuery) {
     if (searchType === 0) {
       // First letter start
-      conditions.push('v.FirstLetterStr BETWEEN ? AND ?');
-      parameters.push(charCodeQuery, charCodeQueryWildCard);
+      const queryObj = lib.searchOperators.firstLetterStartToQuery(
+        charCodeQuery,
+        charCodeQueryWildCard,
+      );
+      conditions.push(...queryObj.conditions);
+      parameters.push(...queryObj.parameters);
+
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
       }
