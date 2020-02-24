@@ -29,6 +29,8 @@ module.exports = {
 
     if (constantsObj.SearchOperators.some(operator => modifiedSearchQuery.includes(operator))) {
       // pretty much the entire ascii range EXCEPT plus (\x2B) and minus (\x2D) which serve as seperators
+      // have to disable linter here until we find a better regex
+      // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
 
@@ -58,7 +60,7 @@ module.exports = {
           parameters.push(modifiedMatch);
         } else if (match.includes('-')) {
           // remove - if it exists
-          let modifiedMatch = match.replace(/\-+/g, '');
+          let modifiedMatch = match.replace(/-+/g, '');
           conditions.push('v.Gurmukhi NOT LIKE BINARY ?');
 
           if (match.includes('*')) {
