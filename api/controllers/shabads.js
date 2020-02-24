@@ -162,14 +162,15 @@ exports.search = async (req, res) => {
       parameters.push(searchQuery);
     } else if (searchType === 6) {
       // Main letters
-      columns += ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID';
-
       // convert unicode to ascii
       searchQuery = anvaad.unicode(searchQuery, true);
-
       const words = searchQuery.split(' ').join('%');
-      conditions.push('t.token LIKE BINARY ?');
-      parameters.push(`${words}%`);
+
+      const queryObj = lib.searchOperators.mainLettersToQuery(words);
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 7) {
       // first letters english

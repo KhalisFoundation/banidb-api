@@ -166,6 +166,72 @@ module.exports = {
       parameters: [`${searchQuery}%`],
     };
   },
+  mainLettersToQuery: words => {
+    let modifiedWords = words;
+    if (constantsObj.SearchOperators.some(operator => modifiedWords.includes(operator))) {
+      // refer to above method (uses same regex) for an explanation
+      // eslint-disable-next-line no-control-regex
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = modifiedWords.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      matches.forEach(match => {
+        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push('v.MainLetters LIKE BINARY ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          // remove spaces
+          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('-')) {
+          let modifiedMatch = match.replace(/-+/g, '');
+          conditions.push('v.MainLetters NOT LIKE BINARY ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
+          parameters.push(modifiedMatch);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      // in the case they only have an asterisk or quotes, just clean up the operators
+      modifiedWords = modifiedWords.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+      modifiedWords = modifiedWords.replace(/"+/g, '');
+      modifiedWords = modifiedWords.replace(/'+/g, '');
+      return {
+        condition: 'v.MainLetters LIKE BINARY ?',
+        parameters: [modifiedWords],
+      };
+    }
+    return {
+      columns: ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID',
+      condition: 't.token LIKE BINARY ?',
+      // shouldn't there be a % at the beginning as well?
+      // lets just keep it the same for now to not break existing flows.
+      parameters: [`${words}%`],
+    };
+  },
   /**
    * Convert ang search operators to database query
    *
