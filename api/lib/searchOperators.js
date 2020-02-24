@@ -99,6 +99,73 @@ module.exports = {
       parameters: [`%${modifiedSearchQuery}%`],
     };
   },
+  fullWordEnglishToQuery: searchQuery => {
+    let modifiedSearchQuery = searchQuery;
+    if (constantsObj.SearchOperators.some(operator => modifiedSearchQuery.includes(operator))) {
+      // refer to above method (uses same regex) for an explanation
+      // eslint-disable-next-line no-control-regex
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      matches.forEach(match => {
+        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push("json_extract(v.Translations, '$.en.bdb') LIKE ?");
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          // don't need to worry about replacing spaces because we're not doing a LIKE BINARY (though I suppose it wouldn't hurt...)
+          parameters.push(`%${modifiedMatch}%`);
+        } else if (match.includes('-')) {
+          let modifiedMatch = match.replace(/-+/g, '');
+          conditions.push("json_extract(v.Translations, '$.en.bdb') NOT LIKE ?");
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          parameters.push(`%${modifiedMatch}%`);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      // in the case they only have an asterisk or quotes, just clean up the operators
+      modifiedSearchQuery = modifiedSearchQuery.replace(
+        /\*+/g,
+        constantsObj.AsteriskMariadbTranslation,
+      );
+      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
+      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+      return {
+        condition: "json_extract(v.Translations, '$.en.bdb') LIKE ?",
+        parameters: [modifiedSearchQuery],
+      };
+    }
+    return {
+      columns: ' LEFT JOIN tokenized_english t ON t.verseid = v.ID',
+      condition: 't.token LIKE ?',
+      // shouldn't there be a % at the beginning as well?
+      // lets just keep it the same for now to not break existing flows.
+      parameters: [`${searchQuery}%`],
+    };
+  },
   /**
    * Convert ang search operators to database query
    *

@@ -142,9 +142,12 @@ exports.search = async (req, res) => {
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) {
       // Full word (English)
-      columns += ' LEFT JOIN tokenized_english t ON t.verseid = v.ID';
-      conditions.push('t.token LIKE ?');
-      parameters.push(`${searchQuery}%`);
+      const queryObj = lib.searchOperators.fullWordEnglishToQuery(searchQuery);
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 4) {
       // Full word (Romanized)
