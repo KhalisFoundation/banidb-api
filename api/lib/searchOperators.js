@@ -1,24 +1,100 @@
 // defining this as an object was the only way I could access
-// ASTERISK_MARIADB_TRANSLATION, and ASTERISK_ASCII_VALUE in the firstLetterStartToQuery function..
-const contantsObj = {
-  ASTERISK_ASCII_VALUE: 42,
-  ASTERISK_MARIADB_TRANSLATION: '%',
+// AsteriskMariadbTranslation, and AsteriskAsciiValue in the firstLetterStartToQuery function..
+const constantsObj = {
+  AsteriskAsciiValue: 42,
+  AsteriskMariadbTranslation: '%',
+  SearchOperators: ['+', '-', '*', '"', "'"],
 };
 
 module.exports = {
-  ASTERISK_ASCII_VALUE: contantsObj.ASTERISK_ASCII_VALUE,
-  ASTERISK_MARIADB_TRANSLATION: contantsObj.ASTERISK_MARIADB_TRANSLATION,
+  AsteriskAsciiValue: constantsObj.AsteriskAsciiValue,
+  AsteriskMariadbTranslation: constantsObj.AsteriskMariadbTranslation,
+  SearchOperators: constantsObj.SearchOperators,
   firstLetterStartToQuery: (charCodeQuery, charCodeQueryWildcard) => {
     // make sure node version > 6 to use includes
-    if (charCodeQuery.includes(contantsObj.ASTERISK_MARIADB_TRANSLATION)) {
+    if (charCodeQuery.includes(constantsObj.AsteriskMariadbTranslation)) {
       return {
         conditions: ['v.FirstLetterStr LIKE ?'],
-        parameters: [`${charCodeQuery}${contantsObj.ASTERISK_MARIADB_TRANSLATION}`],
+        parameters: [`${charCodeQuery}${constantsObj.AsteriskMariadbTranslation}`],
       };
     }
     return {
       conditions: ['v.FirstLetterStr BETWEEN ? AND ?'],
       parameters: [charCodeQuery, charCodeQueryWildcard],
+    };
+  },
+  fullWordGurmukhiToQuery: searchQuery => {
+    // check if one or more of the search operators are in the searchQuery
+    let modifiedSearchQuery = searchQuery.replace(/(\[|\])/g, '');
+
+    if (constantsObj.SearchOperators.some(operator => modifiedSearchQuery.includes(operator))) {
+      // pretty much the entire ascii range EXCEPT plus (\x2B) and minus (\x2D) which serve as seperators
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      matches.forEach(match => {
+        // !match.includes('+') && !match.includes('-') means this is the very first part of the query
+        // which is implicitly a plus (e.g. Awip+inrMjnu) means (e.g. +Awip+inrMjnu)
+        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          // remove + if it exists
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push('v.Gurmukhi LIKE BINARY ?');
+
+          // as it stands, theres really no difference between '*', "", '', etc.
+          // so the following queries give the same results
+          // "Awip" + "inrMjnu" + "Awpy" vs *Awip* + *inrMjnu* + *Awpy* vs Awip + inrMjnu + Awpy
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          // remove spaces
+          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('-')) {
+          // remove - if it exists
+          let modifiedMatch = match.replace(/\-+/g, '');
+          conditions.push('v.Gurmukhi NOT LIKE BINARY ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          } else if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
+          parameters.push(modifiedMatch);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      // in the case they only have an asterisk or quotes, just clean up the operators
+      modifiedSearchQuery = modifiedSearchQuery.replace(
+        /\*+/g,
+        constantsObj.AsteriskMariadbTranslation,
+      );
+      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
+      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+      return {
+        condition: 'v.Gurmukhi LIKE BINARY ?',
+        parameters: [modifiedSearchQuery],
+      };
+    }
+    return {
+      condition: 'v.Gurmukhi LIKE BINARY ?',
+      parameters: [`%${modifiedSearchQuery}%`],
     };
   },
   /**

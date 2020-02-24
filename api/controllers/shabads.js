@@ -81,8 +81,8 @@ exports.search = async (req, res) => {
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
       if (charCode < 100) {
-        if (charCode === lib.searchOperators.ASTERISK_ASCII_VALUE) {
-          charCode = lib.searchOperators.ASTERISK_MARIADB_TRANSLATION;
+        if (charCode === lib.searchOperators.AsteriskAsciiValue) {
+          charCode = lib.searchOperators.AsteriskMariadbTranslation;
         } else {
           charCode = `0${charCode}`;
         }
@@ -91,8 +91,8 @@ exports.search = async (req, res) => {
       // don't pre-pend a ',' in the case of an % in the query
       // also watch for edge case where last char was an asterisk but there are actually no other first letters in between
       if (
-        charCode === lib.searchOperators.ASTERISK_MARIADB_TRANSLATION ||
-        (x > 0 && searchQuery.charCodeAt(x - 1) === lib.searchOperators.ASTERISK_ASCII_VALUE)
+        charCode === lib.searchOperators.AsteriskMariadbTranslation ||
+        (x > 0 && searchQuery.charCodeAt(x - 1) === lib.searchOperators.AsteriskAsciiValue)
       ) {
         charCodeQuery += `${charCode}`;
       } else {
@@ -132,12 +132,13 @@ exports.search = async (req, res) => {
       }
     } else if (searchType === 2) {
       // Full word (Gurmukhi)
-      conditions.push('v.Gurmukhi LIKE BINARY ?');
-
       // convert unicode to ascii
       searchQuery = anvaad.unicode(searchQuery, true);
 
-      parameters.push(`%${searchQuery.replace(/(\[|\])/g, '')}%`);
+      const queryObj = lib.searchOperators.fullWordGurmukhiToQuery(searchQuery);
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) {
       // Full word (English)
