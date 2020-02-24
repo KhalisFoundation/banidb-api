@@ -161,8 +161,6 @@ module.exports = {
     return {
       columns: ' LEFT JOIN tokenized_english t ON t.verseid = v.ID',
       condition: 't.token LIKE ?',
-      // shouldn't there be a % at the beginning as well?
-      // lets just keep it the same for now to not break existing flows.
       parameters: [`${searchQuery}%`],
     };
   },
@@ -227,8 +225,6 @@ module.exports = {
     return {
       columns: ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID',
       condition: 't.token LIKE BINARY ?',
-      // shouldn't there be a % at the beginning as well?
-      // lets just keep it the same for now to not break existing flows.
       parameters: [`${words}%`],
     };
   },
