@@ -100,6 +100,74 @@ module.exports = {
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
   },
+  firstLetterAnywhereToQuery: (charCodeQuery, charCodeQueryWildcard) => {
+    if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
+      // eslint-disable-next-line no-control-regex
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = charCodeQuery.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      matches.forEach(match => {
+        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push('v.FirstLetterStr LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          modifiedMatch = `%${modifiedMatch}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('-')) {
+          let modifiedMatch = match.replace(/-+/g, '');
+          conditions.push('v.FirstLetterStr NOT LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          modifiedMatch = `%${modifiedMatch}%`;
+          parameters.push(modifiedMatch);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      let modifiedSearchQuery = charCodeQuery.replace(
+        /\*+/g,
+        constantsObj.AsteriskMariadbTranslation,
+      );
+      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
+      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+
+      return {
+        condition: 'v.FirstLetterStr LIKE ?',
+        parameters: [modifiedSearchQuery],
+      };
+    }
+    return {
+      columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
+      condition: 't.token BETWEEN ? AND ?',
+      parameters: [charCodeQuery, charCodeQueryWildcard],
+    };
+  },
   fullWordGurmukhiToQuery: searchQuery => {
     // check if one or more of the search operators are in the searchQuery
     let modifiedSearchQuery = searchQuery.replace(/(\[|\])/g, '');

@@ -115,9 +115,14 @@ exports.search = async (req, res) => {
       }
     } else if (searchType === 1) {
       // First letter anywhere
-      columns += ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID';
-      conditions.push('t.token BETWEEN ? AND ?');
-      parameters.push(charCodeQuery, charCodeQueryWildCard);
+      const queryObj = lib.searchOperators.firstLetterAnywhereToQuery(
+        charCodeQuery,
+        charCodeQueryWildCard,
+      );
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
