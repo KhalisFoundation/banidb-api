@@ -80,22 +80,14 @@ exports.search = async (req, res) => {
 
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
-      if (charCode < 100) {
-        if (charCode === lib.searchOperators.AsteriskAsciiValue) {
-          charCode = lib.searchOperators.AsteriskMariadbTranslation;
-        } else {
+      // adding commas with the special characters make them harder to parse out, so just append them
+      //  without having to worry about all that
+      if (lib.searchOperators.DecSearchOperators.includes(charCode)) {
+        charCodeQuery += searchQuery.charAt(x);
+      } else {
+        if (charCode < 100) {
           charCode = `0${charCode}`;
         }
-      }
-
-      // don't pre-pend a ',' in the case of an % in the query
-      // also watch for edge case where last char was an asterisk but there are actually no other first letters in between
-      if (
-        charCode === lib.searchOperators.AsteriskMariadbTranslation ||
-        (x > 0 && searchQuery.charCodeAt(x - 1) === lib.searchOperators.AsteriskAsciiValue)
-      ) {
-        charCodeQuery += `${charCode}`;
-      } else {
         charCodeQuery += `,${charCode}`;
       }
     }
@@ -115,7 +107,7 @@ exports.search = async (req, res) => {
         charCodeQuery,
         charCodeQueryWildCard,
       );
-      conditions.push(...queryObj.conditions);
+      conditions.push(queryObj.condition);
       parameters.push(...queryObj.parameters);
 
       if (searchQuery.length < 3) {

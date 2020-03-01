@@ -4,22 +4,99 @@ const constantsObj = {
   AsteriskAsciiValue: 42,
   AsteriskMariadbTranslation: '%',
   SearchOperators: ['+', '-', '*', '"', "'"],
+  DecSearchOperators: [43, 45, 42, 34, 39],
 };
 
 module.exports = {
   AsteriskAsciiValue: constantsObj.AsteriskAsciiValue,
   AsteriskMariadbTranslation: constantsObj.AsteriskMariadbTranslation,
   SearchOperators: constantsObj.SearchOperators,
+  DecSearchOperators: constantsObj.DecSearchOperators,
   firstLetterStartToQuery: (charCodeQuery, charCodeQueryWildcard) => {
-    // make sure node version > 6 to use includes
-    if (charCodeQuery.includes(constantsObj.AsteriskMariadbTranslation)) {
+    if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
+      // eslint-disable-next-line no-control-regex
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = charCodeQuery.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      // TODO need to abstract out all this logic so it can be better re-used by the other functions
+      //  for the time being though, this is largely the same code as fullWordToGurmukhi so please reference comments there
+      matches.forEach(match => {
+        if (matches.length === 1 && !match.includes('+') && !match.includes('-')) {
+          // this means either a "*" or "" is in the query, so the first letter part becomes more important
+          let modifiedMatch = match;
+          conditions.push('v.FirstLetterStr LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          // don't care about what comes after, just need to make sure the start matches properly
+          modifiedMatch = `${modifiedMatch}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push('v.FirstLetterStr LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          // order doesn't really matter in this case
+          // kind of overlaps with first letter anywhere I guess
+          modifiedMatch = `%${modifiedMatch}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('-')) {
+          let modifiedMatch = match.replace(/-+/g, '');
+          conditions.push('v.FirstLetterStr NOT LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          modifiedMatch = `%${modifiedMatch}%`;
+          parameters.push(modifiedMatch);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      let modifiedSearchQuery = charCodeQuery.replace(
+        /\*+/g,
+        constantsObj.AsteriskMariadbTranslation,
+      );
+      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
+      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+
       return {
-        conditions: ['v.FirstLetterStr LIKE ?'],
-        parameters: [`${charCodeQuery}${constantsObj.AsteriskMariadbTranslation}`],
+        condition: 'v.FirstLetterStr LIKE ?',
+        parameters: [modifiedSearchQuery],
       };
     }
     return {
-      conditions: ['v.FirstLetterStr BETWEEN ? AND ?'],
+      condition: 'v.FirstLetterStr BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
   },
@@ -50,7 +127,9 @@ module.exports = {
           // "Awip" + "inrMjnu" + "Awpy" vs *Awip* + *inrMjnu* + *Awpy* vs Awip + inrMjnu + Awpy
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
@@ -65,7 +144,9 @@ module.exports = {
 
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
@@ -117,7 +198,9 @@ module.exports = {
 
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
@@ -130,7 +213,9 @@ module.exports = {
 
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
@@ -182,7 +267,9 @@ module.exports = {
 
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
@@ -196,7 +283,9 @@ module.exports = {
 
           if (match.includes('*')) {
             modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          } else if (match.includes('"') || match.includes("'")) {
+          }
+
+          if (match.includes('"') || match.includes("'")) {
             modifiedMatch = modifiedMatch.replace(/"+/g, '');
             modifiedMatch = modifiedMatch.replace(/'+/g, '');
           }
