@@ -147,11 +147,10 @@ exports.search = async (req, res) => {
 
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 4) {
-      // Full word (Romanized)
-      let spicy = searchQuery.toLowerCase().split(' ');
-      spicy = spicy.map(word => word.substr(0, 1));
-      conditions.push('v.FirstLetterEng LIKE ?');
-      parameters.push(`%${spicy.join('')}%`);
+      const queryObj = lib.searchOperators.fullWordRomanizedToQuery(searchQuery);
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
     } else if (searchType === 5) {
       // Ang
       // Reserved for Ang search - ideally it should go to /angs

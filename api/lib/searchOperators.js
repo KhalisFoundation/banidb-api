@@ -168,6 +168,94 @@ module.exports = {
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
   },
+  fullWordRomanizedToQuery: searchQuery => {
+    if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
+      let modifiedSearchQuery = searchQuery.toLowerCase();
+
+      const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
+      const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
+
+      const conditions = [];
+      const parameters = [];
+
+      // this is a little bit different than what happens in the non-search operators path
+      //  in that path, we split on the words and then construct the parameters
+      //  in this path we'll split on the search operators and then construct the params
+      matches.forEach(match => {
+        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
+          let modifiedMatch = match.replace(/\++/g, '');
+          conditions.push('v.FirstLetterEng LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          let spicyWords = modifiedMatch.split(' ');
+          spicyWords = spicyWords.map(word => word.substr(0, 1));
+
+          modifiedMatch = `%${spicyWords.join('')}%`;
+          parameters.push(modifiedMatch);
+        } else if (match.includes('-')) {
+          let modifiedMatch = match.replace(/-+/g, '');
+          conditions.push('v.FirstLetterEng NOT LIKE ?');
+
+          if (match.includes('*')) {
+            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+          }
+
+          if (match.includes('"') || match.includes("'")) {
+            modifiedMatch = modifiedMatch.replace(/"+/g, '');
+            modifiedMatch = modifiedMatch.replace(/'+/g, '');
+          }
+
+          let spicyWords = modifiedMatch.split(' ');
+          spicyWords = spicyWords.map(word => word.substr(0, 1));
+
+          modifiedMatch = `%${spicyWords.join('')}%`;
+          parameters.push(modifiedMatch);
+        }
+      });
+
+      if (matches.length > 0) {
+        return {
+          condition: conditions.join(' AND '),
+          parameters,
+        };
+      }
+
+      // in the case they only have an asterisk or quotes, just clean up the operators
+      modifiedSearchQuery = modifiedSearchQuery.replace(
+        /\*+/g,
+        constantsObj.AsteriskMariadbTranslation,
+      );
+      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
+      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+
+      let spicyWords = modifiedSearchQuery.split(' ');
+      spicyWords = spicyWords.map(word => word.substr(0, 1));
+
+      modifiedSearchQuery = `%${spicyWords.join('')}%`;
+
+      return {
+        condition: 'v.FirstLetterEng LIKE ?',
+        parameters: [modifiedSearchQuery],
+      };
+    }
+
+    // modifiedMatch.replace(/\s+/g, '')}
+    let spicy = searchQuery.toLowerCase().split(' ');
+    spicy = spicy.map(word => word.substr(0, 1));
+
+    return {
+      condition: 'v.FirstLetterEng LIKE ?',
+      parameters: [`%${spicy.join('')}%`],
+    };
+  },
   fullWordGurmukhiToQuery: searchQuery => {
     // check if one or more of the search operators are in the searchQuery
     let modifiedSearchQuery = searchQuery.replace(/(\[|\])/g, '');
