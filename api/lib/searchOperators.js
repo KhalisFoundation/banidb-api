@@ -172,6 +172,7 @@ module.exports = {
     if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
       let modifiedSearchQuery = searchQuery.toLowerCase();
 
+      // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
 
