@@ -208,8 +208,6 @@ exports.search = async (req, res) => {
       ${groupBy}
       ORDER BY ${orderBy} ShabadID ASC`;
 
-    console.log('query formed: ', q);
-    console.log('parameters extracted: ', parameters);
     const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, parameters);
 
     const totalResults = row[0]['COUNT(*)'];
