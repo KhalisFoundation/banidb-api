@@ -80,10 +80,16 @@ exports.search = async (req, res) => {
 
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
-      if (charCode < 100) {
-        charCode = `0${charCode}`;
+      // adding commas with the special characters make them harder to parse out, so just append them
+      //  without having to worry about all that
+      if (lib.searchOperators.DecSearchOperators.includes(charCode)) {
+        charCodeQuery += searchQuery.charAt(x);
+      } else {
+        if (charCode < 100) {
+          charCode = `0${charCode}`;
+        }
+        charCodeQuery += `,${charCode}`;
       }
-      charCodeQuery += `,${charCode}`;
     }
     // Add trailing wildcard
     charCodeQueryWildCard = `${charCodeQuery},z`;
@@ -97,41 +103,54 @@ exports.search = async (req, res) => {
   if (searchQuery) {
     if (searchType === 0) {
       // First letter start
-      conditions.push('v.FirstLetterStr BETWEEN ? AND ?');
-      parameters.push(charCodeQuery, charCodeQueryWildCard);
+      const queryObj = lib.searchOperators.firstLetterStartToQuery(
+        charCodeQuery,
+        charCodeQueryWildCard,
+      );
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
       }
     } else if (searchType === 1) {
       // First letter anywhere
-      columns += ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID';
-      conditions.push('t.token BETWEEN ? AND ?');
-      parameters.push(charCodeQuery, charCodeQueryWildCard);
+      const queryObj = lib.searchOperators.firstLetterAnywhereToQuery(
+        charCodeQuery,
+        charCodeQueryWildCard,
+      );
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
       if (searchQuery.length < 3) {
         orderBy = 'FirstLetterLen,';
       }
     } else if (searchType === 2) {
       // Full word (Gurmukhi)
-      conditions.push('v.Gurmukhi LIKE BINARY ?');
-
       // convert unicode to ascii
       searchQuery = anvaad.unicode(searchQuery, true);
 
-      parameters.push(`%${searchQuery.replace(/(\[|\])/g, '')}%`);
+      const queryObj = lib.searchOperators.fullWordGurmukhiToQuery(searchQuery);
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 3) {
       // Full word (English)
-      columns += ' LEFT JOIN tokenized_english t ON t.verseid = v.ID';
-      conditions.push('t.token LIKE ?');
-      parameters.push(`${searchQuery}%`);
+      const queryObj = lib.searchOperators.fullWordEnglishToQuery(searchQuery);
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
+
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 4) {
-      // Full word (Romanized)
-      let spicy = searchQuery.toLowerCase().split(' ');
-      spicy = spicy.map(word => word.substr(0, 1));
-      conditions.push('v.FirstLetterEng LIKE ?');
-      parameters.push(`%${spicy.join('')}%`);
+      const queryObj = lib.searchOperators.fullWordRomanizedToQuery(searchQuery);
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
     } else if (searchType === 5) {
       // Ang
       // Reserved for Ang search - ideally it should go to /angs
@@ -139,14 +158,15 @@ exports.search = async (req, res) => {
       parameters.push(searchQuery);
     } else if (searchType === 6) {
       // Main letters
-      columns += ' LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID';
-
       // convert unicode to ascii
       searchQuery = anvaad.unicode(searchQuery, true);
-
       const words = searchQuery.split(' ').join('%');
-      conditions.push('t.token LIKE BINARY ?');
-      parameters.push(`${words}%`);
+
+      const queryObj = lib.searchOperators.mainLettersToQuery(words);
+      columns += queryObj.columns === undefined ? '' : queryObj.columns;
+
+      conditions.push(queryObj.condition);
+      parameters.push(...queryObj.parameters);
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 7) {
       // first letters english
