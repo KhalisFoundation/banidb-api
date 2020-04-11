@@ -7,6 +7,68 @@ const constantsObj = {
   DecSearchOperators: [43, 45, 42, 34, 39],
 };
 
+const replaceAsterisksAndQuotes = str => {
+  let res = str;
+
+  if (str.includes('*')) {
+    res = str.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
+  }
+
+  if (str.includes('"') || str.includes("'")) {
+    res = res.replace(/"+/g, '');
+    res = res.replace(/'+/g, '');
+  }
+
+  return res;
+};
+
+const getQueryConditionsAndParams = (
+  matches,
+  removeSpaces,
+  isFirstLetterSearch,
+  positiveCondition,
+  negativeCondition,
+) => {
+  const conditions = [];
+  const parameters = [];
+
+  matches.forEach(match => {
+    let modifiedMatch = removeSpaces ? match.replace(/\s+/g, '') : match;
+    modifiedMatch = replaceAsterisksAndQuotes(modifiedMatch);
+
+    if (matches.length === 1 && !match.includes('+') && !match.includes('-')) {
+      // this means either a "*" or "" is in the query, so the first letter part becomes more important
+      // don't care about what comes after, just need to make sure the start matches properly if its first letter
+      modifiedMatch = isFirstLetterSearch ? `${modifiedMatch}%` : `%${modifiedMatch}%`;
+
+      conditions.push(positiveCondition);
+      parameters.push(modifiedMatch);
+    } else if (
+      modifiedMatch.includes('+') ||
+      (!modifiedMatch.includes('+') && !modifiedMatch.includes('-'))
+    ) {
+      // !match.includes('+') && !match.includes('-') means this is the very first part of the query
+      // which is implicitly a plus (e.g. Awip+inrMjnu) means (e.g. +Awip+inrMjnu)
+      // remove + if it exists
+      modifiedMatch = modifiedMatch.replace(/\++/g, '');
+
+      conditions.push(positiveCondition);
+      parameters.push(`%${modifiedMatch}%`);
+    } else if (modifiedMatch.includes('-')) {
+      // remove - if it exists
+      modifiedMatch = modifiedMatch.replace(/-+/g, '');
+
+      conditions.push(negativeCondition);
+      parameters.push(`%${modifiedMatch}%`);
+    }
+  });
+
+  return {
+    conditions,
+    parameters,
+  };
+};
+
 module.exports = {
   AsteriskAsciiValue: constantsObj.AsteriskAsciiValue,
   AsteriskMariadbTranslation: constantsObj.AsteriskMariadbTranslation,
@@ -17,64 +79,13 @@ module.exports = {
       // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = charCodeQuery.match(seperateAtPlusorMinus);
-
-      const conditions = [];
-      const parameters = [];
-
-      // TODO need to abstract out all this logic so it can be better re-used by the other functions
-      //  for the time being though, this is largely the same code as fullWordToGurmukhi so please reference comments there
-      matches.forEach(match => {
-        if (matches.length === 1 && !match.includes('+') && !match.includes('-')) {
-          // this means either a "*" or "" is in the query, so the first letter part becomes more important
-          let modifiedMatch = match;
-          conditions.push('v.FirstLetterStr LIKE ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          // don't care about what comes after, just need to make sure the start matches properly
-          modifiedMatch = `${modifiedMatch}%`;
-          parameters.push(modifiedMatch);
-        } else if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
-          let modifiedMatch = match.replace(/\++/g, '');
-          conditions.push('v.FirstLetterStr LIKE ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          // order doesn't really matter in this case
-          // kind of overlaps with first letter anywhere I guess
-          modifiedMatch = `%${modifiedMatch}%`;
-          parameters.push(modifiedMatch);
-        } else if (match.includes('-')) {
-          let modifiedMatch = match.replace(/-+/g, '');
-          conditions.push('v.FirstLetterStr NOT LIKE ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          modifiedMatch = `%${modifiedMatch}%`;
-          parameters.push(modifiedMatch);
-        }
-      });
+      const { conditions, parameters } = getQueryConditionsAndParams(
+        matches,
+        false,
+        true,
+        'v.FirstLetterStr LIKE ?',
+        'v.FirstLetterStr NOT LIKE ?',
+      );
 
       if (matches.length > 0) {
         return {
@@ -83,13 +94,7 @@ module.exports = {
         };
       }
 
-      let modifiedSearchQuery = charCodeQuery.replace(
-        /\*+/g,
-        constantsObj.AsteriskMariadbTranslation,
-      );
-      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
-      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
-
+      let modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
       return {
         condition: 'v.FirstLetterStr LIKE ?',
         parameters: [modifiedSearchQuery],
@@ -268,50 +273,13 @@ module.exports = {
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
 
-      const conditions = [];
-      const parameters = [];
-
-      matches.forEach(match => {
-        // !match.includes('+') && !match.includes('-') means this is the very first part of the query
-        // which is implicitly a plus (e.g. Awip+inrMjnu) means (e.g. +Awip+inrMjnu)
-        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
-          // remove + if it exists
-          let modifiedMatch = match.replace(/\++/g, '');
-          conditions.push('v.Gurmukhi LIKE BINARY ?');
-
-          // as it stands, theres really no difference between '*', "", '', etc.
-          // so the following queries give the same results
-          // "Awip" + "inrMjnu" + "Awpy" vs *Awip* + *inrMjnu* + *Awpy* vs Awip + inrMjnu + Awpy
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          // remove spaces
-          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
-          parameters.push(modifiedMatch);
-        } else if (match.includes('-')) {
-          // remove - if it exists
-          let modifiedMatch = match.replace(/-+/g, '');
-          conditions.push('v.Gurmukhi NOT LIKE BINARY ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
-          parameters.push(modifiedMatch);
-        }
-      });
+      const { conditions, parameters } = getQueryConditionsAndParams(
+        matches,
+        true,
+        false,
+        'v.Gurmukhi LIKE BINARY ?',
+        'v.Gurmukhi NOT LIKE BINARY ?',
+      );
 
       if (matches.length > 0) {
         return {
@@ -321,12 +289,7 @@ module.exports = {
       }
 
       // in the case they only have an asterisk or quotes, just clean up the operators
-      modifiedSearchQuery = modifiedSearchQuery.replace(
-        /\*+/g,
-        constantsObj.AsteriskMariadbTranslation,
-      );
-      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
-      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+      modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
       return {
         condition: 'v.Gurmukhi LIKE BINARY ?',
         parameters: [modifiedSearchQuery],
