@@ -94,7 +94,7 @@ module.exports = {
         };
       }
 
-      let modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
+      const modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
       return {
         condition: 'v.FirstLetterStr LIKE ?',
         parameters: [modifiedSearchQuery],
@@ -289,7 +289,7 @@ module.exports = {
       }
 
       // in the case they only have an asterisk or quotes, just clean up the operators
-      modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
+      modifiedSearchQuery = replaceAsterisksAndQuotes(modifiedSearchQuery);
       return {
         condition: 'v.Gurmukhi LIKE BINARY ?',
         parameters: [modifiedSearchQuery],
