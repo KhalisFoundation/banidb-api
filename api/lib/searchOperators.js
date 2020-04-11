@@ -25,7 +25,7 @@ const replaceAsterisksAndQuotes = str => {
 const getQueryConditionsAndParams = (
   matches,
   removeSpaces,
-  isFirstLetterSearch,
+  isStartSearch,
   positiveCondition,
   negativeCondition,
 ) => {
@@ -39,7 +39,7 @@ const getQueryConditionsAndParams = (
     if (matches.length === 1 && !match.includes('+') && !match.includes('-')) {
       // this means either a "*" or "" is in the query, so the first letter part becomes more important
       // don't care about what comes after, just need to make sure the start matches properly if its first letter
-      modifiedMatch = isFirstLetterSearch ? `${modifiedMatch}%` : `%${modifiedMatch}%`;
+      modifiedMatch = isStartSearch ? `${modifiedMatch}%` : `%${modifiedMatch}%`;
 
       conditions.push(positiveCondition);
       parameters.push(modifiedMatch);
@@ -111,42 +111,13 @@ module.exports = {
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = charCodeQuery.match(seperateAtPlusorMinus);
 
-      const conditions = [];
-      const parameters = [];
-
-      matches.forEach(match => {
-        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
-          let modifiedMatch = match.replace(/\++/g, '');
-          conditions.push('v.FirstLetterStr LIKE ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          modifiedMatch = `%${modifiedMatch}%`;
-          parameters.push(modifiedMatch);
-        } else if (match.includes('-')) {
-          let modifiedMatch = match.replace(/-+/g, '');
-          conditions.push('v.FirstLetterStr NOT LIKE ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          modifiedMatch = `%${modifiedMatch}%`;
-          parameters.push(modifiedMatch);
-        }
-      });
+      const { conditions, parameters } = getQueryConditionsAndParams(
+        matches,
+        false,
+        false,
+        'v.FirstLetterStr LIKE ?',
+        'v.FirstLetterStr NOT LIKE ?',
+      );
 
       if (matches.length > 0) {
         return {
@@ -155,13 +126,7 @@ module.exports = {
         };
       }
 
-      let modifiedSearchQuery = charCodeQuery.replace(
-        /\*+/g,
-        constantsObj.AsteriskMariadbTranslation,
-      );
-      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
-      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
-
+      const modifiedSearchQuery = replaceAsterisksAndQuotes(charCodeQuery);
       return {
         condition: 'v.FirstLetterStr LIKE ?',
         parameters: [modifiedSearchQuery],
@@ -235,12 +200,7 @@ module.exports = {
       }
 
       // in the case they only have an asterisk or quotes, just clean up the operators
-      modifiedSearchQuery = modifiedSearchQuery.replace(
-        /\*+/g,
-        constantsObj.AsteriskMariadbTranslation,
-      );
-      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
-      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+      modifiedSearchQuery = replaceAsterisksAndQuotes(modifiedSearchQuery);
 
       let spicyWords = modifiedSearchQuery.split(' ');
       spicyWords = spicyWords.map(word => word.substr(0, 1));
@@ -352,12 +312,7 @@ module.exports = {
       }
 
       // in the case they only have an asterisk or quotes, just clean up the operators
-      modifiedSearchQuery = modifiedSearchQuery.replace(
-        /\*+/g,
-        constantsObj.AsteriskMariadbTranslation,
-      );
-      modifiedSearchQuery = modifiedSearchQuery.replace(/"+/g, '');
-      modifiedSearchQuery = modifiedSearchQuery.replace(/'+/g, '');
+      modifiedSearchQuery = replaceAsterisksAndQuotes(modifiedSearchQuery);
       return {
         condition: "json_extract(v.Translations, '$.en.bdb') LIKE ?",
         parameters: [modifiedSearchQuery],
@@ -423,9 +378,7 @@ module.exports = {
       }
 
       // in the case they only have an asterisk or quotes, just clean up the operators
-      modifiedWords = modifiedWords.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-      modifiedWords = modifiedWords.replace(/"+/g, '');
-      modifiedWords = modifiedWords.replace(/'+/g, '');
+      modifiedWords = replaceAsterisksAndQuotes(modifiedWords);
       return {
         condition: 'v.MainLetters LIKE BINARY ?',
         parameters: [modifiedWords],
