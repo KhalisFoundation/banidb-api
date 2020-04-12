@@ -304,43 +304,13 @@ module.exports = {
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = modifiedWords.match(seperateAtPlusorMinus);
 
-      const conditions = [];
-      const parameters = [];
-
-      matches.forEach(match => {
-        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
-          let modifiedMatch = match.replace(/\++/g, '');
-          conditions.push('v.MainLetters LIKE BINARY ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          // remove spaces
-          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
-          parameters.push(modifiedMatch);
-        } else if (match.includes('-')) {
-          let modifiedMatch = match.replace(/-+/g, '');
-          conditions.push('v.MainLetters NOT LIKE BINARY ?');
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          modifiedMatch = `%${modifiedMatch.replace(/\s+/g, '')}%`;
-          parameters.push(modifiedMatch);
-        }
-      });
+      const { conditions, parameters } = getQueryConditionsAndParams(
+        matches,
+        true,
+        false,
+        'v.MainLetters LIKE BINARY ?',
+        'v.MainLetters NOT LIKE BINARY ?',
+      );
 
       if (matches.length > 0) {
         return {
