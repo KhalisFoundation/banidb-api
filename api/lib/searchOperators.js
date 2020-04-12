@@ -268,41 +268,13 @@ module.exports = {
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = modifiedSearchQuery.match(seperateAtPlusorMinus);
 
-      const conditions = [];
-      const parameters = [];
-
-      matches.forEach(match => {
-        if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
-          let modifiedMatch = match.replace(/\++/g, '');
-          conditions.push("json_extract(v.Translations, '$.en.bdb') LIKE ?");
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          // don't need to worry about replacing spaces because we're not doing a LIKE BINARY (though I suppose it wouldn't hurt...)
-          parameters.push(`%${modifiedMatch}%`);
-        } else if (match.includes('-')) {
-          let modifiedMatch = match.replace(/-+/g, '');
-          conditions.push("json_extract(v.Translations, '$.en.bdb') NOT LIKE ?");
-
-          if (match.includes('*')) {
-            modifiedMatch = modifiedMatch.replace(/\*+/g, constantsObj.AsteriskMariadbTranslation);
-          }
-
-          if (match.includes('"') || match.includes("'")) {
-            modifiedMatch = modifiedMatch.replace(/"+/g, '');
-            modifiedMatch = modifiedMatch.replace(/'+/g, '');
-          }
-
-          parameters.push(`%${modifiedMatch}%`);
-        }
-      });
+      const { conditions, parameters } = getQueryConditionsAndParams(
+        matches,
+        false,
+        false,
+        "json_extract(v.Translations, '$.en.bdb') LIKE ?",
+        "json_extract(v.Translations, '$.en.bdb') NOT LIKE ?",
+      );
 
       if (matches.length > 0) {
         return {
