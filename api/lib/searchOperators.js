@@ -36,13 +36,12 @@ const getQueryConditionsAndParams = (
     let modifiedMatch = removeSpaces ? match.replace(/\s+/g, '') : match;
     modifiedMatch = replaceAsterisksAndQuotes(modifiedMatch);
 
-    if (matches.length === 1 && !match.includes('+') && !match.includes('-')) {
+    if (isStartSearch && matches.length === 1 && !match.includes('+') && !match.includes('-')) {
       // this means either a "*" or "" is in the query, so the first letter part becomes more important
       // don't care about what comes after, just need to make sure the start matches properly if its first letter
-      modifiedMatch = isStartSearch ? `${modifiedMatch}%` : `%${modifiedMatch}%`;
 
       conditions.push(positiveCondition);
-      parameters.push(modifiedMatch);
+      parameters.push(`${modifiedMatch}%`);
     } else if (
       modifiedMatch.includes('+') ||
       (!modifiedMatch.includes('+') && !modifiedMatch.includes('-'))
