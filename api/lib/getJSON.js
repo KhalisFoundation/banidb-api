@@ -22,7 +22,6 @@ const concatObjects = array => {
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
   if (Array.isArray(translations)) translations = concatObjects(translations);
-  console.log(row);
   const verse = {
     verseId: row.ID,
     shabadId: row.ShabadID,

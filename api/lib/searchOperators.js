@@ -578,13 +578,7 @@ module.exports = {
     const qOutOr = qOR.join(' OR ');
     qAND.push(`(${qOutOr})`);
     const qOut = qAND.join(' AND ');
-    console.log({
-      q: qOut,
-      parameters,
-      least,
-      most,
-      totalPages: ltgt ? null : parameters.length,
-    });
+
     return {
       q: qOut,
       parameters,
