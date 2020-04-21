@@ -11,6 +11,7 @@ const reduceObj = (accumulator, currentObj) => {
     } else if (typeof accumulatedVal === 'string') {
       newAccumulator[key] += ` ${value}`;
     }
+    return;
   });
   return newAccumulator;
 };
@@ -72,7 +73,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     if (Array.isArray(verse.visraam)) {
       const wordCount = JSON.parse(row.WordCount) || [0];
       let totalWordCount = 0;
-      let accumulator = {};
+      const accumulator = {};
       verse.visraam.map((line, i) => {
         Object.keys(line).map(vtype => {
           if (!accumulator[vtype]) accumulator[vtype] = [];
@@ -80,8 +81,10 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
             if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
             accumulator[vtype].push(v);
           });
+          return;
         });
         totalWordCount += wordCount[i];
+        return;
       });
       verse.visraam = accumulator;
     }
