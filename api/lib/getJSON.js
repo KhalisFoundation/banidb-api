@@ -2,7 +2,7 @@ const object = require('lodash/fp/object');
 
 const reduceObj = (accumulator, currentObj) => {
   const newAccumulator = Object.assign({}, accumulator);
-  Object.entries(currentObj).map(([key, value]) => {
+  Object.entries(currentObj).forEach(([key, value]) => {
     const accumulatedVal = accumulator[key];
     if (!accumulatedVal) {
       newAccumulator[key] = value;
@@ -11,7 +11,6 @@ const reduceObj = (accumulator, currentObj) => {
     } else if (typeof accumulatedVal === 'string') {
       newAccumulator[key] += ` ${value}`;
     }
-    return;
   });
   return newAccumulator;
 };
@@ -70,24 +69,24 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
     verse.visraam = JSON.parse(row.Visraam);
+    /* eslint-disable no-param-reassign */
     if (Array.isArray(verse.visraam)) {
       const wordCount = JSON.parse(row.WordCount) || [0];
       let totalWordCount = 0;
       const accumulator = {};
-      verse.visraam.map((line, i) => {
-        Object.keys(line).map(vtype => {
+      verse.visraam.forEach((line, i) => {
+        Object.keys(line).forEach(vtype => {
           if (!accumulator[vtype]) accumulator[vtype] = [];
           line[vtype].forEach(v => {
             if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
             accumulator[vtype].push(v);
           });
-          return;
         });
         totalWordCount += wordCount[i];
-        return;
       });
       verse.visraam = accumulator;
     }
+    /* eslint-enable no-param-reassign */
   }
 
   if (includeMeta && !liveSearch) {
