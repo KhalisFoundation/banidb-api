@@ -1,5 +1,28 @@
+const object = require('lodash/fp/object');
+
+const reduceObj = (accumulator, currentObj) => {
+  const newAccumulator = Object.assign({}, accumulator);
+  Object.entries(currentObj).map(([key, value]) => {
+    const accumulatedVal = accumulator[key];
+    if (!accumulatedVal) {
+      newAccumulator[key] = value;
+    } else if (typeof accumulatedVal === 'object') {
+      newAccumulator[key] = reduceObj(accumulatedVal, value);
+    } else if (typeof accumulatedVal === 'string') {
+      newAccumulator[key] += ` ${value}`;
+    }
+  });
+  return newAccumulator;
+};
+
+const concatObjects = array => {
+  return array.reduce((accumulator, current) => reduceObj(accumulator, current), {});
+};
+
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
-  const translations = JSON.parse(row.Translations);
+  let translations = JSON.parse(row.Translations);
+  if (Array.isArray(translations)) translations = concatObjects(translations);
+  console.log(row);
   const verse = {
     verseId: row.ID,
     shabadId: row.ShabadID,
@@ -8,8 +31,8 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       unicode: row.GurmukhiUni,
     },
     larivaar: {
-      gurmukhi: row.Gurmukhi.replace(/\s+/g, ''),
-      unicode: row.GurmukhiUni.replace(/\s+/g, ''),
+      gurmukhi: (row.Gurmukhi || '').toString().replace(/\s+/g, ''),
+      unicode: (row.GurmukhiUni || '').toString().replace(/\s+/g, ''),
     },
     translation: {
       en: {
@@ -17,12 +40,12 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       },
       pu: {
         ss: {
-          gurmukhi: translations.pu.ss,
-          unicode: translations.puu.ss,
+          gurmukhi: object.get(translations, 'pu.ss', ''),
+          unicode: object.get(translations, 'puu.ss', ''),
         },
         ft: {
-          gurmukhi: translations.pu.ft,
-          unicode: translations.puu.ft,
+          gurmukhi: object.get(translations, 'pu.ft', ''),
+          unicode: object.get(translations, 'puu.ft', ''),
         },
       },
       es: {
@@ -32,7 +55,8 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   };
 
   if (liveSearch !== 1) {
-    const transliterations = JSON.parse(row.Transliterations);
+    let transliterations = JSON.parse(row.Transliterations);
+    if (Array.isArray(transliterations)) transliterations = concatObjects(transliterations);
     verse.transliteration = {
       english: transliterations.en,
       hindi: transliterations.hi,
@@ -45,6 +69,22 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
     verse.visraam = JSON.parse(row.Visraam);
+    if (Array.isArray(verse.visraam)) {
+      const wordCount = JSON.parse(row.WordCount) || [0];
+      let totalWordCount = 0;
+      let accumulator = {};
+      verse.visraam.map((line, i) => {
+        Object.keys(line).map(vtype => {
+          if (!accumulator[vtype]) accumulator[vtype] = [];
+          line[vtype].forEach(v => {
+            if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
+            accumulator[vtype].push(v);
+          });
+        });
+        totalWordCount += wordCount[i];
+      });
+      verse.visraam = accumulator;
+    }
   }
 
   if (includeMeta && !liveSearch) {
