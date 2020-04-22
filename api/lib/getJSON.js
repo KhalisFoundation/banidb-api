@@ -25,6 +25,7 @@ const concatObjects = array => {
 };
 
 // reduce visraam array of objects with arrays to just objects with arrays
+/* eslint-disable no-param-reassign */
 const reduceVisraams = (visraam, wordCount) => {
   let totalWordCount = 0;
   const accumulator = {};
@@ -44,6 +45,7 @@ const reduceVisraams = (visraam, wordCount) => {
   });
   return accumulator;
 };
+/* eslint-enable no-param-reassign */
 
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
