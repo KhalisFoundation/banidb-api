@@ -100,8 +100,8 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
     verse.visraam = JSON.parse(row.Visraam);
-    const wordCount = JSON.parse(row.WordCount) || [0];
     if (Array.isArray(verse.visraam)) {
+      const wordCount = JSON.parse(row.WordCount || '[0]');
       verse.visraam = reduceVisraams(verse.visraam, wordCount);
     }
   }
