@@ -1,5 +1,9 @@
 const object = require('lodash/fp/object');
 
+// ceremonies and perhaps future features have ranges, meaning
+// translations and translit objects are now arrays of the
+// original verse structures passed as one verse
+// we now need to reduce them to look like a normal line for processing
 const reduceObj = (accumulator, currentObj) => {
   const newAccumulator = Object.assign({}, accumulator);
   Object.entries(currentObj).forEach(([key, value]) => {
@@ -15,19 +19,24 @@ const reduceObj = (accumulator, currentObj) => {
   return newAccumulator;
 };
 
+// wrapper func
 const concatObjects = array => {
   return array.reduce((accumulator, current) => reduceObj(accumulator, current), {});
 };
 
-/* eslint-disable no-param-reassign */
+// reduce visraam array of objects with arrays to just objects with arrays
 const reduceVisraams = (visraam, wordCount) => {
   let totalWordCount = 0;
   const accumulator = {};
   visraam.forEach((line, i) => {
     Object.keys(line).forEach(vtype => {
-      if (!accumulator[vtype]) accumulator[vtype] = [];
+      if (!accumulator[vtype]) {
+        accumulator[vtype] = [];
+      }
       line[vtype].forEach(v => {
-        if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
+        if (i > 0) {
+          v.p = parseInt(v.p, 10) + totalWordCount;
+        }
         accumulator[vtype].push(v);
       });
     });
@@ -35,11 +44,12 @@ const reduceVisraams = (visraam, wordCount) => {
   });
   return accumulator;
 };
-/* eslint-enable no-param-reassign */
 
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
-  if (Array.isArray(translations)) translations = concatObjects(translations);
+  if (Array.isArray(translations)) {
+    translations = concatObjects(translations);
+  }
   const verse = {
     verseId: row.ID,
     shabadId: row.ShabadID,
@@ -73,7 +83,9 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
 
   if (liveSearch !== 1) {
     let transliterations = JSON.parse(row.Transliterations);
-    if (Array.isArray(transliterations)) transliterations = concatObjects(transliterations);
+    if (Array.isArray(transliterations)) {
+      transliterations = concatObjects(transliterations);
+    }
     verse.transliteration = {
       english: transliterations.en,
       hindi: transliterations.hi,
@@ -87,7 +99,9 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.updated = row.Updated;
     verse.visraam = JSON.parse(row.Visraam);
     const wordCount = JSON.parse(row.WordCount) || [0];
-    if (Array.isArray(verse.visraam)) verse.visraam = reduceVisraams(verse.visraam, wordCount);
+    if (Array.isArray(verse.visraam)) {
+      verse.visraam = reduceVisraams(verse.visraam, wordCount);
+    }
   }
 
   if (includeMeta && !liveSearch) {
