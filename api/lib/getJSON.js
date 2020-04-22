@@ -19,6 +19,24 @@ const concatObjects = array => {
   return array.reduce((accumulator, current) => reduceObj(accumulator, current), {});
 };
 
+/* eslint-disable no-param-reassign */
+const reduceVisraams = (visraam, wordCount) => {
+  let totalWordCount = 0;
+  const accumulator = {};
+  visraam.forEach((line, i) => {
+    Object.keys(line).forEach(vtype => {
+      if (!accumulator[vtype]) accumulator[vtype] = [];
+      line[vtype].forEach(v => {
+        if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
+        accumulator[vtype].push(v);
+      });
+    });
+    totalWordCount += wordCount[i];
+  });
+  return accumulator;
+};
+/* eslint-enable no-param-reassign */
+
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
   if (Array.isArray(translations)) translations = concatObjects(translations);
@@ -68,24 +86,8 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
     verse.visraam = JSON.parse(row.Visraam);
-    /* eslint-disable no-param-reassign */
-    if (Array.isArray(verse.visraam)) {
-      const wordCount = JSON.parse(row.WordCount) || [0];
-      let totalWordCount = 0;
-      const accumulator = {};
-      verse.visraam.forEach((line, i) => {
-        Object.keys(line).forEach(vtype => {
-          if (!accumulator[vtype]) accumulator[vtype] = [];
-          line[vtype].forEach(v => {
-            if (i > 0) v.p = parseInt(v.p, 10) + totalWordCount;
-            accumulator[vtype].push(v);
-          });
-        });
-        totalWordCount += wordCount[i];
-      });
-      verse.visraam = accumulator;
-    }
-    /* eslint-enable no-param-reassign */
+    const wordCount = JSON.parse(row.WordCount) || [0];
+    if (Array.isArray(verse.visraam)) verse.visraam = reduceVisraams(verse.visraam, wordCount);
   }
 
   if (includeMeta && !liveSearch) {
