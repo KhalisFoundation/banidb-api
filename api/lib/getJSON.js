@@ -1,4 +1,4 @@
-const object = require('lodash/fp/object');
+const getObject = require('lodash/get');
 
 // ceremonies and perhaps future features have ranges, meaning
 // translations and translit objects are now arrays of the
@@ -69,12 +69,12 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       },
       pu: {
         ss: {
-          gurmukhi: object.get(translations, 'pu.ss', ''),
-          unicode: object.get(translations, 'puu.ss', ''),
+          gurmukhi: getObject(translations, 'pu.ss', ''),
+          unicode: getObject(translations, 'puu.ss', ''),
         },
         ft: {
-          gurmukhi: object.get(translations, 'pu.ft', ''),
-          unicode: object.get(translations, 'puu.ft', ''),
+          gurmukhi: getObject(translations, 'pu.ft', ''),
+          unicode: getObject(translations, 'puu.ft', ''),
         },
       },
       es: {
