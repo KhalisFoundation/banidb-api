@@ -7,7 +7,7 @@ exports.letter = async (req, res) => {
     lib.error(
       'You must supply a single character to see the index for that letter.',
       res,
-      413,
+      422,
       false,
     );
   }
@@ -15,9 +15,9 @@ exports.letter = async (req, res) => {
     conn = await req.app.locals.pool.getConnection();
     const q = `SELECT ID AS id, Word AS word, WordUni AS wordUni
                 FROM MahanKoshWords
-                WHERE FirstLetter='${letter}' OR FirstLetterUni='${letter}'
+                WHERE FirstLetter=? OR FirstLetterUni=?
                 ORDER BY ID`;
-    const rows = await conn.query(q, []);
+    const rows = await conn.query(q, [letter, letter]);
     res.json(rows);
   } catch (err) {
     lib.error(err, res, 500);
@@ -28,16 +28,16 @@ exports.letter = async (req, res) => {
 
 exports.word = async (req, res) => {
   let conn;
-  const word = req.params.Word;
+  const word = `${req.params.Word}%`;
   try {
     conn = await req.app.locals.pool.getConnection();
     const q = `SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
                   d.DefGurmukhi AS definition, d.DefGurmukhiUni AS definitionUni
                 FROM MahanKoshWords w
                 LEFT JOIN MahanKoshDefinitions d ON w.Definition = d.ID
-                WHERE w.Word LIKE '${word}%' OR w.WordUni LIKE BINARY '${word}%'
+                WHERE w.Word LIKE ? OR w.WordUni LIKE BINARY ?
                 ORDER BY w.ID`;
-    const rows = await conn.query(q, []);
+    const rows = await conn.query(q, [word, word]);
     res.json(rows);
   } catch (err) {
     lib.error(err, res, 500);
@@ -48,7 +48,7 @@ exports.word = async (req, res) => {
 
 exports.search = async (req, res) => {
   let conn;
-  const { query } = req.params;
+  const query = `%${req.params.query}%`;
   try {
     conn = await req.app.locals.pool.getConnection();
     const q = `SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
@@ -56,12 +56,12 @@ exports.search = async (req, res) => {
                 FROM MahanKoshWords w
                 LEFT JOIN MahanKoshDefinitions d ON w.Definition = d.ID
                 WHERE
-                  w.Word LIKE '%${query}%' OR
-                  w.WordUni LIKE BINARY '%${query}%' OR
-                  d.DefGurmukhi LIKE '%${query}%' OR
-                  d.DefGurmukhiUni LIKE BINARY '%${query}%'
+                  w.Word LIKE ? OR
+                  w.WordUni LIKE BINARY ? OR
+                  d.DefGurmukhi LIKE ? OR
+                  d.DefGurmukhiUni LIKE BINARY ?
                 ORDER BY w.ID`;
-    const rows = await conn.query(q, []);
+    const rows = await conn.query(q, [query, query, query, query]);
     res.json(rows);
   } catch (err) {
     lib.error(err, res, 500);
