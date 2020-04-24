@@ -4,6 +4,7 @@ const limiter = require('../controllers/limiter');
 const pjson = require('../../package.json');
 const shabads = require('../controllers/shabads');
 const banis = require('../controllers/banis');
+const kosh = require('../controllers/kosh');
 const amritkeertan = require('../controllers/amritkeertan');
 const rehats = require('../controllers/rehats');
 const healthcheck = require('../controllers/healthcheck');
@@ -48,6 +49,13 @@ route.get('/amritkeertan/index', limiter.rate100, amritkeertan.index);
 route.get('/amritkeertan/index/:HeaderID', limiter.rate100, amritkeertan.index);
 
 route.get('/amritkeertan/shabads/:ShabadID', limiter.rate100, amritkeertan.shabad);
+
+// Kosh Routes
+route.get('/kosh/:Letter', limiter.rate100, kosh.letter);
+
+route.get('/kosh/word/:Word', limiter.rate100, kosh.word);
+
+route.get('/kosh/search/:query', limiter.rate100, kosh.search);
 
 // Rehat Routes
 route.get('/rehats', limiter.rate100, rehats.all);
