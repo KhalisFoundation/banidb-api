@@ -80,7 +80,6 @@ exports.bani = async (req, res) => {
       parameters.push(sinceDate);
     }
     const q = `SELECT ${allColumns} WHERE v.Bani = ? ${sinceQuery} ${existsQuery} ORDER BY Seq ASC`;
-    console.log([q, parameters]);
     const rows = await conn.query(q, parameters);
     if (rows && rows.length > 0) {
       const nameTransliterations = JSON.parse(rows[0].NameTransliterations);
