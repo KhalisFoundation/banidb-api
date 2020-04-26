@@ -89,7 +89,7 @@ describe('search endpoint - short', () => {
   });
 });
 
-describe('search endpoint- single', () => {
+describe('search endpoint - single', () => {
   let status;
   let json;
 
@@ -217,5 +217,43 @@ describe('search endpoint- single', () => {
     expect(raagObj.startAng).toBe(489);
     expect(raagObj.endAng).toBe(21964);
     expect(raagObj.raagWithPage).toBe('Gujri (489-526)');
+  });
+});
+
+describe('search endpoint - random', () => {
+  let status;
+  let json;
+
+  beforeAll(async () => {
+    const results = await geturl('random');
+    [status, json] = [results.status, results.json];
+  });
+
+  test('status', () => {
+    expect(status).toBe(200);
+  });
+
+  test('shabadInfo', () => {
+    expect(json.shabadInfo).toBeTruthy();
+    expect(json.shabadInfo.shabadId).toBeGreaterThan(0);
+  });
+});
+
+describe('search endpoint - operators', () => {
+  let status;
+  let json;
+
+  beforeAll(async () => {
+    const results = await geturl('search/hj*r');
+    [status, json] = [results.status, results.json];
+  });
+
+  test('status', () => {
+    expect(status).toBe(200);
+  });
+
+  test('shabadInfo', () => {
+    expect(json.resultsInfo).toBeTruthy();
+    expect(json.resultsInfo.totalResults).toBe(90);
   });
 });
