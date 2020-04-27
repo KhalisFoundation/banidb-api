@@ -7,8 +7,8 @@
     "start": "pm2 start process.json",
     "dev": "pm2 start process-dev.json",
     "test": "eslint .",
-    "e2e:smoke:test:dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
-    "e2e:smoke:test:prod": "API_ENV=prod jest --rootDir ./tests/e2e "
+    "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
+    "e2e": "API_ENV=prod jest --rootDir ./tests/e2e "
   },
   "repository": {
     "type": "git",
