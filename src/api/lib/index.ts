@@ -1,10 +1,11 @@
-const getJSON = require('./getJSON');
-const searchOperators = require('./searchOperators');
+import * as e from 'express';
+import getJSON from './getJSON';
+import searchOperators from './searchOperators';
 
 const lib = {
-  error: (err, res, code, stack = true) => {
+  error: (err: any, res: e.Response, code: any, stack = true) => {
     res.cacheControl = { noCache: true };
-    const ret = {
+    const ret: any = {
       error: true,
       data: {
         error: err,
@@ -17,7 +18,7 @@ const lib = {
     }
     res.status(code).json(ret);
   },
-  isListOfNumbers: str => {
+  isListOfNumbers: (str: any) => {
     if (typeof str !== 'string') {
       return false;
     }
@@ -31,7 +32,7 @@ const lib = {
 
     return false;
   },
-  isRangeOfNumbers: str => {
+  isRangeOfNumbers: (str: any) => {
     if (typeof str !== 'string') {
       return false;
     }
@@ -45,7 +46,7 @@ const lib = {
 
     return false;
   },
-  isValidDatetime: str => {
+  isValidDatetime: (str: any) => {
     if (typeof str !== 'string') {
       return null;
     }
@@ -60,7 +61,7 @@ const lib = {
   },
 };
 
-module.exports = {
+export default {
   ...lib,
   ...getJSON,
   searchOperators,

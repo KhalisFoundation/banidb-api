@@ -1,6 +1,7 @@
-const lib = require('../lib');
+import * as e from 'express';
+import lib from '../lib';
 
-exports.all = async (req, res) => {
+export const all = async (req: e.Request, res: e.Response) => {
   let conn;
 
   try {
@@ -18,7 +19,7 @@ exports.all = async (req, res) => {
   }
 };
 
-exports.chapterList = async (req, res) => {
+export const chapterList = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
@@ -38,14 +39,14 @@ exports.chapterList = async (req, res) => {
   }
 };
 
-exports.chapters = async (req, res) => {
+export const chapters = async (req: e.Request, res: e.Response) => {
   let { RehatID, ChapterID } = req.params;
   let where = '';
-  RehatID = parseInt(RehatID, 10);
+  RehatID = parseInt(RehatID, 10) as any;
   const params = [RehatID];
   if (typeof ChapterID !== 'undefined') {
-    ChapterID = parseInt(ChapterID, 10);
-    if (ChapterID > 0) {
+    ChapterID = parseInt(ChapterID, 10) as any;
+    if ((ChapterID as any) > 0) {
       where = 'AND id = ?';
       params.push(ChapterID);
     }
@@ -67,7 +68,7 @@ exports.chapters = async (req, res) => {
   }
 };
 
-exports.search = async (req, res) => {
+export const search = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();

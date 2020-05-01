@@ -1,6 +1,7 @@
-const lib = require('../lib');
+import * as e from 'express';
+import lib from '../lib';
 
-const allColumns = `
+const allColumns: any = `
 aki.IndexID,
 aki.HeaderID,
 aki.ShabadID,
@@ -32,7 +33,7 @@ LEFT JOIN Writer w USING(WriterID)
 LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
-const allIndexColumns = `
+const allIndexColumns: any = `
 b.IndexID,
 b.HeaderID,
 b.ShabadID,
@@ -64,7 +65,7 @@ LEFT JOIN Writer w USING(WriterID)
 LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
-exports.headers = async (req, res) => {
+export const headers = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
@@ -72,7 +73,7 @@ exports.headers = async (req, res) => {
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders ORDER BY HeaderID ASC';
     const rows = await conn.query(q, []);
     res.json({
-      headers: rows.map(items => lib.prepAKIndex(items)),
+      headers: rows.map((items: any) => lib.prepAKIndex(items)),
     });
   } catch (err) {
     lib.error(err, res, 500);
@@ -81,7 +82,7 @@ exports.headers = async (req, res) => {
   }
 };
 
-exports.index = async (req, res) => {
+export const index = async (req: e.Request, res: e.Response) => {
   let conn;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
@@ -89,7 +90,7 @@ exports.index = async (req, res) => {
     conn = await req.app.locals.pool.getConnection();
     let headerID = -1;
     let header = '';
-    const out = {};
+    const out: any = {};
     const parameters = [];
 
     if (req.params.HeaderID) {
@@ -107,7 +108,7 @@ exports.index = async (req, res) => {
 
     const q = `SELECT ${allIndexColumns} WHERE 1 ${header} ${sinceQuery} ORDER BY IndexID ASC`;
     const rows = await conn.query(q, parameters);
-    out.index = rows.map(items => lib.prepAKIndex(items));
+    out.index = rows.map((items: any) => lib.prepAKIndex(items));
     res.json(out);
   } catch (err) {
     lib.error(err, res, 500);
@@ -116,10 +117,12 @@ exports.index = async (req, res) => {
   }
 };
 
-exports.shabad = async (req, res) => {
+export const shabad = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
-    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+    const sinceDate: any = req.query.updatedsince
+      ? lib.isValidDatetime(req.query.updatedsince)
+      : null;
     conn = await req.app.locals.pool.getConnection();
     const ShabadID = parseInt(req.params.ShabadID, 10);
     const parameters = [ShabadID];
@@ -135,7 +138,7 @@ exports.shabad = async (req, res) => {
 
     if (rows && rows.length > 0) {
       const header = await getHeaderInfo(rows[0].HeaderID, conn);
-      const verses = rows.map(row => lib.prepVerse(row));
+      const verses = rows.map((row: any) => lib.prepVerse(row));
 
       res.json({
         header,
@@ -152,12 +155,12 @@ exports.shabad = async (req, res) => {
 };
 
 // eslint-disable-next-line consistent-return
-const getHeaderInfo = async (headerID, conn, res) => {
+const getHeaderInfo = async (headerID: any, conn: any, res?: any) => {
   try {
     const q =
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders WHERE HeaderID = ? ORDER BY HeaderID ASC';
     const row = await conn.query(q, [headerID]);
-    return row.map(items => lib.prepAKIndex(items));
+    return row.map((items: any) => lib.prepAKIndex(items));
   } catch (err) {
     lib.error(err, res, 500);
   } finally {

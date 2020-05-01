@@ -1,6 +1,8 @@
-const lib = require('../lib');
+import * as e from 'express';
+import lib from '../lib';
 
-exports.db = async (req, res) => {
+export const db = async (req: e.Request, res: e.Response) => {
+  res.json('working');
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();

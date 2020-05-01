@@ -1,6 +1,7 @@
-const lib = require('../lib');
+import * as e from 'express';
+import lib from '../lib';
 
-exports.letter = async (req, res) => {
+export const letter = async (req: e.Request, res: e.Response) => {
   let conn;
   const letter = req.params.Letter;
   if (letter.length !== 1) {
@@ -26,7 +27,7 @@ exports.letter = async (req, res) => {
   }
 };
 
-exports.word = async (req, res) => {
+export const word = async (req: e.Request, res: e.Response) => {
   let conn;
   const word = `${req.params.Word}%`;
   try {
@@ -46,7 +47,7 @@ exports.word = async (req, res) => {
   }
 };
 
-exports.search = async (req, res) => {
+export const search = async (req: e.Request, res: e.Response) => {
   let conn;
   const query = `%${req.params.query}%`;
   try {

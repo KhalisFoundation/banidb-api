@@ -1,10 +1,10 @@
-const getObject = require('lodash/get');
+import getObject from 'lodash/get';
 
 // ceremonies and perhaps future features have ranges, meaning
 // translations and translit objects are now arrays of the
 // original verse structures passed as one verse
 // we now need to reduce them to look like a normal line for processing
-const reduceObj = (accumulator, currentObj) => {
+const reduceObj = (accumulator: any, currentObj: any) => {
   const newAccumulator = Object.assign({}, accumulator);
   Object.entries(currentObj).forEach(([key, value]) => {
     const accumulatedVal = accumulator[key];
@@ -20,21 +20,21 @@ const reduceObj = (accumulator, currentObj) => {
 };
 
 // wrapper func
-const concatObjects = array => {
-  return array.reduce((accumulator, current) => reduceObj(accumulator, current), {});
+const concatObjects = (array: any) => {
+  return array.reduce((accumulator: any, current: any) => reduceObj(accumulator, current), {});
 };
 
 // reduce visraam array of objects with arrays to just objects with arrays
 /* eslint-disable no-param-reassign */
-const reduceVisraams = (visraam, wordCount) => {
+const reduceVisraams = (visraam: any, wordCount: any) => {
   let totalWordCount = 0;
-  const accumulator = {};
-  visraam.forEach((line, i) => {
+  const accumulator: any = {};
+  visraam.forEach((line: any, i: number) => {
     Object.keys(line).forEach(vtype => {
       if (!accumulator[vtype]) {
         accumulator[vtype] = [];
       }
-      line[vtype].forEach(v => {
+      line[vtype].forEach((v: any) => {
         if (i > 0) {
           v.p = parseInt(v.p, 10) + totalWordCount;
         }
@@ -47,12 +47,12 @@ const reduceVisraams = (visraam, wordCount) => {
 };
 /* eslint-enable no-param-reassign */
 
-const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
+const prepVerse = (row: any, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
   if (Array.isArray(translations)) {
     translations = concatObjects(translations);
   }
-  const verse = {
+  const verse: any = {
     verseId: row.ID,
     shabadId: row.ShabadID,
     verse: {
@@ -114,7 +114,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   return verse;
 };
 
-const getShabadInfo = shabad => ({
+const getShabadInfo = (shabad: any) => ({
   shabadId: shabad.ShabadID,
   shabadName: shabad.ShabadName,
   pageNo: shabad.PageNo,
@@ -123,7 +123,7 @@ const getShabadInfo = shabad => ({
   writer: getWriter(shabad),
 });
 
-const getSource = shabad => ({
+const getSource = (shabad: any) => ({
   sourceId: shabad.SourceID,
   gurmukhi: shabad.SourceGurmukhi,
   unicode: shabad.SourceUnicode,
@@ -131,7 +131,7 @@ const getSource = shabad => ({
   pageNo: shabad.PageNo,
 });
 
-const getRaag = shabad => ({
+const getRaag = (shabad: any) => ({
   raagId: shabad.RaagID,
   gurmukhi: shabad.RaagGurmukhi,
   unicode: shabad.RaagUnicode,
@@ -141,14 +141,14 @@ const getRaag = shabad => ({
   raagWithPage: shabad.RaagWithPage,
 });
 
-const getWriter = shabad => ({
+const getWriter = (shabad: any) => ({
   writerId: shabad.WriterID,
   gurmukhi: shabad.WriterGurmukhi,
   unicode: shabad.WriterUnicode,
   english: shabad.WriterEnglish,
 });
 
-const prepBanis = row => {
+const prepBanis = (row: any) => {
   const transliterations = JSON.parse(row.transliterations);
   const banis = {
     ID: row.ID,
@@ -169,14 +169,14 @@ const prepBanis = row => {
   return banis;
 };
 
-const prepAKIndex = row => {
+const prepAKIndex = (row: any) => {
   const akIndexRow = row;
   akIndexRow.Transliterations = JSON.parse(row.Transliterations);
   akIndexRow.Translations = JSON.parse(row.Translations);
   return akIndexRow;
 };
 
-module.exports = {
+export default {
   prepVerse,
   prepBanis,
   prepAKIndex,

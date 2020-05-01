@@ -1,15 +1,16 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const cacheControl = require('express-cache-controller');
-const { createPool } = require('mariadb');
-const config = require('./api/config');
-const routes = require('./api/routes');
+require('dotenv').config();
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import cacheControl from 'express-cache-controller';
+import { createPool } from 'mariadb';
+import config from './api/config';
+import routes from './api/routes';
 
 const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
-app.locals.pool = createPool(config.mysql);
+app.locals.pool = createPool(config.mysql as any);
 
 app.use(cors());
 app.use(cacheControl({ maxAge: 21600 }));

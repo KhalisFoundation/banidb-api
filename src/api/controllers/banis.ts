@@ -1,13 +1,14 @@
-const lib = require('../lib');
+import * as e from 'express';
+import lib from '../lib';
 
-const lengthExistsMap = {
+const lengthExistsMap: any = {
   s: 'existsSGPC',
   m: 'existsMedium',
   t: 'existsTaksal',
   b: 'existsBuddhaDal',
 };
 
-const allColumns = `
+const allColumns: any = `
 b.Gurmukhi AS NameGurmukhi,
 b.GurmukhiUni AS NameGurmukhiUni,
 b.Transliterations AS NameTransliterations,
@@ -46,14 +47,14 @@ LEFT JOIN Writer w USING(WriterID)
 LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
-exports.all = async (req, res) => {
+export const all = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
     const q =
       'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
-    res.json(rows.map(banis => lib.prepBanis(banis)));
+    res.json(rows.map((banis: any) => lib.prepBanis(banis)));
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
@@ -61,13 +62,15 @@ exports.all = async (req, res) => {
   }
 };
 
-exports.bani = async (req, res) => {
+export const bani = async (req: e.Request, res: e.Response) => {
   let conn;
   try {
-    const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
+    const sinceDate: any = req.query.updatedsince
+      ? lib.isValidDatetime(req.query.updatedsince)
+      : null;
     conn = await req.app.locals.pool.getConnection();
     const BaniID = parseInt(req.params.BaniID, 10);
-    const exists = lengthExistsMap[req.query.length] || false;
+    const exists = lengthExistsMap[req.query.length as any] || false;
     const parameters = [BaniID];
 
     let existsQuery = '';
@@ -98,7 +101,7 @@ exports.bani = async (req, res) => {
         writer: lib.getWriter(rows[0]),
       };
 
-      const verses = rows.map(row => prepBaniVerse(row, exists));
+      const verses = rows.map((row: any) => prepBaniVerse(row, exists));
 
       res.json({
         baniInfo,
@@ -114,10 +117,10 @@ exports.bani = async (req, res) => {
   }
 };
 
-const prepBaniVerse = (row, existsFlag) => {
+const prepBaniVerse = (row: any, existsFlag: any) => {
   const verse = lib.prepVerse(row);
   delete verse.firstLetters;
-  const exists = {};
+  const exists: any = {};
   if (!existsFlag) {
     exists.existsSGPC = row.existsSGPC;
     exists.existsMedium = row.existsMedium;
