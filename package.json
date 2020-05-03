@@ -4,15 +4,16 @@
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start process.json",
     "dev": "pm2 start process-dev.json",
-    "local": "npm run docker:start && NODE_ENV=development node app.js",
+    "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
     "docker:start": "./bin/start-docker.sh",
     "docker:stop": "./bin/stop-docker.sh",
-    "docker:clean": "./bin/clean-up-docker-containers.sh",
-    "test": "eslint .",
     "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
-    "e2e": "API_ENV=prod jest --rootDir ./tests/e2e "
+    "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
+    "local": "npm run docker:start && NODE_ENV=development node app.js",
+    "postinstall": "npm run test",
+    "start": "pm2 start process.json",
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
