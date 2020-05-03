@@ -6,6 +6,10 @@
   "scripts": {
     "start": "pm2 start process.json",
     "dev": "pm2 start process-dev.json",
+    "local": "npm run docker:start && NODE_ENV=development node app.js",
+    "docker:start": "./bin/start-docker.sh",
+    "docker:stop": "./bin/stop-docker.sh",
+    "docker:clean": "./bin/clean-up-docker-containers.sh",
     "test": "eslint .",
     "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
     "e2e": "API_ENV=prod jest --rootDir ./tests/e2e "
