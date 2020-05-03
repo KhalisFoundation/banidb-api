@@ -4,3 +4,4 @@ process-dev.json
 *.log
 .idea
 .env
+dist/
