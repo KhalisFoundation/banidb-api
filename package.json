@@ -8,6 +8,7 @@
     "dev": "pm2 start process-dev.json",
     "local": "nodemon ./dist/src/app.js",
     "build": "tsc",
+    "postinstall": "npm run build",
     "watch": "tsc -w",
     "test": "eslint .",
     "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
