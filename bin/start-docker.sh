@@ -8,5 +8,5 @@ then
      echo "Starting docker container"
      docker run -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=khajana_dev_khajana -d -p 3306:3306 --name $container_name khalisfoundation/banidb-dev:latest
 else
-      echo "Docker contatiner is running"
+      echo "Docker container is running"
 fi
