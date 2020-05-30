@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pm2 start process-dev.json",
-    "local": "nodemon ./dist/src/app.js",
     "build": "tsc",
-    "postinstall": "npm run build",
+    "postinstall": "npm run test & npm run build",
     "watch": "tsc -w",
     "test": "eslint .",
     "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
@@ -16,9 +15,7 @@
     "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
     "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
     "local": "DB_PORT=3002 npm run docker:start && DB_PORT=3002 NODE_ENV=development node app.js",
-    "postinstall": "npm run test",
-    "start": "pm2 start process.json",
-    "test": "eslint ."
+    "start": "pm2 start process.json"
   },
   "repository": {
     "type": "git",
