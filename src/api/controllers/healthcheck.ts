@@ -2,7 +2,6 @@ import * as e from 'express';
 import lib from '../lib';
 
 export const db = async (req: e.Request, res: e.Response) => {
-  res.json('working');
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
