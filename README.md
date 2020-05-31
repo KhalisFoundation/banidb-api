@@ -39,13 +39,13 @@
 
 # Vision Statement
 
-BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
+BaniDB's vision is to create a single, universally accessible Gurbani Database for Sikh websites and applications. BaniDB is, and will continue to be, the most accurate and complete Gurbani database ever created for use by Sikhs around the world.
 
 In order to make this vision possible, members of this collaborative effort work to ensure that the platform is selfsustaining, tested, and secure.
 
 # Precision and Recall
 
-BaniDB is the most precise Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
+BaniDB is the most precise Sikh Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis.
 
@@ -63,7 +63,7 @@ While BaniDB is a collaborative and collective effort, it is imperative that we 
 
 # Get Involved
 
-Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. reach out to us and join our active Slack Channel today!
+Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. Reach out to us and join our active Slack Channel today!
 
 Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
 
