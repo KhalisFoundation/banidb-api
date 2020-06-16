@@ -8,8 +8,8 @@ const metadata = {
 
 module.exports = {
   mysql0: {
-    host: '127.0.0.1',
-    port: 1, //process.env.DB_PORT || 3306,
+    host: 'localhost',
+    port: process.env.DB_PORT || 3306,
     ...metadata,
   },
   mysql2: {

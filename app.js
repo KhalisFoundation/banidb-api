@@ -12,15 +12,22 @@ const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 //database
 try {
   app.locals.pool = createPool(config.mysql0);
+  app.local.pool.getConnection().query('SELECT 1');
 } catch (err) {
   try {
     app.locals.pool = createPool(config.mysql1);
+    app.local.pool.getConnection().query('SELECT 1');
+    console.log('Failed to DB1');
   } catch (err) {
     try {
       app.locals.pool = createPool(config.mysql2);
+      app.local.pool.getConnection().query('SELECT 1');
+      console.log('Failed to DB2');
     } catch (err) {
       try {
         app.locals.pool = createPool(config.mysql3);
+        app.local.pool.getConnection().query('SELECT 1');
+        console.log('Failed to DB3');
       } catch (err) {
         console.log('Could not connect to any database!');
         console.log(err);
