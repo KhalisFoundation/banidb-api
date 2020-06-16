@@ -45,8 +45,20 @@ const reduceVisraams = (visraam, wordCount) => {
   });
   return accumulator;
 };
-/* eslint-enable no-param-reassign */
 
+// this exists because the pu spec for v2 api looks different than data in db
+const reducepuTranslations = (pu, puu) => {
+  const accumulator = {};
+  Object.keys(pu).forEach(i => {
+    accumulator[i] = {
+      gurmukhi: pu[i],
+      unicode: puu[i],
+    };
+  });
+  return accumulator;
+};
+
+/* eslint-enable no-param-reassign */
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
   if (Array.isArray(translations)) {
@@ -67,20 +79,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       en: {
         ...translations.en,
       },
-      pu: {
-        ss: {
-          gurmukhi: getObject(translations, 'pu.ss', ''),
-          unicode: getObject(translations, 'puu.ss', ''),
-        },
-        ft: {
-          gurmukhi: getObject(translations, 'pu.ft', ''),
-          unicode: getObject(translations, 'puu.ft', ''),
-        },
-        ms: {
-          gurmukhi: getObject(translations, 'pu.ms', ''),
-          unicode: getObject(translations, 'puu.ms', ''),
-        },
-      },
+      pu: reducepuTranslations(translations.pu, translations.puu),
       es: {
         ...translations.es,
       },
