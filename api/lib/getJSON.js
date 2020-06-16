@@ -76,6 +76,10 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
           gurmukhi: getObject(translations, 'pu.ft', ''),
           unicode: getObject(translations, 'puu.ft', ''),
         },
+        ms: {
+          gurmukhi: getObject(translations, 'pu.ms', ''),
+          unicode: getObject(translations, 'puu.ms', ''),
+        },
       },
       es: {
         ...translations.es,
@@ -99,7 +103,11 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.pageNo = row.PageNo;
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
-    verse.visraam = JSON.parse(row.Visraam);
+    try {
+      verse.visraam = JSON.parse(row.Visraam);
+    } catch {
+      verse.visraam = [];
+    }
     if (Array.isArray(verse.visraam)) {
       const wordCount = JSON.parse(row.WordCount || '[0]');
       verse.visraam = reduceVisraams(verse.visraam, wordCount);

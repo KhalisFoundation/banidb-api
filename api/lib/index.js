@@ -11,9 +11,9 @@ const lib = {
       },
     };
     if (stack === true) {
-      ret.data.stack = err.stack;
+      ret.data.stack = err.stack.split('\n');
       console.error(err);
-      Error.captureStackTrace(err);
+      //Error.captureStackTrace(err);
     }
     res.status(code).json(ret);
   },
