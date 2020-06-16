@@ -105,7 +105,7 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.updated = row.Updated;
     try {
       verse.visraam = JSON.parse(row.Visraam);
-    } catch {
+    } catch (e) {
       verse.visraam = [];
     }
     if (Array.isArray(verse.visraam)) {
