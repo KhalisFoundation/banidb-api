@@ -1,3 +1,5 @@
+const getObject = require('lodash/get');
+
 // ceremonies and perhaps future features have ranges, meaning
 // translations and translit objects are now arrays of the
 // original verse structures passed as one verse
@@ -47,12 +49,14 @@ const reduceVisraams = (visraam, wordCount) => {
 // this exists because the pu spec for v2 api looks different than data in db
 const reducepuTranslations = (pu, puu) => {
   const accumulator = {};
-  Object.keys(pu).forEach(i => {
-    accumulator[i] = {
-      gurmukhi: pu[i],
-      unicode: puu[i],
-    };
-  });
+  if (typeof pu === 'object') {
+    Object.keys(pu).forEach(i => {
+      accumulator[i] = {
+        gurmukhi: pu[i],
+        unicode: puu[i],
+      };
+    });
+  }
   return accumulator;
 };
 
