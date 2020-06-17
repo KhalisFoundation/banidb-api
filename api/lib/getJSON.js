@@ -70,8 +70,8 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       unicode: row.GurmukhiUni,
     },
     larivaar: {
-      gurmukhi: (row.Gurmukhi || '').toString().replace(/\s+/g, ''),
-      unicode: (row.GurmukhiUni || '').toString().replace(/\s+/g, ''),
+      gurmukhi: (String(row.Gurmukhi) || '').replace(/\s+/g, ''),
+      unicode: (String(row.GurmukhiUni) || '').replace(/\s+/g, ''),
     },
     translation: {
       en: {
