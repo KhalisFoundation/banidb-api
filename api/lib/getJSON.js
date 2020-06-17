@@ -1,5 +1,3 @@
-const getObject = require('lodash/get');
-
 // ceremonies and perhaps future features have ranges, meaning
 // translations and translit objects are now arrays of the
 // original verse structures passed as one verse
