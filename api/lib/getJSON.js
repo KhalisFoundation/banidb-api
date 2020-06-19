@@ -1,5 +1,3 @@
-const getObject = require('lodash/get');
-
 // ceremonies and perhaps future features have ranges, meaning
 // translations and translit objects are now arrays of the
 // original verse structures passed as one verse
@@ -45,8 +43,22 @@ const reduceVisraams = (visraam, wordCount) => {
   });
   return accumulator;
 };
-/* eslint-enable no-param-reassign */
 
+// this exists because the pu spec for v2 api looks different than data in db
+const reducepuTranslations = (pu, puu) => {
+  const accumulator = {};
+  if (typeof pu === 'object') {
+    Object.keys(pu).forEach(i => {
+      accumulator[i] = {
+        gurmukhi: pu[i],
+        unicode: puu[i],
+      };
+    });
+  }
+  return accumulator;
+};
+
+/* eslint-enable no-param-reassign */
 const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   let translations = JSON.parse(row.Translations);
   if (Array.isArray(translations)) {
@@ -60,23 +72,14 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       unicode: row.GurmukhiUni,
     },
     larivaar: {
-      gurmukhi: (row.Gurmukhi || '').toString().replace(/\s+/g, ''),
-      unicode: (row.GurmukhiUni || '').toString().replace(/\s+/g, ''),
+      gurmukhi: (String(row.Gurmukhi) || '').replace(/\s+/g, ''),
+      unicode: (String(row.GurmukhiUni) || '').replace(/\s+/g, ''),
     },
     translation: {
       en: {
         ...translations.en,
       },
-      pu: {
-        ss: {
-          gurmukhi: getObject(translations, 'pu.ss', ''),
-          unicode: getObject(translations, 'puu.ss', ''),
-        },
-        ft: {
-          gurmukhi: getObject(translations, 'pu.ft', ''),
-          unicode: getObject(translations, 'puu.ft', ''),
-        },
-      },
+      pu: reducepuTranslations(translations.pu, translations.puu),
       es: {
         ...translations.es,
       },
@@ -99,7 +102,11 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
     verse.pageNo = row.PageNo;
     verse.lineNo = row.LineNo;
     verse.updated = row.Updated;
-    verse.visraam = JSON.parse(row.Visraam);
+    try {
+      verse.visraam = JSON.parse(row.Visraam);
+    } catch (e) {
+      verse.visraam = [];
+    }
     if (Array.isArray(verse.visraam)) {
       const wordCount = JSON.parse(row.WordCount || '[0]');
       verse.visraam = reduceVisraams(verse.visraam, wordCount);

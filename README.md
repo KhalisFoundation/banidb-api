@@ -1,42 +1,148 @@
 # BaniDB API
 
-Active work ongoing under dev branch
-=======
+# Active work ongoing under dev branch
+
 [<img height="100" src="http://www.banidb.com/wp-content/uploads/2018/03/full-banidb-logo.png">](http://banidb.com)
 
-[![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org) 
+[![Email](https://img.shields.io/badge/Email-bod%40khalisfoundation.org-green.svg)](mailto:bod@khalisfoundation.org)
 [![Slack](https://img.shields.io/badge/Slack-join%20the%20conversation-red.svg)](https://khalis.slack.com)
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/BJKALklMKao/0.jpg)](https://www.youtube.com/watch?v=BJKALklMKao)
-# Vision Statement
-BaniDB's vision is to create a single, universally accessible Gurbani Database for websites and applications. BaniDB is and will continue to be the most accurate and complete Gurbani database ever created.
 
-In order to make this vision possible, members of this collaborative effort work to ensure that the platform is selfsustaining, tested, and secure. 
+## Contributing
+
+### Prerequisites
+
+1.  [Node](https://nodejs.org/en/download/) (10+)
+    - `nvm` can be used for mac/linux
+2.  [Docker](https://www.docker.com/get-started)
+
+#### Optional
+
+- [MariaDB](https://mariadb.org/download/)
+- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+
+### Installation
+
+- Run `npm ci` in the repository root
+
+### Running
+
+- Run `npm run local` in the repository root
+  - This starts the khalisfoundation/banidb-dev image in a docker container
+- API will run on `http://localhost:3001/v2/`
+
+#### Stopping
+
+- Run `npm run docker:stop` to stop the container
+- Run `npm run docker:clean` to remove the image
+
+# Vision Statement
+
+BaniDB's vision is to create a single, universally accessible Gurbani Database for Sikh websites and applications. BaniDB is, and will continue to be, the most accurate and complete Gurbani database ever created for use by Sikhs around the world.
+
+In order to make this vision possible, members of this collaborative effort work to ensure that the platform is selfsustaining, tested, and secure.
 
 # Precision and Recall
 
-BaniDB is the most precise Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
+BaniDB is the most precise Sikh Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
 
 It is the only database in the world that is being standardized for lagamatras (spelling) and padh chhedh (word separation) versus the Shiromani Gurdwara Parbandhak Committee's (SGPC) published Gurbani pothis.
 
-Furthermore, no change to the DB is approved without at least 3 peer reviews with full citations and audit trail. This exhaustive process ensures that no individual can tamper with Gurbani.  
+Furthermore, no change to the DB is approved without at least 3 peer reviews with full citations and audit trail. This exhaustive process ensures that no individual can tamper with Gurbani.
 
 We have worked closely with Gursikhs and Sikh scholars around the world to build upon their previous work. These partners and collaborators include SHARE Charity UK, iGurbani, Gursevak, and others. This has allowed us to ensure we have high recall of Gurbani and Panthic sources typically sung in Kirtan or referenced in Katha.
 
 # A Living DB
 
-BaniDB is a collective effort up of a group of dozens of volunteers who ensure that the DB continues to grow, and is properly vetted. 
+BaniDB is a collective effort up of a group of dozens of volunteers who ensure that the DB continues to grow, and is properly vetted.
 
 # Secure
 
 While BaniDB is a collaborative and collective effort, it is imperative that we also ensure it is an effort that secures the sanctity of Gurbani. As a result, we have chosen to take a controlled approach in order to allow for collaboration but also ensure fidelity of Gurbani data. We welcome others to get involved, but have seen too many instances of Gurbani being misused and altered to feel comfortable making the data completely open. This approach is modeled on the approach Sikhs have traditionally taken with Gurbani.
 
 # Get Involved
-Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. reach out to us and join our active Slack Channel today!
+
+Interested in coding? Have a love for Gurbani? Want to help with Marketing? Whatever your passions, we would love to work with you. Reach out to us and join our active Slack Channel today!
 
 Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
 
-# Sources
+# Feature Comparison
+
+The table below outlines some stats about BaniDB, as of 01/14/2020.
+
+<table cellspacing="0" cellpadding="0" id="banidbapps">
+  <tr>
+    <th> Source</th>
+    <th> Accurate </th>
+    <th> Corrections/Changes </th>
+    <th> Maintained </th>
+    <th> Multiple Raters per Change</th>
+    <th> SGPC Compatible Lagamatras &amp; Padh Chhedh</th>
+    <th> DSGMC Approval </th>
+  </tr>
+  <tr>
+    <td> BaniDB          </td>
+    <td> ✅       </td>
+    <td> 43,000+     </td>
+    <td> ✅         </td>
+    <td> ✅                             </td>
+    <td> ✅✅            </td>
+    <td> ✅             </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax Web</td>
+    <td> Uses BaniDB</td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB                 </td>
+    <td> Uses BaniDB     </td>
+    <td> Uses BaniDB    </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax 2 </td>
+    <td> 80-90%   </td>
+    <td> 6,000+      </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> iGurbani        </td>
+    <td> 80-90%   </td>
+    <td> 1,000+      </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Sikher          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Others          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ✅❌            </td>
+    <td> ❌             </td>
+  </tr>
+</table>
+
+# Current Users
+
+See our [Partner Page](https://www.banidb.com/partners/) for information.
+
+# Gurbani Sources
+
 Below is a list of sources used as ground truth for Gurbani accuracy. We have digitized sources via manual scanning, and have consolidated existing digital sources and uploaded these to www.vidhia.com to help facilitate sudhaee (correction) efforts.
 
 ## Sri Guru Granth Sahib Ji
@@ -342,78 +448,63 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
   </tr>
 </table>
 
-# Feature Comparison
-The table below outlines some stats about BaniDB, as of 01/14/2020.
+# Translation Sources
 
-<table cellspacing="0" cellpadding="0" id="banidbapps">
+Below is a list of sources used for translations. We have digitized sources via manual scanning and have consolidated existing digital sources.
+
+<table cellspacing="0" cellpadding="0" id="sggs01">
+
   <tr>
-    <th> Source</th>
-    <th> Accurate </th>
-    <th> Corrections/Changes </th>
-    <th> Maintained </th>
-    <th> Multiple Raters per Change</th>
-    <th> SGPC Compatible Lagamatras &amp; Padh Chhedh</th>
-    <th> DSGMC Approval </th>
+    <th> Source </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
   </tr>
   <tr>
-    <td> BaniDB          </td>
-    <td> ✅       </td>
-    <td> 43,000+     </td>
-    <td> ✅         </td>
-    <td> ✅                             </td>
-    <td> ✅✅            </td>
-    <td> ✅             </td>
+    <td> BaniDB </td>
+    <td> BaniDB Volunteers and Partners </td>
+    <td> KhalisFoundation </td>
+    <td> Living </td>
+    <td> http://www.sikhitothemax.org </td>
   </tr>
   <tr>
-    <td> SikhiToTheMax Web</td>
-    <td> Uses BaniDB</td>
-    <td> Uses BaniDB </td>
-    <td> Uses BaniDB </td>
-    <td> Uses BaniDB                 </td>
-    <td> Uses BaniDB     </td>
-    <td> Uses BaniDB    </td>
+    <td> Fareedkot Teeka </td>
+    <td> Sant Giani Badan Singh Ji of Dera Sekhwan et al.</td>
+    <td> Wazir Hind Press </td>
+    <td> 1928 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> SikhiToTheMax 2 </td>
-    <td> 80-90%   </td>
-    <td> 6,000+      </td>
-    <td> ❌         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Bhai Manmohan Singh </td>
+    <td> Bhai Manmohan Singh </td>
+    <td> SGPC </td>
+    <td> c1948 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> iGurbani        </td>
-    <td> 80-90%   </td>
-    <td> 1,000+      </td>
-    <td> ✅         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Sikhnet </td>
+    <td> Bhai Ji Singh Sahib Babaji Singh Khalsa </td>
+    <td> Sikhnet </td>
+    <td> October 2008 </td>
+    <td> https://www.sikhnet.com/news/siri-guru-granth-sahib-spanish </td>
   </tr>
   <tr>
-    <td> Sikher          </td>
-    <td> ????     </td>
-    <td> ????        </td>
-    <td> ❌         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Sri Guru Granth Sahib Darpan </td>
+    <td> Professor Sahib Singh </td>
+    <td> SGPC </td>
+    <td> c1965 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> Others          </td>
-    <td> ????     </td>
-    <td> ????        </td>
-    <td> ✅         </td>
-    <td> ❌                             </td>
-    <td> ✅❌            </td>
-    <td> ❌             </td>
+    <td> Dr. Sant Singh Khalsa </td>
+    <td> Dr. Sant Singh Khalsa </td>
+    <td> Sikhnet </td>
+    <td> 2 </td>
+    <td> https://www.sikhnet.com/siri-guru-granth-sahib-w-english-translation </td>
   </tr>
+
 </table>
-
-# Current Users
-
-* [Sundar Gutka - STTM Web](https://www.sikhitothemax.org/sundar-gutka)
 
 # Metrics
 
@@ -488,4 +579,3 @@ The table below outlines some stats about BaniDB, as of 01/14/2020.
     <td align="right">7,937</td>
   </tr>
 </table>
-

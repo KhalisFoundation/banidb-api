@@ -1,11 +1,19 @@
 {
   "name": "banidb-api",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start process.json",
     "dev": "pm2 start process-dev.json",
+    "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
+    "docker:start": "DB_PORT=3002 ./bin/start-docker.sh",
+    "docker:stop": "./bin/stop-docker.sh",
+    "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
+    "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
+    "local": "npm run docker:start && npm run local:api",
+    "local:api": "DB_PORT=3002 DB_HOST='127.0.0.1' NODE_ENV=development node app.js",
+    "postinstall": "npm run test",
+    "start": "pm2 start process.json",
     "test": "eslint ."
   },
   "repository": {
@@ -28,12 +36,18 @@
     "memory-cache": "^0.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-jest": "^25.4.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-prettier": "^3.0.1",
     "husky": "^1.3.1",
+    "jest": "^25.4.0",
+    "node-fetch": "^2.6.0",
     "nodemon": "^1.18.9",
     "pm2": "^2.10.4",
     "prettier": "^1.16.4",
