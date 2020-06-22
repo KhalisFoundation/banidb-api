@@ -9,7 +9,7 @@ const routes = require('./api/routes');
 const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
-//database
+// database
 app.locals.pool = createPoolCluster();
 app.locals.pool.add('local', config.mysql0);
 app.locals.pool.add('db1', config.mysql1);
