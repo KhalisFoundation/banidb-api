@@ -3,7 +3,12 @@ const metadata = {
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.NODE_ENV === 'development' ? 'khajana_dev_khajana' : 'khajana_khajana',
   dateStrings: true,
+  acquireTimeout: 5000,
   connectionLimit: process.env.DB_POOL_SIZE,
+};
+const standbyMetadata = {
+  port: 3306,
+  minimumIdle: 0,
 };
 
 module.exports = {
@@ -12,19 +17,19 @@ module.exports = {
     port: process.env.DB_PORT || 3306,
     ...metadata,
   },
-  mysql2: {
+  mysql1: {
     host: 'db1.khalis.net',
-    port: 3306,
     ...metadata,
+    ...standbyMetadata,
   },
   mysql2: {
     host: 'db2.khalis.net',
-    port: 3306,
     ...metadata,
+    ...standbyMetadata,
   },
-  mysql2: {
+  mysql3: {
     host: 'db3.khalis.net',
-    port: 3306,
     ...metadata,
+    ...standbyMetadata,
   },
 };
