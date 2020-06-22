@@ -14,7 +14,7 @@ const standbyMetadata = {
 module.exports = {
   mysql0: {
     ...metadata,
-    host: 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
   },
   mysql1: {
