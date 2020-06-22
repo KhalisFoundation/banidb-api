@@ -13,23 +13,23 @@ const standbyMetadata = {
 
 module.exports = {
   mysql0: {
+    ...metadata,
     host: 'localhost',
     port: process.env.DB_PORT || 3306,
-    ...metadata,
   },
   mysql1: {
-    host: 'db1.khalis.net',
     ...metadata,
     ...standbyMetadata,
+    host: 'db1.khalis.net',
   },
   mysql2: {
-    host: 'db2.khalis.net',
     ...metadata,
     ...standbyMetadata,
+    host: 'db2.khalis.net',
   },
   mysql3: {
-    host: 'db3.khalis.net',
     ...metadata,
     ...standbyMetadata,
+    host: 'db3.khalis.net',
   },
 };
