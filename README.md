@@ -67,7 +67,81 @@ Interested in coding? Have a love for Gurbani? Want to help with Marketing? What
 
 Found a mistake in Gurbani? Have a better translation? Become a contributor to BaniDB! Visit: https://tinyurl.com/banidb-signup for instructions.
 
-# Sources
+# Feature Comparison
+
+The table below outlines some stats about BaniDB, as of 01/14/2020.
+
+<table cellspacing="0" cellpadding="0" id="banidbapps">
+  <tr>
+    <th> Source</th>
+    <th> Accurate </th>
+    <th> Corrections/Changes </th>
+    <th> Maintained </th>
+    <th> Multiple Raters per Change</th>
+    <th> SGPC Compatible Lagamatras &amp; Padh Chhedh</th>
+    <th> DSGMC Approval </th>
+  </tr>
+  <tr>
+    <td> BaniDB          </td>
+    <td> ✅       </td>
+    <td> 43,000+     </td>
+    <td> ✅         </td>
+    <td> ✅                             </td>
+    <td> ✅✅            </td>
+    <td> ✅             </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax Web</td>
+    <td> Uses BaniDB</td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB </td>
+    <td> Uses BaniDB                 </td>
+    <td> Uses BaniDB     </td>
+    <td> Uses BaniDB    </td>
+  </tr>
+  <tr>
+    <td> SikhiToTheMax 2 </td>
+    <td> 80-90%   </td>
+    <td> 6,000+      </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> iGurbani        </td>
+    <td> 80-90%   </td>
+    <td> 1,000+      </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Sikher          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ❌         </td>
+    <td> ❌                             </td>
+    <td> ❌❌            </td>
+    <td> ❌             </td>
+  </tr>
+  <tr>
+    <td> Others          </td>
+    <td> ????     </td>
+    <td> ????        </td>
+    <td> ✅         </td>
+    <td> ❌                             </td>
+    <td> ✅❌            </td>
+    <td> ❌             </td>
+  </tr>
+</table>
+
+# Current Users
+
+See our [Partner Page](https://www.banidb.com/partners/) for information.
+
+# Gurbani Sources
 
 Below is a list of sources used as ground truth for Gurbani accuracy. We have digitized sources via manual scanning, and have consolidated existing digital sources and uploaded these to www.vidhia.com to help facilitate sudhaee (correction) efforts.
 
@@ -374,79 +448,63 @@ Below is a list of sources used as ground truth for Gurbani accuracy. We have di
   </tr>
 </table>
 
-# Feature Comparison
+# Translation Sources
 
-The table below outlines some stats about BaniDB, as of 01/14/2020.
+Below is a list of sources used for translations. We have digitized sources via manual scanning and have consolidated existing digital sources.
 
-<table cellspacing="0" cellpadding="0" id="banidbapps">
+<table cellspacing="0" cellpadding="0" id="sggs01">
+
   <tr>
-    <th> Source</th>
-    <th> Accurate </th>
-    <th> Corrections/Changes </th>
-    <th> Maintained </th>
-    <th> Multiple Raters per Change</th>
-    <th> SGPC Compatible Lagamatras &amp; Padh Chhedh</th>
-    <th> DSGMC Approval </th>
+    <th> Source </th>
+    <th> Author </th>
+    <th> Publisher </th>
+    <th> Edition </th>
+    <th> Link </th>
   </tr>
   <tr>
-    <td> BaniDB          </td>
-    <td> ✅       </td>
-    <td> 43,000+     </td>
-    <td> ✅         </td>
-    <td> ✅                             </td>
-    <td> ✅✅            </td>
-    <td> ✅             </td>
+    <td> BaniDB </td>
+    <td> BaniDB Volunteers and Partners </td>
+    <td> KhalisFoundation </td>
+    <td> Living </td>
+    <td> http://www.sikhitothemax.org </td>
   </tr>
   <tr>
-    <td> SikhiToTheMax Web</td>
-    <td> Uses BaniDB</td>
-    <td> Uses BaniDB </td>
-    <td> Uses BaniDB </td>
-    <td> Uses BaniDB                 </td>
-    <td> Uses BaniDB     </td>
-    <td> Uses BaniDB    </td>
+    <td> Fareedkot Teeka </td>
+    <td> Sant Giani Badan Singh Ji of Dera Sekhwan et al.</td>
+    <td> Wazir Hind Press </td>
+    <td> 1928 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> SikhiToTheMax 2 </td>
-    <td> 80-90%   </td>
-    <td> 6,000+      </td>
-    <td> ❌         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Bhai Manmohan Singh </td>
+    <td> Bhai Manmohan Singh </td>
+    <td> SGPC </td>
+    <td> c1948 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> iGurbani        </td>
-    <td> 80-90%   </td>
-    <td> 1,000+      </td>
-    <td> ✅         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Sikhnet </td>
+    <td> Bhai Ji Singh Sahib Babaji Singh Khalsa </td>
+    <td> Sikhnet </td>
+    <td> October 2008 </td>
+    <td> https://www.sikhnet.com/news/siri-guru-granth-sahib-spanish </td>
   </tr>
   <tr>
-    <td> Sikher          </td>
-    <td> ????     </td>
-    <td> ????        </td>
-    <td> ❌         </td>
-    <td> ❌                             </td>
-    <td> ❌❌            </td>
-    <td> ❌             </td>
+    <td> Sri Guru Granth Sahib Darpan </td>
+    <td> Professor Sahib Singh </td>
+    <td> SGPC </td>
+    <td> c1965 </td>
+    <td> No link available </td>
   </tr>
   <tr>
-    <td> Others          </td>
-    <td> ????     </td>
-    <td> ????        </td>
-    <td> ✅         </td>
-    <td> ❌                             </td>
-    <td> ✅❌            </td>
-    <td> ❌             </td>
+    <td> Dr. Sant Singh Khalsa </td>
+    <td> Dr. Sant Singh Khalsa </td>
+    <td> Sikhnet </td>
+    <td> 2 </td>
+    <td> https://www.sikhnet.com/siri-guru-granth-sahib-w-english-translation </td>
   </tr>
+
 </table>
-
-# Current Users
-
-- [Sundar Gutka - STTM Web](https://www.sikhitothemax.org/sundar-gutka)
 
 # Metrics
 
