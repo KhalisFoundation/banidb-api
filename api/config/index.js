@@ -7,29 +7,35 @@ const metadata = {
   connectionLimit: process.env.DB_POOL_SIZE,
 };
 const standbyMetadata = {
-  port: 3306,
   minimumIdle: 0,
 };
 
-module.exports = {
-  mysql0: {
+// everything below is to pull from process.json
+const configObj = {};
+
+// if npm run local, then just define what cli gives, otherwise use process.json
+if (process.env.hasOwnProperty('DB_NODES')) {
+  const dbs = JSON.parse(process.env.DB_NODES);
+  Object.keys(dbs).forEach(dbname => {
+    const thisObj = {
+      ...metadata,
+      host: dbs[dbname].host,
+      port: dbs[dbname].port || 3306,
+    };
+    if (dbs[dbname].hasOwnProperty('isPrimary') && dbs[dbname].isPrimary == true) {
+      configObj[dbname] = thisObj;
+    } else {
+      configObj[dbname] = {
+        ...thisObj,
+        ...standbyMetadata,
+      };
+    }
+  });
+} else {
+  configObj.local = {
     ...metadata,
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
-  },
-  mysql1: {
-    ...metadata,
-    ...standbyMetadata,
-    host: 'db1.khalis.net',
-  },
-  mysql2: {
-    ...metadata,
-    ...standbyMetadata,
-    host: 'db2.khalis.net',
-  },
-  mysql3: {
-    ...metadata,
-    ...standbyMetadata,
-    host: 'db3.khalis.net',
-  },
-};
+  };
+}
+module.exports = configObj;

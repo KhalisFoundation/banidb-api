@@ -11,10 +11,7 @@ const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
 // database
 app.locals.pool = createPoolCluster();
-app.locals.pool.add('local', config.mysql0);
-app.locals.pool.add('db1', config.mysql1);
-app.locals.pool.add('db2', config.mysql2);
-app.locals.pool.add('db3', config.mysql3);
+Object.keys(config).forEach(db => app.locals.pool.add(db, config[db]));
 
 // app
 app.use(cors());
