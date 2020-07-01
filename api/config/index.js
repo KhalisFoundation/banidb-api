@@ -14,7 +14,7 @@ const standbyMetadata = {
 const configObj = {};
 
 // if npm run local, then just define what cli gives, otherwise use process.json
-if (process.env.hasOwnProperty('DB_NODES')) {
+if (Object.prototype.hasOwnProperty.call(process.env, 'DB_NODES')) {
   const dbs = JSON.parse(process.env.DB_NODES);
   Object.keys(dbs).forEach(dbname => {
     const thisObj = {
@@ -22,7 +22,10 @@ if (process.env.hasOwnProperty('DB_NODES')) {
       host: dbs[dbname].host,
       port: dbs[dbname].port || 3306,
     };
-    if (dbs[dbname].hasOwnProperty('isPrimary') && dbs[dbname].isPrimary == true) {
+    if (
+      Object.prototype.hasOwnProperty.call(dbs[dbname], 'isPrimary') &&
+      dbs[dbname].isPrimary === true
+    ) {
       configObj[dbname] = thisObj;
     } else {
       configObj[dbname] = {
