@@ -1,3 +1,36 @@
+/**
+ * Expects process-dev.json or process.json (or run local)
+ *
+ * @example
+ *
+ * {
+ *    "name" : "banidb",
+ *    "script" : "app.js",
+ *    "env": {
+ *        "NODE_ENV": "development|production",
+ *        "DB_USER": "",
+ *        "DB_PASSWORD": "",
+ *        "DB_POOL_SIZE": 5,
+ *        "DB_NODES": [
+ *          {
+ *            "host": "localhost",
+ *            "port": 3306,
+ *            "isPrimary": true,
+ *          },
+ *          {
+ *            "host": "dba.contoso.net",
+ *          },
+ *          {
+ *            "host": "dbb.contoso.net",
+ *          },
+ *        ],
+ *    },
+ *    "error_file": "err.log",
+ *    "out_file": "out.log",
+ *    "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
+ * }
+ **/
+
 const metadata = {
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
@@ -11,34 +44,32 @@ const standbyMetadata = {
 };
 
 // everything below is to pull from process.json
-const configObj = {};
+const configArry = [];
 
 // if npm run local, then just define what cli gives, otherwise use process.json
-if (Object.prototype.hasOwnProperty.call(process.env, 'DB_NODES')) {
+if (!!process.env['DB_NODES']) {
   const dbs = JSON.parse(process.env.DB_NODES);
-  Object.keys(dbs).forEach(dbname => {
+  dbs.forEach(db => {
     const thisObj = {
       ...metadata,
-      host: dbs[dbname].host,
-      port: dbs[dbname].port || 3306,
+      host: db.host,
+      port: db.port || 3306,
     };
-    if (
-      Object.prototype.hasOwnProperty.call(dbs[dbname], 'isPrimary') &&
-      dbs[dbname].isPrimary === true
-    ) {
-      configObj[dbname] = thisObj;
+    if (!!db.isPrimary && db.isPrimary === true) {
+      configArry.push(thisObj);
     } else {
-      configObj[dbname] = {
+      configArry.push({
         ...thisObj,
         ...standbyMetadata,
-      };
+      });
     }
   });
 } else {
-  configObj.local = {
+  configArry.push({
     ...metadata,
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
-  };
+  });
 }
-module.exports = configObj;
+
+module.exports = configArry;
