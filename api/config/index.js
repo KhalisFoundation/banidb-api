@@ -29,7 +29,7 @@
  *    "out_file": "out.log",
  *    "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
  * }
- **/
+ */
 
 const metadata = {
   user: process.env.DB_USER || 'root',
@@ -47,7 +47,7 @@ const standbyMetadata = {
 const configArry = [];
 
 // if npm run local, then just define what cli gives, otherwise use process.json
-if (!!process.env['DB_NODES']) {
+if (!!process.env.DB_NODES) {
   const dbs = JSON.parse(process.env.DB_NODES);
   dbs.forEach(db => {
     const thisObj = {
