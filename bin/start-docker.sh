@@ -9,7 +9,7 @@ else
     dbPort=${DB_PORT}
 fi
 
-if [[ -z "$is_running" || "$is_running" -eq "false" ]]
+if [[ -z "$is_running" && "$is_running" -eq "false" ]]
 then
      echo "Starting docker container"
      docker run -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=khajana_dev_khajana -d -p $dbPort:3306 --name $container_name khalisfoundation/banidb-dev:latest || docker start $container_name
