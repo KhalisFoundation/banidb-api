@@ -1,0 +1,20 @@
+type navigation {
+  previous: Int
+  next: Int
+}
+
+type shabadInfo {
+  shabadId: ID
+  shabadName: Int
+  pageNo: Int
+  source: source
+  raag: raag
+  writer: writer
+}
+
+type Shabad {
+  shabadInfo: shabadInfo
+  count: Int!
+  navigation: navigation
+  verses: [Verse]
+}

@@ -1,0 +1,46 @@
+type visraamObject {
+  p: Int
+  v: String
+}
+
+type visraam {
+  sttm: [visraamObject]
+  igurbani: [visraamObject]
+  sttm2: [visraamObject]
+}
+
+type line {
+  gurmukhi: String
+  unicode: String
+}
+
+type enObj {
+  bdb: String
+}
+
+type puObj {
+  ss: line
+  ft: line
+}
+
+type esObj {
+  sn: String
+}
+
+type translations {
+  en: enObj
+  pu: puObj
+  es: esObj
+}
+type Verse {
+  verseId: ID
+  shabadId: Int
+  verse: line
+  larivaar: line
+  translation: translations
+  transliteration: transliteration
+  pageNo: Int
+  lineNo: Int
+  updated: String
+  visraam: visraam
+}

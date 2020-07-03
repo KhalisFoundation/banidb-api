@@ -12,9 +12,12 @@
     "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
     "local": "npm run docker:start && npm run local:api",
     "local:api": "DB_PORT=3002 DB_HOST='127.0.0.1' NODE_ENV=development node app.js",
-    "postinstall": "npm run test",
+    "postinstall": "npm run test && npm run graphql",
     "start": "pm2 start process.json",
-    "test": "eslint ."
+    "test": "eslint . && ./bin/validation-graphql.sh",
+    "graphql": "npm run graphql:clean && npm run graphql:generate",
+    "graphql:clean": "rm -rf ./api/graphql/__generated__/schema-defs.js",
+    "graphql:generate": "node bin/generateGraphql.js"
   },
   "repository": {
     "type": "git",
@@ -24,12 +27,16 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/khalisfoundation/khajana-api#readme",
   "dependencies": {
+    "@graphql-tools/load-files": "^6.0.12",
+    "@graphql-tools/merge": "^6.0.12",
     "@sttm/banidb": "^2.2.4",
     "anvaad-js": "^1.4.1",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-cache-controller": "^1.1.0",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.2.0",
     "limiter": "^1.1.3",
     "lodash": "^4.17.15",
     "mariadb": "^2.4.1",

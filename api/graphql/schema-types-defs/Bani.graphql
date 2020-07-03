@@ -1,0 +1,39 @@
+type baniInfo {
+  baniID: ID!
+  gurmukhi: String
+  english: String
+  hindi: String
+  en: String
+  hi: String
+  ipa: String
+  ur: String
+  source: source
+  raag: raag
+  writer: writer
+}
+
+type baniVerse {
+  header: Int
+  mangalPosition: String
+  existsSGPC: Int
+  existsMedium: Int
+  existsTaksal: Int
+  existsBuddhaDal: Int
+  paragraph: Int
+  verse: Verse
+}
+
+type BaniObj {
+  baniInfo: baniInfo
+  verses: baniVerse
+}
+
+type Bani {
+  ID: ID
+  token: String
+  gurmukhi: String
+  gurmukhiUni: String
+  transliteration: String
+  transliterations: transliteration
+  updated: String
+}
