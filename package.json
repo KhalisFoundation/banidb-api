@@ -14,7 +14,8 @@
     "local:api": "DB_PORT=3002 DB_HOST='127.0.0.1' NODE_ENV=development node app.js",
     "postinstall": "npm run test && npm run graphql",
     "start": "pm2 start process.json",
-    "test": "eslint . && ./bin/validation-graphql.sh",
+    "test": "eslint .",
+    "validate": "./bin/validation-graphql.sh",
     "graphql": "npm run graphql:clean && npm run graphql:generate",
     "graphql:clean": "rm -rf ./api/graphql/__generated__/schema-defs.js",
     "graphql:generate": "node bin/generateGraphql.js"
