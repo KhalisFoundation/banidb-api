@@ -55,7 +55,7 @@ if (!!process.env.DB_NODES) {
       host: db.host,
       port: db.port || 3306,
     };
-    if (!!db.isPrimary && db.isPrimary === true) {
+    if (!!db.isPrimary) {
       configArry.push(thisObj);
     } else {
       configArry.push({
