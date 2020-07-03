@@ -28,7 +28,7 @@ type baniVerse {
 
 type BaniObj {
   baniInfo: baniInfo
-  verses: baniVerse
+  verses: [baniVerse]
 }
 
 type Bani {
