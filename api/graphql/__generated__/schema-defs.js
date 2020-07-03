@@ -16,13 +16,13 @@ type baniInfo {
 }
 
 type baniVerse {
-  header: Int,
-  mangalPosition: String,
-  existsSGPC: Int,
-  existsMedium: Int,
-  existsTaksal: Int,
-  existsBuddhaDal: Int,
-  paragraph: Int,
+  header: Int
+  mangalPosition: String
+  existsSGPC: Int
+  existsMedium: Int
+  existsTaksal: Int
+  existsBuddhaDal: Int
+  paragraph: Int
   verse: Verse
 }
 
@@ -50,20 +50,20 @@ type source {
 }
 
 type raag {
-  raagId: Int,
-  gurmukhi: String,
-  unicode: String,
-  english: String,
-  startAng: Int,
-  endAng: Int,
+  raagId: Int
+  gurmukhi: String
+  unicode: String
+  english: String
+  startAng: Int
+  endAng: Int
   raagWithPage: String
 }
 
 type writer {
-  writerId: Int,
-  gurmukhi: String,
-  unicode: String,
-  english: String,
+  writerId: Int
+  gurmukhi: String
+  unicode: String
+  english: String
 }
 
 type transliteration {
