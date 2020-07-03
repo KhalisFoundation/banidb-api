@@ -17,7 +17,7 @@
     "test": "eslint .",
     "validate": "./bin/validation-graphql.sh",
     "graphql": "npm run graphql:clean && npm run graphql:generate",
-    "graphql:clean": "rm -rf ./api/graphql/__generated__/schema-defs.js",
+    "graphql:clean": "rimraf ./api/graphql/__generated__/schema-defs.js",
     "graphql:generate": "node bin/generateGraphql.js"
   },
   "repository": {
@@ -59,7 +59,8 @@
     "nodemon": "^1.18.9",
     "pm2": "^2.10.4",
     "prettier": "^1.16.4",
-    "pretty-quick": "^1.10.0"
+    "pretty-quick": "^1.10.0",
+    "rimraf": "^3.0.2"
   },
   "husky": {
     "hooks": {
