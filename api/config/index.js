@@ -36,11 +36,12 @@ const metadata = {
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.NODE_ENV === 'development' ? 'khajana_dev_khajana' : 'khajana_khajana',
   dateStrings: true,
-  acquireTimeout: 5000,
+  compress: true,
+  acquireTimeout: 6000,
   connectionLimit: process.env.DB_POOL_SIZE,
 };
 const standbyMetadata = {
-  minimumIdle: 0,
+  minimumIdle: 2,
 };
 
 // everything below is to pull from process.json
