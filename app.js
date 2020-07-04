@@ -10,8 +10,9 @@ const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
 // database
-app.locals.pool = createPoolCluster();
-config.forEach(dbConfig => app.locals.pool.add(dbConfig.host, dbConfig));
+const dbCluster = createPoolCluster();
+config.forEach(dbConfig => dbCluster.add(dbConfig.host, dbConfig));
+app.locals.pool = dbCluster.of(/.*?/, 'ORDER');
 
 // app
 app.use(cors());
