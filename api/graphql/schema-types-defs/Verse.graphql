@@ -16,11 +16,15 @@ type line {
 
 type enObj {
   bdb: String
+  ms: String
+  ssk: String
 }
 
 type puObj {
   ss: line
   ft: line
+  bdb: line
+  ms: line
 }
 
 type esObj {
