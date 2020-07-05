@@ -104,7 +104,7 @@ type Shabad {
 
 type visraamObject {
   p: Int
-  v: String
+  t: String
 }
 
 type visraam {
