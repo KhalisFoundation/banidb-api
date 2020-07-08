@@ -2,15 +2,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cacheControl = require('express-cache-controller');
-const { createPool } = require('mariadb');
+const { createPoolCluster } = require('mariadb');
 const config = require('./api/config');
 const routes = require('./api/routes');
 
 const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
-app.locals.pool = createPool(config.mysql);
+// database
+const dbCluster = createPoolCluster();
+config.forEach(dbConfig => dbCluster.add(dbConfig.host, dbConfig));
+app.locals.pool = dbCluster.of(/.*?/, 'ORDER');
 
+// app
 app.use(cors());
 app.use(cacheControl({ maxAge: 21600 }));
 app.use(bodyParser.urlencoded({ extended: true }));
