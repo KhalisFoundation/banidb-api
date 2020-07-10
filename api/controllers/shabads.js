@@ -509,6 +509,8 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
       .catch(err => reject(err));
   });
 
+exports.getShabad = getShabad;
+
 const getAngSingle = async (req, res, rows) => {
   const { PageNo, SourceID } = rows[0];
   const source = lib.getSource(rows[0]);
