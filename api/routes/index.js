@@ -1,4 +1,5 @@
 const os = require('os');
+const graphqlHTTP = require('express-graphql');
 const { Router } = require('express');
 const limiter = require('../controllers/limiter');
 const pjson = require('../../package.json');
@@ -7,7 +8,9 @@ const banis = require('../controllers/banis');
 const kosh = require('../controllers/kosh');
 const amritkeertan = require('../controllers/amritkeertan');
 const rehats = require('../controllers/rehats');
+const metadata = require('../controllers/metadata');
 const healthcheck = require('../controllers/healthcheck');
+const { schema, resolvers } = require('../graphql');
 
 const route = Router();
 
@@ -65,5 +68,39 @@ route.get('/rehats/:RehatID', limiter.rate100, rehats.chapterList);
 route.get('/rehats/:RehatID/chapters/:ChapterID?', limiter.rate100, rehats.chapters);
 
 route.get('/rehats/search/:string', limiter.rate250, rehats.search);
+
+// Metadata Routes
+route.get('/writers', limiter.rate100, metadata.writers);
+
+route.get('/raags', limiter.rate100, metadata.raags);
+
+route.get('/sources', limiter.rate100, metadata.sources);
+
+// Graphql Routes
+route.post(
+  '/graphql',
+  graphqlHTTP((req, res) => ({
+    schema,
+    rootValue: resolvers,
+    graphiql: false,
+    context: {
+      req,
+      res,
+    },
+  })),
+);
+
+route.get(
+  '/graphql',
+  graphqlHTTP((req, res) => ({
+    schema,
+    rootValue: resolvers,
+    graphiql: true,
+    context: {
+      req,
+      res,
+    },
+  })),
+);
 
 module.exports = route;

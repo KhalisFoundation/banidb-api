@@ -1,0 +1,33 @@
+type source {
+  sourceId: String
+  gurmukhi: String
+  unicode: String
+  english: String
+  pageNo: Int
+}
+
+type raag {
+  raagId: Int
+  gurmukhi: String
+  unicode: String
+  english: String
+  startAng: Int
+  endAng: Int
+  raagWithPage: String
+}
+
+type writer {
+  writerId: Int
+  gurmukhi: String
+  unicode: String
+  english: String
+}
+
+type transliteration {
+  english: String
+  hindi: String
+  en: String
+  hi: String
+  ipa: String
+  ur: String
+}
