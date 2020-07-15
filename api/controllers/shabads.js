@@ -205,7 +205,7 @@ exports.search = async (req, res) => {
     conn = await req.app.locals.pool.getConnection();
 
     const q = `SELECT ${columns}
-      WHERE ${conditions.join(' and ')}
+      WHERE ${conditions.join(' AND ')}
       ${groupBy}
       ORDER BY ${orderBy} ShabadID ASC`;
 
