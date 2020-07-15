@@ -202,12 +202,12 @@ exports.search = async (req, res) => {
   let conn;
 
   try {
-    conn = await req.app.locals.pool.getconnection();
+    conn = await req.app.locals.pool.getConnection();
 
-    const q = `select ${columns}
-      where ${conditions.join(' and ')}
-      ${groupby}
-      order by ${orderby} shabadid asc`;
+    const q = `SELECT ${columns}
+      WHERE ${conditions.join(' and ')}
+      ${groupBy}
+      ORDER BY ${orderBy} SHABADID ASC`;
 
     const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, parameters);
 
