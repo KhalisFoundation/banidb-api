@@ -207,7 +207,7 @@ exports.search = async (req, res) => {
     const q = `SELECT ${columns}
       WHERE ${conditions.join(' and ')}
       ${groupBy}
-      ORDER BY ${orderBy} ShabadId ASC`;
+      ORDER BY ${orderBy} ShabadID ASC`;
 
     const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, parameters);
 
