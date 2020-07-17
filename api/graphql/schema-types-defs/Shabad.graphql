@@ -18,3 +18,8 @@ type Shabad {
   navigation: navigation
   verses: [Verse]
 }
+
+type MultiShabad {
+  shabadIds: [Int]
+  shabads: [Shabad]
+}

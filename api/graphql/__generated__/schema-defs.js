@@ -1,6 +1,18 @@
 /* eslint:disable */
 // This file was automatically generated
 const typeDefs = `
+type Ang {
+  source: source
+  count: Int
+  navigation: navigation
+  page: [Verse]
+}
+
+type MultiAng {
+  pageNos: [Int]
+  pages: [Ang]
+}
+
 type baniInfo {
   baniID: ID!
   gurmukhi: String
@@ -76,9 +88,12 @@ type transliteration {
 }
 
 type Query {
-  shabad(id: ID!): Shabad
+  shabad(id: ID!, sinceDate: String): Shabad
+  multiShabad(id: String!, sinceDate: String): MultiShabad
   banis: [Bani]
-  bani(id: ID!, length: String, sinceData: String): BaniObj
+  bani(id: ID!, length: String, sinceDate: String): BaniObj
+  ang(id: ID!, sourceId: String, sinceDate: String): Ang
+  multiAng(id: String!, sourceId: String, sinceDate: String): MultiAng
 }
 
 type navigation {
@@ -100,6 +115,11 @@ type Shabad {
   count: Int!
   navigation: navigation
   verses: [Verse]
+}
+
+type MultiShabad {
+  shabadIds: [Int]
+  shabads: [Shabad]
 }
 
 type visraamObject {
