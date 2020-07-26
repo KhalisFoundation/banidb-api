@@ -285,9 +285,8 @@ exports.shabads = async (req, res) => {
 };
 
 exports.angs = async (req, res) => {
-  const { PageNo } = req.params;
+  const { PageNo, SourceID } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
-  const { SourceID } = req.params;
 
   try {
     const results = await getAngs(req, res, { pageNo: PageNo, sourceID: SourceID, sinceDate });
