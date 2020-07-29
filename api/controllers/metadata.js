@@ -27,6 +27,7 @@ exports.raags = async (req, res) => {
     const q = 'SELECT * FROM Raag ORDER BY RaagID';
 
     const rows = await conn.query(q);
+    rows.forEach(row => lib.getRaagExtended(row));
 
     res.json({
       rows,

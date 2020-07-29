@@ -9,7 +9,7 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS
     v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
     v.FirstLetterEng, v.Transliterations, v.WriterID, w.WriterEnglish,
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
-    r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,
+    r.RaagUnicode, r.RaagEnglish, r.RaagWithPage,
     src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,
     GREATEST(s.Updated, v.Updated) AS Updated`;
 
