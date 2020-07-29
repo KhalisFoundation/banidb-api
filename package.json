@@ -39,7 +39,7 @@
     "express-graphql": "^0.9.0",
     "graphql": "^15.2.0",
     "limiter": "^1.1.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mariadb": "^2.4.1",
     "memory-cache": "^0.2.0"
   },
