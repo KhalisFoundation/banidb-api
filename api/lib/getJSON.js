@@ -138,13 +138,22 @@ const getSource = shabad => ({
   pageNo: shabad.PageNo,
 });
 
+/* eslint-disable no-param-reassign */
+const getRaagExtended = shabad => {
+  shabad.SourceInfo = JSON.parse(String(shabad.SourceInfo) || '');
+  shabad.Sargun = JSON.parse(String(shabad.Sargun) || '');
+  shabad.WritersGuru = JSON.parse(String(shabad.WritersGuru) || '');
+  shabad.WritersBhagat = JSON.parse(String(shabad.WritersBhagat) || '');
+  shabad.Writers = JSON.parse(String(shabad.Writers) || '');
+  return shabad;
+};
+/* eslint-enable no-param-reassign */
+
 const getRaag = shabad => ({
   raagId: shabad.RaagID,
   gurmukhi: shabad.RaagGurmukhi,
   unicode: shabad.RaagUnicode,
   english: shabad.RaagEnglish,
-  startAng: shabad.StartID,
-  endAng: shabad.EndID,
   raagWithPage: shabad.RaagWithPage,
 });
 
@@ -190,5 +199,6 @@ module.exports = {
   getShabadInfo,
   getSource,
   getRaag,
+  getRaagExtended,
   getWriter,
 };
