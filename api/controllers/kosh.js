@@ -28,16 +28,24 @@ exports.letter = async (req, res) => {
 
 exports.word = async (req, res) => {
   let conn;
-  const word = `${req.params.Word}%`;
+  const word = `${req.params.Word}`;
+  const wordWild = `${word}%`;
   try {
     conn = await req.app.locals.pool.getConnection();
-    const q = `SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
+    const q = `(SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
                   d.DefGurmukhi AS definition, d.DefGurmukhiUni AS definitionUni
                 FROM MahanKoshWords w
                 LEFT JOIN MahanKoshDefinitions d ON w.Definition = d.ID
-                WHERE w.Word LIKE ? OR w.WordUni LIKE BINARY ?
-                ORDER BY w.ID`;
-    const rows = await conn.query(q, [word, word]);
+                WHERE w.Word LIKE ? OR w.WordUni LIKE BINARY ? LIMIT 1)
+                UNION ALL
+                (SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
+                d.DefGurmukhi AS definition, d.DefGurmukhiUni AS definitionUni
+                FROM MahanKoshWords w
+                LEFT JOIN MahanKoshDefinitions d ON w.Definition = d.ID
+                WHERE (w.Word LIKE ? OR w.WordUni LIKE BINARY ?)
+                  AND w.Word NOT LIKE ? AND w.WordUni NOT LIKE BINARY ?
+                ORDER BY w.wordUni)`;
+    const rows = await conn.query(q, [word, word, wordWild, wordWild, word, word]);
     res.json(rows);
   } catch (err) {
     lib.error(err, res, 500);
