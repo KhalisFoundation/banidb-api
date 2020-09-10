@@ -28,15 +28,14 @@ exports.letter = async (req, res) => {
 
 exports.word = async (req, res) => {
   let conn;
-  const word = `${req.params.Word}%`;
+  const word = `${req.params.Word}`;
   try {
     conn = await req.app.locals.pool.getConnection();
     const q = `SELECT w.ID AS id, w.Word AS word, w.WordUni AS wordUni,
                   d.DefGurmukhi AS definition, d.DefGurmukhiUni AS definitionUni
                 FROM MahanKoshWords w
                 LEFT JOIN MahanKoshDefinitions d ON w.Definition = d.ID
-                WHERE w.Word LIKE ? OR w.WordUni LIKE BINARY ?
-                ORDER BY w.ID`;
+                WHERE w.Word LIKE ? OR w.WordUni LIKE BINARY ? LIMIT 1`;
     const rows = await conn.query(q, [word, word]);
     res.json(rows);
   } catch (err) {
