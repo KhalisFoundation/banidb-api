@@ -1,5 +1,8 @@
 type Query {
-  shabad(id: ID!): Shabad
+  shabad(id: ID!, sinceDate: String): Shabad
+  multiShabad(id: String!, sinceDate: String): MultiShabad
   banis: [Bani]
-  bani(id: ID!, length: String, sinceData: String): BaniObj
+  bani(id: ID!, length: String, sinceDate: String): BaniObj
+  ang(id: ID!, sourceId: String, sinceDate: String): Ang
+  multiAng(id: String!, sourceId: String, sinceDate: String): MultiAng
 }

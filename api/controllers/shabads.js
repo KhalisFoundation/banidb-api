@@ -9,7 +9,7 @@ const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS
     v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
     v.FirstLetterEng, v.Transliterations, v.WriterID, w.WriterEnglish,
     w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
-    r.RaagUnicode, r.RaagEnglish, r.RaagWithPage, r.StartID, r.EndID,
+    r.RaagUnicode, r.RaagEnglish, r.RaagWithPage,
     src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,
     GREATEST(s.Updated, v.Updated) AS Updated`;
 
@@ -285,77 +285,18 @@ exports.shabads = async (req, res) => {
 };
 
 exports.angs = async (req, res) => {
-  let { PageNo } = req.params;
+  const { PageNo, SourceID } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
 
-  if (!lib.isRangeOfNumbers(PageNo)) {
-    PageNo = '1';
-  }
-
-  let { SourceID } = req.params;
-  // Check if SourceID is supported or default to 'G'
-  if (!sources[SourceID]) {
-    SourceID = 'G';
-  }
-  // If SGGS, check if within 1430
-  if (SourceID === 'G' && PageNo > 1430) {
-    PageNo = '1430';
-  }
-
-  const PageNoQuery = lib.searchOperators.angToQuery(PageNo);
-
-  const parameters = [...PageNoQuery.parameters, SourceID];
-
-  let sinceQuery = '';
-  if (sinceDate) {
-    sinceQuery = 'AND GREATEST(s.Updated, v.Updated) > ?';
-    parameters.push(sinceDate);
-  }
-
-  let conn;
-
   try {
-    conn = await req.app.locals.pool.getConnection();
-    const q = `SELECT ${allColumns} ${allFrom}
-      WHERE
-        ${PageNoQuery.q}
-        AND v.SourceID = ?
-        ${sinceQuery}
-        ${allColumnsWhere}
-      ORDER BY PageNo,v.LineNo ASC, ShabadID ASC, v.ID ASC`;
-
-    const rows = await conn.query(q, parameters);
-    if (rows.length > 0 && PageNoQuery.totalPages === 1) {
-      // single ang
-      const output = await getAngSingle(req, res, rows);
-      res.json(output);
-    } else if (rows.length > 0) {
-      // multiple ang
-      const output = {
-        pageNos: [],
-        pages: [],
-      };
-      let curPage = -1;
-      let counter = 0;
-      rows.forEach(row => {
-        if (row.PageNo !== curPage) {
-          curPage = row.PageNo;
-          output.pageNos.push(curPage);
-          counter = output.pages.push([]) - 1;
-        }
-        output.pages[counter].push(row);
-      });
-
-      const outputPagePromises = output.pages.map(row => getAngSingle(req, res, row));
-      output.pages = await Promise.all(outputPagePromises);
-      res.json(output);
+    const results = await getAngs(req, res, { pageNo: PageNo, sourceID: SourceID, sinceDate });
+    if (results) {
+      res.json(results);
     } else {
       lib.error('That ang does not exist or no updates found.', res, 404, false);
     }
   } catch (err) {
     lib.error(err, res, 500);
-  } finally {
-    if (conn) conn.end();
   }
 };
 
@@ -509,7 +450,81 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
       .catch(err => reject(err));
   });
 
+const getAngs = async (req, res, { pageNo, sinceDate, sourceId }) => {
+  let PageNo = pageNo;
+  let SourceID = sourceId;
+  if (!lib.isRangeOfNumbers(PageNo)) {
+    PageNo = '1';
+  }
+
+  // Check if SourceID is supported or default to 'G'
+  if (!sources[SourceID]) {
+    SourceID = 'G';
+  }
+  // If SGGS, check if within 1430
+  if (SourceID === 'G' && PageNo > 1430) {
+    PageNo = '1430';
+  }
+
+  const PageNoQuery = lib.searchOperators.angToQuery(PageNo);
+
+  const parameters = [...PageNoQuery.parameters, SourceID];
+
+  let sinceQuery = '';
+  if (sinceDate) {
+    sinceQuery = 'AND GREATEST(s.Updated, v.Updated) > ?';
+    parameters.push(sinceDate);
+  }
+
+  let conn;
+  let results = null;
+  try {
+    conn = await req.app.locals.pool.getConnection();
+    const q = `SELECT ${allColumns} ${allFrom}
+      WHERE
+        ${PageNoQuery.q}
+        AND v.SourceID = ?
+        ${sinceQuery}
+        ${allColumnsWhere}
+      ORDER BY PageNo,v.LineNo ASC, ShabadID ASC, v.ID ASC`;
+
+    const rows = await conn.query(q, parameters);
+    if (rows.length > 0 && PageNoQuery.totalPages === 1) {
+      // single ang
+      const output = await getAngSingle(req, res, rows);
+      results = output;
+    } else if (rows.length > 0) {
+      // multiple ang
+      const output = {
+        pageNos: [],
+        pages: [],
+      };
+      let curPage = -1;
+      let counter = 0;
+      rows.forEach(row => {
+        if (row.PageNo !== curPage) {
+          curPage = row.PageNo;
+          output.pageNos.push(curPage);
+          counter = output.pages.push([]) - 1;
+        }
+        output.pages[counter].push(row);
+      });
+
+      const outputPagePromises = output.pages.map(row => getAngSingle(req, res, row));
+      output.pages = await Promise.all(outputPagePromises);
+      results = output;
+    }
+    return results;
+  } catch (e) {
+    throw e;
+  } finally {
+    if (conn) conn.end();
+  }
+};
+
+// for graphql
 exports.getShabad = getShabad;
+exports.getAngs = getAngs;
 
 const getAngSingle = async (req, res, rows) => {
   const { PageNo, SourceID } = rows[0];

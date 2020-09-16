@@ -1,0 +1,11 @@
+type Ang {
+  source: source
+  count: Int
+  navigation: navigation
+  page: [Verse]
+}
+
+type MultiAng {
+  pageNos: [Int]
+  pages: [Ang]
+}
