@@ -23,8 +23,6 @@ describe('shabads endpoint', () => {
     expect(shabadInfo.source.pageNo).toBe(1);
     expect(shabadInfo.raag.raagId).toBe(1);
     expect(shabadInfo.raag.gurmukhi).toBe('jp');
-    expect(shabadInfo.raag.startAng).toBe(1);
-    expect(shabadInfo.raag.endAng).toBe(8);
     expect(shabadInfo.writer.writerId).toBe(1);
     expect(shabadInfo.writer.english).toBe('Guru Nanak Dev Ji');
   });

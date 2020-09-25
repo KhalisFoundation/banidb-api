@@ -1,6 +1,6 @@
 {
   "name": "banidb-api",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
     "docker:start": "DB_PORT=3002 ./bin/start-docker.sh",
     "docker:stop": "./bin/stop-docker.sh",
+    "e2e-local": "API_ENV=local jest --rootDir ./tests/e2e ",
     "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
     "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
     "local": "npm run docker:start && npm run local:api",
