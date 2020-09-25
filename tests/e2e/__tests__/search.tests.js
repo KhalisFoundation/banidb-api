@@ -214,8 +214,6 @@ describe('search endpoint - single', () => {
     expect(raagObj.gurmukhi).toBe('rwgu gUjrI');
     expect(raagObj.unicode).toBe('ਰਾਗੁ ਗੂਜਰੀ');
     expect(raagObj.english).toBe('Raag Gujri');
-    expect(raagObj.startAng).toBe(489);
-    expect(raagObj.endAng).toBe(21964);
     expect(raagObj.raagWithPage).toBe('Gujri (489-526)');
   });
 });
