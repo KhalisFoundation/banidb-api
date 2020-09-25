@@ -450,9 +450,9 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
       .catch(err => reject(err));
   });
 
-const getAngs = async (req, res, { pageNo, sinceDate, sourceId }) => {
+const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
   let PageNo = pageNo;
-  let SourceID = sourceId;
+  let SourceID = sourceID;
   if (!lib.isRangeOfNumbers(PageNo)) {
     PageNo = '1';
   }

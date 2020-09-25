@@ -109,8 +109,36 @@ describe('angs endpoint', () => {
     expect(raagObj.gurmukhi).toBe('rwgu rwmklI');
     expect(raagObj.unicode).toBe('ਰਾਗੁ ਰਾਮਕਲੀ');
     expect(raagObj.english).toBe('Raag Raamkalee');
-    expect(raagObj.startAng).toBe(876);
-    expect(raagObj.endAng).toBe(37216);
     expect(raagObj.raagWithPage).toBe('Raamkalee (876-974)');
+  });
+});
+
+describe('angs Dasam endpoint', () => {
+  let status;
+  let json;
+
+  beforeAll(async () => {
+    const results = await geturl('angs/2/D');
+    [status, json] = [results.status, results.json];
+  });
+
+  test('status', () => {
+    expect(status).toBe(200);
+  });
+
+  test('ang info', () => {
+    expect(json.count).toBe(91);
+    expect(json.navigation.next).toBe(3);
+    expect(json.navigation.previous).toBe(1);
+    expect(json.source.pageNo).toBe(2);
+    expect(json.source.english).toBe('Dasam Bani');
+    expect(json.source.sourceId).toBe('D');
+  });
+
+  test('verses verse', () => {
+    const verseObj = json.page[0].verse;
+
+    expect(verseObj).toBeTruthy();
+    expect(verseObj.gurmukhi).toBe('nmsqM Aloky ]');
   });
 });
