@@ -6,12 +6,12 @@ module.exports = {
     ang: async ({ id, sourceId, sinceDate }, { req, res }) => {
       const date = sinceDate ? lib.isValidDatetime(sinceDate) : null;
 
-      return getAngs(req, res, { pageNo: id, sourceId, sinceDate: date });
+      return getAngs(req, res, { pageNo: id, sourceID: sourceId, sinceDate: date });
     },
     multiAng: async ({ id, sourceId, sinceDate }, { req, res }) => {
       const date = sinceDate ? lib.isValidDatetime(sinceDate) : null;
 
-      return getAngs(req, res, { pageNo: id, sourceId, sinceDate: date });
+      return getAngs(req, res, { pageNo: id, sourceID: sourceId, sinceDate: date });
     },
   },
 };
