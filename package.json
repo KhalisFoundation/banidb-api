@@ -32,7 +32,7 @@
     "@graphql-tools/load-files": "^6.0.12",
     "@graphql-tools/merge": "^6.0.12",
     "@sttm/banidb": "^2.2.4",
-    "anvaad-js": "^1.4.1",
+    "anvaad-js": "^1.4.3",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
