@@ -11,7 +11,7 @@
       "description": "prod"
     },
     {
-      "url": "http://api.khajna.com/v2",
+      "url": "http://api.khajana.com/v2",
       "description": "stage"
     }
   ],
