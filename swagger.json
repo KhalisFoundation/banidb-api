@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "Banidb-api docs",
+    "description": "banidb-api docs",
     "version": "1",
     "title": "banidb-api"
   },
@@ -61,6 +61,20 @@
             "name": "ang",
             "in": "query",
             "description": "Which ang to return. Required if searchtype is 5",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "raag",
+            "in": "query",
+            "description": "Which raag to limit search to.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "writer",
+            "in": "query",
+            "description": "Which writer to limit search to.",
             "required": false,
             "type": "number"
           },
@@ -349,6 +363,39 @@
             "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/writers": {
+      "get": {
+        "summary": "Writers meta-data",
+        "description": "Get writers available to be used for search endpoint.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/raags": {
+      "get": {
+        "summary": "Raags meta-data",
+        "description": "Get raags available to be used for search endpoint.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/sources": {
+      "get": {
+        "summary": "Sources meta-data",
+        "description": "Get sources available to be used for search endpoint.",
         "responses": {
           "200": {
             "description": "successful operation"
