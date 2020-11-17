@@ -7,12 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://api.banidb.com/v2",
-      "description": "prod"
-    },
-    {
-      "url": "http://api.khajana.com/v2",
-      "description": "stage"
+      "url": "",
+      "description": "live endpoint"
     }
   ],
   "paths": {
