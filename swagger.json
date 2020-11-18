@@ -38,16 +38,16 @@
           {
             "name": "searchtype",
             "in": "query",
-            "description": "Type of search. { 0: First letter each word from start (Gurmukhi), 1: First letter each word anywhere(Gurmukhi), 2: Full Word (Gurmukhi), 3: Full Word Translation (English), 4: Romanized Gurmukhi (English), 5: Ang, 6: Main Letter (Gurmukhi), 7: Romanized first letter anywhere (English) }",
+            "description": "Type of search. { 0: First letter each word from start (Gurmukhi), 1: First letter each word anywhere (Gurmukhi), 2: Full Word (Gurmukhi), 3: Full Word Translation (English), 4: Romanized Gurmukhi (English), 5: Ang, 6: Main Letter (Gurmukhi), 7: Romanized first letter anywhere (English) }",
             "required": false,
             "schema": {
-              "$ref": "#/definitions/SeaerchType"
+              "$ref": "#/definitions/SearchType"
             }
           },
           {
             "name": "source",
             "in": "query",
-            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
             "required": false,
             "schema": {
               "$ref": "#/definitions/Source"
@@ -77,7 +77,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Pagination param. Which page to return.",
+            "description": "Pagination param. Which results page to return",
             "required": false,
             "type": "number"
           },
@@ -99,7 +99,7 @@
     "/shabads/{shabadID}": {
       "get": {
         "summary": "Shabads by ID",
-        "description": "Get an entire Shabad from its ShabadID. More than one shabadID can be specificed with operators '+' or ','",
+        "description": "Get an entire Shabad from its shabadID. More than one shabadID can be specificed with operators '+' or ','",
         "parameters": [
           {
             "name": "shabadID",
@@ -127,7 +127,7 @@
           {
             "name": "pageNo",
             "in": "path",
-            "description": "Ang number and/or range",
+            "description": "Ang number or range(s). Examples: '1', '2-3', '4+6', '2-3+7', '1-4+7-9' ",
             "required": true,
             "type": "string"
           },
@@ -159,21 +159,21 @@
           {
             "name": "year",
             "in": "path",
-            "description": "Year for specific date of hukamnama. Required if month and day is specified.",
+            "description": "Year for specific date of Hukamnama. Required if month and day are specified.",
             "required": false,
             "type": "string"
           },
           {
             "name": "month",
             "in": "path",
-            "description": "Month for specific date of hukamnama. Required if year and day is specified.",
+            "description": "Month for specific date of Hukamnama. Required if year and day are specified.",
             "required": false,
             "type": "string"
           },
           {
             "name": "day",
             "in": "path",
-            "description": "Day for specific date of hukamnama. Required if year and month is specified.",
+            "description": "Day for specific date of Hukamnama. Required if year and month are specified.",
             "required": false,
             "type": "string"
           }
@@ -196,7 +196,7 @@
           {
             "name": "sourceID",
             "in": "path",
-            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
             "required": false,
             "schema": {
               "$ref": "#/definitions/Source"
@@ -227,12 +227,12 @@
     "/banis/{baniID}": {
       "get": {
         "summary": "Bani",
-        "description": "Get a specific bani found in sundar gutka by BaniID.",
+        "description": "Get a specific bani found in sundar gutka by baniID.",
         "parameters": [
           {
             "name": "baniID",
             "in": "path",
-            "description": "Bani id",
+            "description": "Bani ID",
             "required": true,
             "type": "string"
           }
@@ -401,7 +401,7 @@
     }
   },
   "definitions": {
-    "SeaerchType": {
+    "SearchType": {
       "type": "number",
       "enum": [0, 1, 2, 3, 4, 5, 6, 7]
     },
