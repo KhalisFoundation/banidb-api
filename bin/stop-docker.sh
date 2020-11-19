@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-docker kill banidb-api
+docker stop banidb-api
 docker rm banidb-api

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-docker kill banidb-api
-docker rm banidb-api
+docker stop banidb-api || echo "stopped"
+docker rm banidb-api || echo "removed"
 
 docker rmi khalisfoundation/banidb-dev --force
