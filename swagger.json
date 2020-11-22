@@ -134,7 +134,7 @@
           {
             "name": "sourceID",
             "in": "path",
-            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "description": "Source to search in. Defaults of G when omitted. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
             "required": false,
             "schema": {
               "$ref": "#/definitions/AngSources"
