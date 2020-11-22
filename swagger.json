@@ -47,7 +47,7 @@
           {
             "name": "source",
             "in": "query",
-            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources, all: All sources }",
             "required": false,
             "schema": {
               "$ref": "#/definitions/Source"
@@ -137,7 +137,7 @@
             "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
             "required": false,
             "schema": {
-              "$ref": "#/definitions/Source"
+              "$ref": "#/definitions/AngSources"
             }
           }
         ],
@@ -196,7 +196,7 @@
           {
             "name": "sourceID",
             "in": "path",
-            "description": "Source to search in. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources }",
+            "description": "Source to search in. Defaults of G when omitted. { G: Guru Granth Sahib Ji, D: Dasam Granth Sahib, B: Bhai Gurdas Ji Vaaran, A: Amrit Keertan, S: Bhai Gurdas Singh Ji Vaaran, N: Bhai Nand Lal Ji Vaaran, R: Rehatnamas & Panthic Sources, all: All sources }",
             "required": false,
             "schema": {
               "$ref": "#/definitions/Source"
@@ -404,6 +404,10 @@
     "SearchType": {
       "type": "number",
       "enum": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    "AngSources": {
+      "type": "string",
+      "enum": ["G", "D", "B", "A", "S", "N", "R"]
     },
     "Source": {
       "type": "string",
