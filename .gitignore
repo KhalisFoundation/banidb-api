@@ -3,3 +3,4 @@ process.json
 process-dev.json
 *.log
 .idea
+.vscode

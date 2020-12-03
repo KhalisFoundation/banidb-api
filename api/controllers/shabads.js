@@ -364,6 +364,8 @@ exports.hukamnamas = async (req, res) => {
 
 exports.random = async (req, res) => {
   let { SourceID } = req.params;
+  const params = [];
+  let whereClause = '';
   // Check if SourceID is supported or default to 'G'
   if (!sources[SourceID]) {
     SourceID = 'G';
@@ -371,9 +373,14 @@ exports.random = async (req, res) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
-    const q =
-      'SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID WHERE v.SourceID = ? ORDER BY RAND() LIMIT 1';
-    const row = await conn.query(q, [SourceID]);
+
+    if (SourceID !== 'all') {
+      whereClause = 'WHERE v.SourceID = ?';
+      params.push(SourceID);
+    }
+    const q = `SELECT DISTINCT s.ShabadID, v.PageNo FROM Shabad s JOIN Verse v ON s.VerseID = v.ID ${whereClause} ORDER BY RAND() LIMIT 1`;
+
+    const row = await conn.query(q, params);
     const { ShabadID } = row[0];
     const rows = await getShabad(req, res, [ShabadID]);
     res.cacheControl = { noCache: true };
