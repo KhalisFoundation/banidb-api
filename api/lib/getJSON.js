@@ -83,6 +83,9 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
       es: {
         ...translations.es,
       },
+      hi: {
+        ...translations.hi,
+      },
     },
   };
 

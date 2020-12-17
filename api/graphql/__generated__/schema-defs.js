@@ -155,11 +155,18 @@ type esObj {
   sn: String
 }
 
+type hiObj {
+  ss: String
+  sts: String
+}
+
 type translations {
   en: enObj
   pu: puObj
   es: esObj
+  hi: hiObj
 }
+
 type Verse {
   verseId: ID
   shabadId: Int
