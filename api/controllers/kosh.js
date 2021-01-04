@@ -74,8 +74,6 @@ exports.wordSearch = async (req, res) => {
     const rows = await conn.query(q, [
       match,
       match,
-      match,
-      match,
       fullMatch,
       fullMatch,
       startMatch,
