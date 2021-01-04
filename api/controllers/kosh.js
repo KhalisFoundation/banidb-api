@@ -71,7 +71,6 @@ exports.wordSearch = async (req, res) => {
                     WHEN wordUni LIKE ? THEN 3
                     ELSE 4
                   END`;
-    console.log(q);
     const rows = await conn.query(q, [
       match,
       match,
@@ -126,7 +125,6 @@ exports.search = async (req, res) => {
                     WHEN definitionUni LIKE ? THEN 6
                     ELSE 7
                   END`;
-    console.log(q);
     const rows = await conn.query(q, [
       match,
       match,
