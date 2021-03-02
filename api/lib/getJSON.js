@@ -170,7 +170,8 @@ const getWriter = (shabad, fullShabad) => {
       english: shabad.WriterEnglish,
     };
   }
-  const writerInfoRow = fullShabad.find(row => !!row.WriterID);
+  const writerInfoRow =
+    fullShabad && fullShabad.length > 0 ? fullShabad.find(row => !!row.WriterID) : undefined;
 
   if (writerInfoRow) {
     return {
