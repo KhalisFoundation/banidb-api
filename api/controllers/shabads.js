@@ -555,7 +555,7 @@ const getAngSingle = async (req, res, rows) => {
 };
 
 const getShabadSingle = async (req, res, rows) => {
-  const shabadInfo = lib.getShabadInfo(rows[0]);
+  const shabadInfo = lib.getShabadInfo(rows[0], rows);
   const verses = rows.map(lib.prepVerse);
   const navigation = await getNavigation(req, res, 'shabad', rows[0].ID, rows[rows.length - 1].ID);
 
