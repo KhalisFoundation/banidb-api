@@ -124,13 +124,13 @@ const prepVerse = (row, includeMeta = false, liveSearch = 0) => {
   return verse;
 };
 
-const getShabadInfo = shabad => ({
+const getShabadInfo = (shabad, fullShabad) => ({
   shabadId: shabad.ShabadID,
   shabadName: shabad.ShabadName,
   pageNo: shabad.PageNo,
   source: getSource(shabad),
   raag: getRaag(shabad),
-  writer: getWriter(shabad),
+  writer: getWriter(shabad, fullShabad),
 });
 
 const getSource = shabad => ({
@@ -148,6 +148,7 @@ const getRaagExtended = shabad => {
   shabad.WritersGuru = JSON.parse(String(shabad.WritersGuru) || '');
   shabad.WritersBhagat = JSON.parse(String(shabad.WritersBhagat) || '');
   shabad.Writers = JSON.parse(String(shabad.Writers) || '');
+
   return shabad;
 };
 /* eslint-enable no-param-reassign */
@@ -160,12 +161,33 @@ const getRaag = shabad => ({
   raagWithPage: shabad.RaagWithPage,
 });
 
-const getWriter = shabad => ({
-  writerId: shabad.WriterID,
-  gurmukhi: shabad.WriterGurmukhi,
-  unicode: shabad.WriterUnicode,
-  english: shabad.WriterEnglish,
-});
+const getWriter = (shabad, fullShabad) => {
+  if (shabad && shabad.WriterID) {
+    return {
+      writerId: shabad.WriterID,
+      gurmukhi: shabad.WriterGurmukhi,
+      unicode: shabad.WriterUnicode,
+      english: shabad.WriterEnglish,
+    };
+  }
+  const writerInfoRow = fullShabad.find(row => !!row.WriterID);
+
+  if (writerInfoRow) {
+    return {
+      writerId: writerInfoRow.WriterID,
+      gurmukhi: writerInfoRow.WriterGurmukhi,
+      unicode: writerInfoRow.WriterUnicode,
+      english: writerInfoRow.WriterEnglish,
+    };
+  }
+
+  return {
+    writerId: null,
+    gurmukhi: null,
+    unicode: null,
+    english: null,
+  };
+};
 
 const prepBanis = row => {
   const transliterations = JSON.parse(row.transliterations);
