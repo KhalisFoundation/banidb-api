@@ -271,8 +271,8 @@ module.exports = {
         matches,
         false,
         false,
-        "json_extract(v.Translations, '$.en.bdb') LIKE ?",
-        "json_extract(v.Translations, '$.en.bdb') NOT LIKE ?",
+        "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci",
+        "json_extract(v.Translations, '$.en.bdb') NOT LIKE ? COLLATE utf8mb4_general_ci",
       );
 
       if (matches.length > 0) {
@@ -285,13 +285,13 @@ module.exports = {
       // in the case they only have an asterisk or quotes, just clean up the operators
       modifiedSearchQuery = replaceAsterisksAndQuotes(modifiedSearchQuery);
       return {
-        condition: "json_extract(v.Translations, '$.en.bdb') LIKE ?",
+        condition: "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci",
         parameters: [modifiedSearchQuery],
       };
     }
     return {
       columns: ' LEFT JOIN tokenized_english t ON t.verseid = v.ID',
-      condition: 't.token LIKE ?',
+      condition: 't.token LIKE ? COLLATE utf8mb4_general_ci',
       parameters: [`${searchQuery}%`],
     };
   },
