@@ -1,3 +1,4 @@
+const lodash = require('lodash');
 // defining this as an object was the only way I could access
 // AsteriskMariadbTranslation, and AsteriskAsciiValue in the firstLetterStartToQuery function..
 const constantsObj = {
@@ -291,8 +292,8 @@ module.exports = {
     }
     return {
       columns: ' LEFT JOIN tokenized_english t ON t.verseid = v.ID',
-      condition: 't.token LIKE ? COLLATE utf8mb4_general_ci',
-      parameters: [`${searchQuery}%`],
+      condition: 't.token LIKE ? OR t.token LIKE ?',
+      parameters: [`${lodash.upperFirst(searchQuery)}%`, `${lodash.lowerFirst(searchQuery)}%`],
     };
   },
   mainLettersToQuery: words => {
