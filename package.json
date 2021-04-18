@@ -1,6 +1,6 @@
 {
   "name": "banidb-api",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
