@@ -366,6 +366,84 @@
         }
       }
     },
+    "/rehats": {
+      "get": {
+        "summary": "Rehat Maryadas list",
+        "description": "Get a list of rehat maryads that are provided by BaniDB.",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rehats/{rehatID}": {
+      "get": {
+        "summary": "Rehat Maryada chapters",
+        "description": "Get the chapters for a specific rehat maryada found in by rehatID.",
+        "parameters": [
+          {
+            "name": "rehatID",
+            "in": "path",
+            "description": "Rehat ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rehats/{rehatID}/chapters/{chapterID}": {
+      "get": {
+        "summary": "Rehat Maryada chapter contents",
+        "description": "Get the chapter contents for a specific chapter by chapterID of a specific rehat maryada found by rehatID.",
+        "parameters": [
+          {
+            "name": "rehatID",
+            "in": "path",
+            "description": "Rehat ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chapterID",
+            "in": "path",
+            "description": "Chapter ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rehats/search/{query}": {
+      "get": {
+        "summary": "Rehat Maryada search",
+        "description": "Enter a search query and get chapters from rehats that match.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "description": "Query string",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
     "/writers": {
       "get": {
         "summary": "Writers meta-data",
