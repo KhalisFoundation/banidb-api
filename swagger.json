@@ -244,7 +244,7 @@
         }
       }
     },
-    "amritkeertan": {
+    "/amritkeertan": {
       "get": {
         "summary": "Amrit Keertan List",
         "description": "Get a list of all headers found in Amrit Keertan.",
@@ -255,7 +255,7 @@
         }
       }
     },
-    "amritkeertan/index": {
+    "/amritkeertan/index": {
       "get": {
         "summary": "Amrit Keertan List",
         "description": "Get a list of all indexes found in Amrit Keertan.",
@@ -266,7 +266,7 @@
         }
       }
     },
-    "amritkeertan/index/{headerID}": {
+    "/amritkeertan/index/{headerID}": {
       "get": {
         "summary": "Amrit Keertan List",
         "description": "Get a list of all indexes found in Amrit Keertan for a specific header.",
@@ -286,7 +286,7 @@
         }
       }
     },
-    "amritkeertan/shabads/{shabadID}": {
+    "/amritkeertan/shabads/{shabadID}": {
       "get": {
         "summary": "Amrit Keertan List",
         "description": "Get shabads found in Amrit Keertan by number",
