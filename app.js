@@ -11,8 +11,8 @@ const swaggerDocument = require('./swagger.json');
 
 swaggerDocument.servers[0].url =
   process.env.NODE_ENV === 'development'
-    ? 'http://api.khajana.org/v2/'
-    : 'http://api.banidb.com/v2';
+    ? 'https://api.khajana.org/v2/'
+    : 'https://api.banidb.com/v2';
 
 const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
