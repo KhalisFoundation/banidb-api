@@ -292,7 +292,7 @@ module.exports = {
     }
     return {
       columns: ' LEFT JOIN tokenized_english t ON t.verseid = v.ID',
-      condition: 't.token LIKE ? OR t.token LIKE ?',
+      condition: '(t.token LIKE ? OR t.token LIKE ?)',
       parameters: [`${lodash.upperFirst(searchQuery)}%`, `${lodash.lowerFirst(searchQuery)}%`],
     };
   },
