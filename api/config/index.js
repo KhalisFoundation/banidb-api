@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 /**
  * Expects process-dev.json or process.json (or run local)
  *
@@ -30,9 +32,9 @@
  *    "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
  * }
  */
-let serverCert = "";
+let serverCert = '';
 if (process.env.SKYSQL_CA_PEM) {
-  serverCert = [fs.readFileSync(process.env.SKYSQL_CA_PEM, "utf8")];
+  serverCert = [fs.readFileSync(process.env.SKYSQL_CA_PEM, 'utf8')];
 }
 
 const metadata = {
