@@ -34,7 +34,7 @@ const fs = require('fs');
  */
 let serverCert = '';
 if (process.env.SKYSQL_CA_PEM) {
-  serverCert = [fs.readFileSync(process.env.SKYSQL_CA_PEM, 'utf8')];
+  serverCert = fs.readFileSync(process.env.SKYSQL_CA_PEM, 'utf8');
 }
 
 const metadata = {
