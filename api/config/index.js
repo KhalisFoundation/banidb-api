@@ -32,10 +32,6 @@ const fs = require('fs');
  *    "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
  * }
  */
-let serverCert = '';
-if (process.env.SKYSQL_CA_PEM) {
-  serverCert = fs.readFileSync(process.env.SKYSQL_CA_PEM, 'utf8');
-}
 
 const metadata = {
   user: process.env.DB_USER || 'root',
@@ -45,8 +41,12 @@ const metadata = {
   compress: true,
   acquireTimeout: 6000,
   connectionLimit: process.env.DB_POOL_SIZE,
-  ssl: { ca: serverCert },
 };
+
+if (process.env.SSL_CA) {
+  metadata.ssl = { ca: fs.readFileSync(process.env.SSL_CA, 'utf8') };
+}
+
 const standbyMetadata = {
   minimumIdle: 2,
 };

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cacheControl = require('express-cache-controller');
-const { createPoolCluster } = require('mariadb');
+const { createPool, createPoolCluster } = require('mariadb');
 const swaggerUi = require('swagger-ui-express');
 
 const config = require('./api/config');
@@ -18,9 +18,13 @@ const app = express();
 const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 
 // database
-const dbCluster = createPoolCluster();
-config.forEach(dbConfig => dbCluster.add(dbConfig.host, dbConfig));
-app.locals.pool = dbCluster.of(/.*?/, 'ORDER');
+if (config.length > 1) {
+  const dbCluster = createPoolCluster();
+  config.forEach(dbConfig => dbCluster.add(dbConfig.host, dbConfig));
+  app.locals.pool = dbCluster.of(/.*?/, 'ORDER');
+} else {
+  app.locals.pool = createPool(config[0]);
+}
 
 // app
 app.use(cors());

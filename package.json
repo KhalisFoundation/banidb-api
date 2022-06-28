@@ -1,10 +1,10 @@
 {
   "name": "banidb-api",
-  "version": "2.9.5",
+  "version": "2.10.0",
   "description": "BaniDB API",
   "main": "index.js",
   "scripts": {
-    "dev": "pm2 start process-dev.json",
+    "dev": " NODE_ENV=development pm2 start process-dev.json",
     "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
     "docker:start": "DB_PORT=3002 ./bin/start-docker.sh",
     "docker:stop": "./bin/stop-docker.sh",
@@ -35,6 +35,7 @@
     "anvaad-js": "^1.4.3",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
+    "dotenv": "^16.0.1",
     "express": "^4.16.2",
     "express-cache-controller": "^1.1.0",
     "express-graphql": "^0.9.0",
