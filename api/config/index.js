@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 /**
  * Expects process-dev.json or process.json (or run local)
  *
@@ -11,6 +13,11 @@
  *        "DB_USER": "",
  *        "DB_PASSWORD": "",
  *        "DB_POOL_SIZE": 5,
+ *        "SSL_CA": "/Downloads/aws_skysql_chain.pem",
+ *        // single endpoint, use:
+ *        "DB_HOST": "dba.contoso.net",
+ *        "DB_PORT": 5001
+ *        // if you are using a write anywhere cluster, use DB_NODES:
  *        "DB_NODES": [
  *          {
  *            "host": "localhost",
@@ -40,6 +47,11 @@ const metadata = {
   acquireTimeout: 6000,
   connectionLimit: process.env.DB_POOL_SIZE,
 };
+
+if (process.env.SSL_CA) {
+  metadata.ssl = { ca: fs.readFileSync(process.env.SSL_CA, 'utf8') };
+}
+
 const standbyMetadata = {
   minimumIdle: 2,
 };
