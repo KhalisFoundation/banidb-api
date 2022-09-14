@@ -254,7 +254,7 @@ exports.search = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -357,7 +357,7 @@ exports.hukamnamas = async (req, res) => {
     } catch (err) {
       lib.error(err, res, 500);
     } finally {
-      if (conn) conn.end();
+      if (conn) conn.release();
     }
   }
 };
@@ -388,7 +388,7 @@ exports.random = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -450,7 +450,7 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
             } else {
               resolve({});
             }
-            if (conn) conn.end();
+            if (conn) conn.release();
           })
           .catch(err => reject(err));
       })
@@ -525,7 +525,7 @@ const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
   } catch (e) {
     throw e;
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -618,7 +618,7 @@ const getNavigation = async (req, res, type, first, last, source = '') => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
   return {};
 };

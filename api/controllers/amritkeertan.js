@@ -77,7 +77,7 @@ exports.headers = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -112,7 +112,7 @@ exports.index = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -147,7 +147,7 @@ exports.shabad = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -161,6 +161,6 @@ const getHeaderInfo = async (headerID, conn, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
