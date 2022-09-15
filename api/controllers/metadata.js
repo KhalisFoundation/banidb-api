@@ -15,7 +15,7 @@ exports.writers = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -35,7 +35,7 @@ exports.raags = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -54,6 +54,6 @@ exports.sources = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };

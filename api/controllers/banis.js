@@ -59,7 +59,7 @@ const getAll = async req => {
     throw new Error(err);
   } finally {
     if (conn) {
-      conn.end();
+      conn.release();
     }
   }
 };
@@ -75,7 +75,7 @@ exports.all = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -138,7 +138,7 @@ exports.getBani = async ({ id, length, sinceDate }, req) => {
   } catch (err) {
     throw new Error(err);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
   return null;
 };
@@ -167,7 +167,7 @@ exports.bani = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
