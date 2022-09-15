@@ -12,7 +12,7 @@ exports.db = async (req, res) => {
     lib.error(err, res, 500, false);
   } finally {
     if (conn) {
-      conn.end();
+      conn.release();
     }
   }
 };
