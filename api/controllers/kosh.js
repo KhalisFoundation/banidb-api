@@ -22,7 +22,7 @@ exports.letter = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -41,7 +41,7 @@ exports.word = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
 
@@ -65,6 +65,6 @@ exports.search = async (req, res) => {
   } catch (err) {
     lib.error(err, res, 500);
   } finally {
-    if (conn) conn.end();
+    if (conn) conn.release();
   }
 };
