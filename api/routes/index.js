@@ -31,6 +31,8 @@ route.get('/health', limiter.rate250, healthcheck.db);
 // Shabad Routes
 route.get('/search/:query', limiter.rate250, shabads.search);
 
+route.get('/search-results/:VerseID', limiter.rate250, shabads.resultsInfo);
+
 route.get('/shabads/:ShabadID', limiter.rate100, shabads.shabads);
 
 route.get('/angs/:PageNo/:SourceID?', limiter.rate100, shabads.angs);
