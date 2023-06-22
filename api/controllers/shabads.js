@@ -258,6 +258,65 @@ exports.search = async (req, res) => {
   }
 };
 
+exports.resultsInfo = async (req, res) => {
+  const { VerseID } = req.params;
+  const results = 20;
+  let page = parseInt(req.query.page, 10) || 1;
+  if (lib.isListOfNumbers(VerseID)) {
+    let conn;
+    try {
+      conn = await req.app.locals.pool.getConnection();
+
+      const q = `SELECT ${allColumns} ${allFrom}
+           WHERE v.ID IN (${VerseID})`;
+
+      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, []);
+
+      const totalResults = row[0]['COUNT(*)'];
+      const totalPages = Math.ceil(totalResults / results);
+      if (page > totalPages) {
+        page = totalPages;
+      }
+      const resultsInfo = {
+        totalResults,
+        pageResults: totalResults,
+        pages: {
+          page,
+          resultsPerPage: results,
+          totalPages,
+        },
+      };
+
+      if (totalResults > 0) {
+        if (page < totalPages) {
+          req.query.page = page + 1;
+          resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${
+            req.path
+          }?${Object.keys(req.query)
+            .map(key => `${key}=${encodeURIComponent(req.query[key])}`)
+            .join('&')}`;
+        }
+        const rows = await conn.query(`${q} LIMIT ?, ?`, [(page - 1) * results, results]);
+        const verses = rows.map(verse => lib.prepVerse(verse, true, false));
+        resultsInfo.pageResults = verses.length;
+        res.json({
+          resultsInfo,
+          verses,
+        });
+      } else {
+        res.json({
+          resultsInfo,
+          verses: [],
+        });
+      }
+    } catch (err) {
+      lib.error(err, res, 500);
+    } finally {
+      if (conn) conn.release();
+    }
+  }
+};
+
 exports.shabads = async (req, res) => {
   let { ShabadID } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
