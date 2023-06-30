@@ -259,11 +259,11 @@ exports.search = async (req, res) => {
 };
 
 exports.resultsInfo = async (req, res) => {
-  const { VerseID } = req.params;
+  const { VerseIds } = req.params;
   const results = 20;
-  const verseArray = VerseID.split(',');
+  const verseArray = VerseIds.split(',');
   let page = parseInt(req.query.page, 10) || 1;
-  if (lib.isListOfNumbers(VerseID)) {
+  if (lib.isListOfNumbers(VerseIds)) {
     let conn;
     try {
       conn = await req.app.locals.pool.getConnection();
@@ -323,6 +323,8 @@ exports.resultsInfo = async (req, res) => {
     } finally {
       if (conn) conn.release();
     }
+  } else {
+    lib.error('Malformed URL. Please check the VerseID list and try again.', res, 400, false);
   }
 };
 
