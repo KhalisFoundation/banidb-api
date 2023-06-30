@@ -270,9 +270,12 @@ exports.resultsInfo = async (req, res) => {
 
       const placeholders = verseArray.map(() => '?').join(',');
       const q = `SELECT ${allColumns} ${allFrom}
-           WHERE v.ID IN (${placeholders}) ORDER BY field(v.ID, ${VerseID})`;
+           WHERE v.ID IN (${placeholders}) ORDER BY field(v.ID, ${placeholders})`;
 
-      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, [...verseArray]);
+      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, [
+        ...verseArray,
+        ...verseArray,
+      ]);
       const totalResults = row[0]['COUNT(*)'];
       const totalPages = Math.ceil(totalResults / results);
       if (page > totalPages) {
@@ -298,6 +301,7 @@ exports.resultsInfo = async (req, res) => {
             .join('&')}`;
         }
         const rows = await conn.query(`${q} LIMIT ?, ?`, [
+          ...verseArray,
           ...verseArray,
           (page - 1) * results,
           results,
