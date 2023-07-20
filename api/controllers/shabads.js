@@ -259,19 +259,23 @@ exports.search = async (req, res) => {
 };
 
 exports.resultsInfo = async (req, res) => {
-  const { VerseID } = req.params;
+  const { VerseIds } = req.params;
   const results = 20;
+  const verseArray = VerseIds.split(',');
   let page = parseInt(req.query.page, 10) || 1;
-  if (lib.isListOfNumbers(VerseID)) {
+  if (lib.isListOfNumbers(VerseIds)) {
     let conn;
     try {
       conn = await req.app.locals.pool.getConnection();
 
+      const placeholders = verseArray.map(() => '?').join(',');
       const q = `SELECT ${allColumns} ${allFrom}
-           WHERE v.ID IN (${VerseID})`;
+           WHERE v.ID IN (${placeholders}) ORDER BY field(v.ID, ${placeholders})`;
 
-      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, []);
-
+      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, [
+        ...verseArray,
+        ...verseArray,
+      ]);
       const totalResults = row[0]['COUNT(*)'];
       const totalPages = Math.ceil(totalResults / results);
       if (page > totalPages) {
@@ -296,7 +300,12 @@ exports.resultsInfo = async (req, res) => {
             .map(key => `${key}=${encodeURIComponent(req.query[key])}`)
             .join('&')}`;
         }
-        const rows = await conn.query(`${q} LIMIT ?, ?`, [(page - 1) * results, results]);
+        const rows = await conn.query(`${q} LIMIT ?, ?`, [
+          ...verseArray,
+          ...verseArray,
+          (page - 1) * results,
+          results,
+        ]);
         const verses = rows.map(verse => lib.prepVerse(verse, true, false));
         resultsInfo.pageResults = verses.length;
         res.json({
@@ -314,6 +323,8 @@ exports.resultsInfo = async (req, res) => {
     } finally {
       if (conn) conn.release();
     }
+  } else {
+    lib.error('Malformed URL. Please check the VerseID list and try again.', res, 400, false);
   }
 };
 
