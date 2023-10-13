@@ -354,6 +354,46 @@ exports.shabads = async (req, res) => {
   }
 };
 
+const getAll = async req => {
+  let conn;
+  try {
+    conn = await req.app.locals.pool.getConnection();
+    const q =
+      'SELECT sn.ShabadID, {$allColumns}' +
+      ' FROM ShabadName sn\n' +
+      'LEFT JOIN Verse v on v.ID = sn.VerseID  \n' +
+      'LEFT JOIN Shabad s ON s.VerseID = v.ID\n' +
+      '  LEFT JOIN Writer w USING(WriterID)\n' +
+      '  LEFT JOIN Raag r USING(RaagID)\n' +
+      '  LEFT JOIN Source src USING(SourceID)\n' +
+      '    ORDER BY sn.ShabadID, v.ID ASC';
+    const rows = await conn.query(q, []);
+
+    return { rows: rows.map(banis => lib.prepBanis(banis)) };
+  } catch (err) {
+    throw new Error(err);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+};
+
+// For the graphql endpoint
+exports.getAll = getAll;
+
+exports.all = async (req, res) => {
+  let conn;
+  try {
+    const { rows } = await getAll(req);
+    res.json(rows);
+  } catch (err) {
+    lib.error(err, res, 500);
+  } finally {
+    if (conn) conn.release();
+  }
+};
+
 exports.angs = async (req, res) => {
   const { PageNo, SourceID } = req.params;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
