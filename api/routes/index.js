@@ -35,6 +35,8 @@ route.get('/search-results/:VerseIds', limiter.rate250, shabads.resultsInfo);
 
 route.get('/shabads/:ShabadID', limiter.rate100, shabads.shabads);
 
+route.get('/shabads/updates/:Date', limiter.rate100, shabads.updates);
+
 route.get('/angs/:PageNo/:SourceID?', limiter.rate100, shabads.angs);
 
 route.get('/hukamnamas/:year?/:month?/:day?', limiter.rate100, shabads.hukamnamas);
