@@ -515,6 +515,10 @@ Below is a list of sources used for translations. We have digitized sources via 
     <th> Verified Changes  </th>
   </tr>
   <tr>
+    <td> 04/13/2024 </td>
+    <td align="right">46,810</td>
+  </tr>
+  <tr>
     <td> 11/18/2020 </td>
     <td align="right">43,649</td>
   </tr>
