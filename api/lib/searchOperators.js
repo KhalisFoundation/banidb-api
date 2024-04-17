@@ -1,4 +1,6 @@
 const lodash = require('lodash');
+const anvaad = require('anvaad-js');
+
 // defining this as an object was the only way I could access
 // AsteriskMariadbTranslation, and AsteriskAsciiValue in the firstLetterStartToQuery function..
 const constantsObj = {
@@ -7,6 +9,27 @@ const constantsObj = {
   SearchOperators: ['+', '-', '*', '"', "'"],
   DecSearchOperators: [43, 45, 42, 34, 39],
 };
+
+// Pairing the bindi characters with their non-bind counterparts
+const bindiCharsUni = {
+  ਸ: 'ਸ਼',
+  ਖ: 'ਖ਼',
+  ਗ: 'ਗ਼',
+  ਜ: 'ਜ਼',
+  ਫ: 'ਫ਼',
+};
+
+// Generating an object with the ASCII codes of the bindi characters
+const bindiCharacters = Object.entries(bindiCharsUni).reduce((acc, [key, value]) => {
+  const char = anvaad.unicode(key, true);
+  const asciiCode = anvaad.ascii(char).replaceAll(',', '');
+
+  const charWithBindi = anvaad.unicode(value, true);
+  const asciiCodeWithBindi = anvaad.ascii(charWithBindi).replaceAll(',', '');
+
+  acc[asciiCode] = asciiCodeWithBindi;
+  return acc;
+}, {});
 
 const replaceAsterisksAndQuotes = str => {
   let res = str;
@@ -69,6 +92,38 @@ const getQueryConditionsAndParams = (
   };
 };
 
+const hasBindiCharacter = charCode => {
+  if (bindiCharacters[charCode]) {
+    return bindiCharacters[charCode];
+  }
+  return false;
+};
+
+const generateBindiQuery = (charCodeQuery, charCodeQueryWildcard, result) => {
+  let bindiCharQuery = charCodeQuery;
+  let bindiCharQueryWildcard = charCodeQueryWildcard;
+  const updatedResult = result;
+
+  charCodeQuery.split(',').forEach(charCode => {
+    const bindiCharCode = hasBindiCharacter(charCode);
+    if (bindiCharCode) {
+      bindiCharQuery = bindiCharQuery.replaceAll(charCode, bindiCharCode);
+      bindiCharQueryWildcard = bindiCharQueryWildcard.replaceAll(charCode, bindiCharCode);
+    }
+  });
+
+  if (charCodeQuery !== bindiCharQuery) {
+    updatedResult.condition = `${updatedResult.condition} OR ${updatedResult.condition}`;
+    updatedResult.parameters = [
+      ...updatedResult.parameters,
+      bindiCharQuery,
+      bindiCharQueryWildcard,
+    ];
+  }
+
+  return updatedResult;
+};
+
 module.exports = {
   AsteriskAsciiValue: constantsObj.AsteriskAsciiValue,
   AsteriskMariadbTranslation: constantsObj.AsteriskMariadbTranslation,
@@ -100,10 +155,12 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    return {
-      condition: 'v.FirstLetterStr BETWEEN ? AND ?',
+    const result = {
+      columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
+      condition: 't.token BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
+    return generateBindiQuery(charCodeQuery, charCodeQueryWildcard, result);
   },
   firstLetterAnywhereToQuery: (charCodeQuery, charCodeQueryWildcard) => {
     if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
@@ -132,11 +189,12 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    return {
+    const result = {
       columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
       condition: 't.token BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
+    return generateBindiQuery(charCodeQuery, charCodeQueryWildcard, result);
   },
   fullWordRomanizedToQuery: searchQuery => {
     if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
