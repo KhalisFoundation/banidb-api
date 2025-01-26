@@ -1,0 +1,49 @@
+steps:
+  # Pull the latest image for caching
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [ '-c', 'docker pull gcr.io/$PROJECT_ID/banidb-api:latest || exit 0' ]
+
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/banidb-api:latest',
+            '-t', 'gcr.io/$PROJECT_ID/banidb-api:$COMMIT_SHA',
+            '--cache-from', 'gcr.io/$PROJECT_ID/banidb-api:latest',
+            '.' ]
+
+  # Push the Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/$PROJECT_ID/banidb-api', '--all-tags' ]
+
+  # Deploy the image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - "-c"
+      - "gcloud beta run deploy banidb-api \
+        --image gcr.io/$PROJECT_ID/banidb-api:latest \
+        --regions $_REGION \
+        --port 3000 \
+        --timeout 30s \
+        --concurrency 80 \
+        --execution-environment gen2 \
+        --min-instances 0 \
+        --max-instances 10 \
+        --cpu-boost \
+        --cpu-throttling \
+        --allow-unauthenticated \
+        --ingress internal-and-cloud-load-balancing \
+        --set-secrets DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest,DB_HOST=DB_HOST:latest,DB_PORT=DB_PORT:latest \
+        --set-env-vars NODE_ENV=production"
+
+# Specify the images
+images:
+  - 'gcr.io/$PROJECT_ID/banidb-api:latest'
+  - 'gcr.io/$PROJECT_ID/banidb-api:$COMMIT_SHA'
+
+# Define substitutions
+substitutions:
+  _REGION: us-east1,asia-south1
+
+options:
+  substitutionOption: ALLOW_LOOSE
