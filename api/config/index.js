@@ -39,9 +39,9 @@ const fs = require('fs');
  */
 
 const metadata = {
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'root',
-  database: process.env.NODE_ENV === 'development' ? 'khajana_dev_khajana' : 'khajana_khajana',
+  user: process.env.DB_USER || process.env.DBUSER || 'root',
+  password: process.env.DB_PASSWORD || process.env.DBPASSWORD || 'root',
+  database: process.env.DBNAME,
   dateStrings: true,
   compress: true,
   acquireTimeout: 6000,
@@ -80,8 +80,8 @@ if (!!process.env.DB_NODES) {
 } else {
   configArry.push({
     ...metadata,
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
+    host: process.env.DB_HOST || process.env.DBHOST || 'localhost',
+    port: process.env.DB_PORT || process.env.DBPORT || 3306,
   });
 }
 
