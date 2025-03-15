@@ -136,8 +136,7 @@ module.exports = {
       };
     }
     const queryObj = {
-      columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
-      condition: 't.token BETWEEN ? AND ?',
+      condition: 'v.FirstLetterStr BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
     return generateBindiQuery(queryObj);

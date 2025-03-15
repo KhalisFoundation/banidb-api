@@ -107,7 +107,6 @@ exports.search = async (req, res) => {
         charCodeQuery,
         charCodeQueryWildCard,
       );
-      columns += queryObj.columns === undefined ? '' : queryObj.columns;
       conditions.push(queryObj.condition);
       parameters.push(...queryObj.parameters);
 
