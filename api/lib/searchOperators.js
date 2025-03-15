@@ -1,5 +1,4 @@
 const lodash = require('lodash');
-const anvaad = require('anvaad-js');
 
 // defining this as an object was the only way I could access
 // AsteriskMariadbTranslation, and AsteriskAsciiValue in the firstLetterStartToQuery function..
@@ -10,26 +9,13 @@ const constantsObj = {
   DecSearchOperators: [43, 45, 42, 34, 39],
 };
 
-// Pairing the bindi characters with their non-bind counterparts
-const bindiCharsUni = {
-  ਸ: 'ਸ਼',
-  ਖ: 'ਖ਼',
-  ਗ: 'ਗ਼',
-  ਜ: 'ਜ਼',
-  ਫ: 'ਫ਼',
+const bindiCharacters = {
+  '103': '090', //  ਸ: 'ਸ਼'
+  '106': '122', //  ਖ: 'ਖ਼'
+  '115': '083', //  ਗ: 'ਗ਼'
+  '075': '094', //  ਜ: 'ਜ਼'
+  '080': '038', //  ਫ: 'ਫ਼'
 };
-
-// Generating an object with the ASCII codes of the bindi characters
-const bindiCharacters = Object.entries(bindiCharsUni).reduce((acc, [key, value]) => {
-  const char = anvaad.unicode(key, true);
-  const asciiCode = anvaad.ascii(char).replaceAll(',', '');
-
-  const charWithBindi = anvaad.unicode(value, true);
-  const asciiCodeWithBindi = anvaad.ascii(charWithBindi).replaceAll(',', '');
-
-  acc[asciiCode] = asciiCodeWithBindi;
-  return acc;
-}, {});
 
 const replaceAsterisksAndQuotes = str => {
   let res = str;
@@ -92,36 +78,30 @@ const getQueryConditionsAndParams = (
   };
 };
 
-const hasBindiCharacter = charCode => {
-  if (bindiCharacters[charCode]) {
-    return bindiCharacters[charCode];
-  }
-  return false;
-};
+const hasBindiCharacter = charCode => bindiCharacters[charCode] || false;
 
-const generateBindiQuery = (charCodeQuery, charCodeQueryWildcard, result) => {
-  let bindiCharQuery = charCodeQuery;
-  let bindiCharQueryWildcard = charCodeQueryWildcard;
-  const updatedResult = result;
+const generateBindiQuery = queryObj => {
+  const [charCodeQuery, charCodeQueryWildcard] = queryObj.parameters;
 
-  charCodeQuery.split(',').forEach(charCode => {
-    const bindiCharCode = hasBindiCharacter(charCode);
-    if (bindiCharCode) {
-      bindiCharQuery = bindiCharQuery.replaceAll(charCode, bindiCharCode);
-      bindiCharQueryWildcard = bindiCharQueryWildcard.replaceAll(charCode, bindiCharCode);
-    }
-  });
+  const updatedBindiQueries = charCodeQuery.split(',').reduce(
+    ([bindiCharQuery, bindiCharQueryWildcard], charCode) => {
+      const bindiCharCode = hasBindiCharacter(charCode);
+      if (bindiCharCode) {
+        return [
+          bindiCharQuery.replaceAll(charCode, bindiCharCode),
+          bindiCharQueryWildcard.replaceAll(charCode, bindiCharCode),
+        ];
+      }
+      return [bindiCharQuery, bindiCharQueryWildcard];
+    },
+    [charCodeQuery, charCodeQueryWildcard],
+  );
 
-  if (charCodeQuery !== bindiCharQuery) {
-    updatedResult.condition = `${updatedResult.condition} OR ${updatedResult.condition}`;
-    updatedResult.parameters = [
-      ...updatedResult.parameters,
-      bindiCharQuery,
-      bindiCharQueryWildcard,
-    ];
-  }
-
-  return updatedResult;
+  return {
+    ...queryObj,
+    condition: `${queryObj.condition} OR ${queryObj.condition}`,
+    parameters: [...queryObj.parameters, ...updatedBindiQueries],
+  };
 };
 
 module.exports = {
@@ -155,12 +135,12 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    const result = {
+    const queryObj = {
       columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
       condition: 't.token BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
-    return generateBindiQuery(charCodeQuery, charCodeQueryWildcard, result);
+    return generateBindiQuery(queryObj);
   },
   firstLetterAnywhereToQuery: (charCodeQuery, charCodeQueryWildcard) => {
     if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
@@ -189,12 +169,12 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    const result = {
+    const queryObj = {
       columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
       condition: 't.token BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
-    return generateBindiQuery(charCodeQuery, charCodeQueryWildcard, result);
+    return generateBindiQuery(queryObj);
   },
   fullWordRomanizedToQuery: searchQuery => {
     if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
