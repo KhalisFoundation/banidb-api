@@ -6,6 +6,11 @@ WORKDIR /app
 # Copy application code
 COPY . .
 
+ARG NODE_ENV = $NODE_ENV
+ENV NODE_ENV = $NODE_ENV
+
+RUN echo "NODE_ENV is $NODE_ENV"
+
 # install mysql client
 RUN apt update
 RUN apt install -y default-mysql-client

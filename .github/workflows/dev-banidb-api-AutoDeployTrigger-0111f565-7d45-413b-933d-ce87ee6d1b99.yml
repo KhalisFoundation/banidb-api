@@ -4,19 +4,18 @@ name: Trigger auto deployment for dev-banidb-api
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ azure-pipeline ]
+    branches: [dev]
     paths:
-    - '**'
-    - '.github/workflows/dev-banidb-api-AutoDeployTrigger-0111f565-7d45-413b-933d-ce87ee6d1b99.yml'
+      - '**'
+      - '.github/workflows/dev-banidb-api-AutoDeployTrigger-0111f565-7d45-413b-933d-ce87ee6d1b99.yml'
 
-  # Allow manual trigger 
-  workflow_dispatch:      
+  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
 
@@ -43,6 +42,4 @@ jobs:
           resourceGroup: devops
           imageToBuild: khalis.azurecr.io/dev-banidb-api:${{ github.sha }}
           _buildArgumentsKey_: |
-            _buildArgumentsValues_
-
-
+            NODE_ENV=development
