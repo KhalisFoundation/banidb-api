@@ -22,8 +22,7 @@ RUN npm install -g pm2
 COPY DigiCertGlobalRootCA.crt.pem /certs/DigiCertGlobalRootCA.crt.pem 
 
 # Set the environment to production and expose your app port
-ENV NODE_ENV=production
-EXPOSE 3000
+EXPOSE 3000 3001
 
 # Start the application
 CMD ["pm2-runtime", "start", "--name", "banidb-api-prod-v2", "process.json"]
