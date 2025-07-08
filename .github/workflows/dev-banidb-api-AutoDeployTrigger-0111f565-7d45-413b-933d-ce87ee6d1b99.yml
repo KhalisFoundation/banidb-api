@@ -4,7 +4,7 @@ name: Trigger auto deployment for dev-banidb-api
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: [dev]
+    branches: [azure-pipeline]
     paths:
       - '**'
       - '.github/workflows/dev-banidb-api-AutoDeployTrigger-0111f565-7d45-413b-933d-ce87ee6d1b99.yml'
