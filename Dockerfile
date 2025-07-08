@@ -26,7 +26,7 @@ RUN npm install -g pm2
 # update SSL_CA_LINK with the actual link 
 RUN apt-get update && apt-get install -y curl && \
     mkdir -p /certs && \
-    echo "SSL_CA_LINK last 12 chars: ${SSL_CA_LINK: -12}" && \
+    echo "SSL_CA_LINK last 12 chars: $(echo ${SSL_CA_LINK} | tail -c 13)" && \
     curl -o /certs/azure.pem ${SSL_CA_LINK}
 
 # Set the environment to production and expose your app port
