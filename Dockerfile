@@ -1,15 +1,16 @@
 FROM node:18.18.0
 
+# Declare build arguments
+ARG SSL_CA_LINK
+
 # Set working directory
 WORKDIR /app
 
 # Copy application code
 COPY . .
 
-ARG NODE_ENV = $NODE_ENV
-ENV NODE_ENV = $NODE_ENV
-
-RUN echo "NODE_ENV is $NODE_ENV"
+ARG NODE_ENV
+RUN echo "NODE_ENV is ${NODE_ENV}"
 
 # install mysql client
 RUN apt update
@@ -21,10 +22,12 @@ RUN npm install --legacy-peer-deps
 # Install pm2
 RUN npm install -g pm2
 
-# Copy the certificate file into a directory (e.g., /certs)
-# Make sure the file skysql-ca.pem is in your project root
-# COPY aws_skysql_chain.pem /certs/aws_skysql_chain.pem
-COPY DigiCertGlobalRootCA.crt.pem /certs/DigiCertGlobalRootCA.crt.pem 
+# Install curl and download the Azure CA certificate from external URL
+# update SSL_CA_LINK with the actual link 
+RUN apt-get update && apt-get install -y curl && \
+    mkdir -p /certs && \
+    echo "SSL_CA_LINK last 12 chars: ${SSL_CA_LINK: -12}" && \
+    curl -o /certs/azure.pem ${SSL_CA_LINK}
 
 # Set the environment to production and expose your app port
 EXPOSE 3000 3001

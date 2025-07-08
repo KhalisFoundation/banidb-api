@@ -41,5 +41,6 @@ jobs:
           containerAppName: dev-banidb-api
           resourceGroup: devops
           imageToBuild: khalis.azurecr.io/dev-banidb-api:${{ github.sha }}
-          _buildArgumentsKey_: |
+          buildArguments: |
             NODE_ENV=development
+            SSL_CA_LINK=${{ secrets.SSL_CA_LINK }}
