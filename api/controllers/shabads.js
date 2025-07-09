@@ -209,7 +209,6 @@ exports.search = async (req, res) => {
       ORDER BY ${orderBy} ShabadID ASC`;
 
     const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, parameters);
-
     const totalResults = row[0]['COUNT(*)'];
     const totalPages = Math.ceil(totalResults / results);
     if (page > totalPages) {

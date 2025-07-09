@@ -1,4 +1,5 @@
 const lodash = require('lodash');
+
 // defining this as an object was the only way I could access
 // AsteriskMariadbTranslation, and AsteriskAsciiValue in the firstLetterStartToQuery function..
 const constantsObj = {
@@ -6,6 +7,14 @@ const constantsObj = {
   AsteriskMariadbTranslation: '%',
   SearchOperators: ['+', '-', '*', '"', "'"],
   DecSearchOperators: [43, 45, 42, 34, 39],
+};
+
+const bindiCharacters = {
+  '103': '090', //  ਸ: 'ਸ਼'
+  '106': '122', //  ਖ: 'ਖ਼'
+  '115': '083', //  ਗ: 'ਗ਼'
+  '075': '094', //  ਜ: 'ਜ਼'
+  '080': '038', //  ਫ: 'ਫ਼'
 };
 
 const replaceAsterisksAndQuotes = str => {
@@ -69,6 +78,32 @@ const getQueryConditionsAndParams = (
   };
 };
 
+const hasBindiCharacter = charCode => bindiCharacters[charCode] || false;
+
+const generateBindiQuery = queryObj => {
+  const [charCodeQuery, charCodeQueryWildcard] = queryObj.parameters;
+
+  const updatedBindiQueries = charCodeQuery.split(',').reduce(
+    ([bindiCharQuery, bindiCharQueryWildcard], charCode) => {
+      const bindiCharCode = hasBindiCharacter(charCode);
+      if (bindiCharCode) {
+        return [
+          bindiCharQuery.replaceAll(charCode, bindiCharCode),
+          bindiCharQueryWildcard.replaceAll(charCode, bindiCharCode),
+        ];
+      }
+      return [bindiCharQuery, bindiCharQueryWildcard];
+    },
+    [charCodeQuery, charCodeQueryWildcard],
+  );
+
+  return {
+    ...queryObj,
+    condition: `${queryObj.condition} OR ${queryObj.condition}`,
+    parameters: [...queryObj.parameters, ...updatedBindiQueries],
+  };
+};
+
 module.exports = {
   AsteriskAsciiValue: constantsObj.AsteriskAsciiValue,
   AsteriskMariadbTranslation: constantsObj.AsteriskMariadbTranslation,
@@ -100,10 +135,11 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    return {
+    const queryObj = {
       condition: 'v.FirstLetterStr BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
+    return generateBindiQuery(queryObj);
   },
   firstLetterAnywhereToQuery: (charCodeQuery, charCodeQueryWildcard) => {
     if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
@@ -132,11 +168,12 @@ module.exports = {
         parameters: [modifiedSearchQuery],
       };
     }
-    return {
+    const queryObj = {
       columns: ' LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID',
       condition: 't.token BETWEEN ? AND ?',
       parameters: [charCodeQuery, charCodeQueryWildcard],
     };
+    return generateBindiQuery(queryObj);
   },
   fullWordRomanizedToQuery: searchQuery => {
     if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
