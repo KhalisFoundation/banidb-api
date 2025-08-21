@@ -1,5 +1,7 @@
 const banidb = require('@sttm/banidb');
 const anvaad = require('anvaad-js');
+
+const { omniSearch } = require('./omni');
 const lib = require('../lib');
 
 const sources = banidb.SOURCES;
@@ -34,6 +36,7 @@ exports.search = async (req, res) => {
   let results = parseInt(req.query.results, 10) || 20;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
   const liveSearch = req.query.livesearch ? parseInt(req.query.livesearch, 10) : 0;
+  const isGurmukhi = req.query.isGurmukhi ? parseInt(req.query.isGurmukhi, 10) : 0;
 
   SourceID = SourceID.substr(0, 1);
 
@@ -175,6 +178,16 @@ exports.search = async (req, res) => {
       searchQuery = searchQuery.toLowerCase();
       conditions.push('v.FirstLetterEng LIKE ?');
       parameters.push(`%${searchQuery}%`);
+    } else if (searchType === 8) {
+      const trimmedQuery = String(searchQuery).trim();
+      if (/^\d+$/.test(trimmedQuery)) {
+        conditions.push('v.PageNo = ?');
+        parameters.push(searchQuery);
+      } else {
+        const omniResults = await omniSearch(req, searchQuery, isGurmukhi);
+        res.json(omniResults);
+        return;
+      }
     }
   }
 

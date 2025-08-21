@@ -218,7 +218,82 @@ const prepAKIndex = row => {
   return akIndexRow;
 };
 
+const prepResults = async (req, verseArray) => {
+  try {
+    const output = {
+      resultsInfo: {
+        totalResults: 0,
+        pageResults: 0,
+        pages: { page: 1, resultsPerPage: 20, totalPages: 0 },
+      },
+      verses: [],
+    };
+
+    if (verseArray.length === 0) {
+      return output;
+    }
+
+    const resultsPerPage = 20;
+    let page = 1;
+
+    // Build query similar to resultsInfo in shabads.js
+    const allColumns = `v.ID, v.Gurmukhi, v.GurmukhiUni, v.Translations, v.PageNo AS PageNo, v.LineNo,
+          v.SourceID as SourceID, s.ShabadID, v.FirstLetterStr, v.MainLetters, v.Visraam,
+          v.FirstLetterEng, v.Transliterations, v.WriterID, w.WriterEnglish,
+          w.WriterGurmukhi, w.WriterUnicode, v.RaagID, r.RaagGurmukhi,
+          r.RaagUnicode, r.RaagEnglish, r.RaagWithPage,
+          src.SourceGurmukhi, src.SourceUnicode, src.SourceEnglish,
+          GREATEST(s.Updated, v.Updated) AS Updated`;
+
+    const allFrom = `FROM Verse v
+        LEFT JOIN Shabad s ON s.VerseID = v.ID
+        LEFT JOIN Writer w USING(WriterID)
+        LEFT JOIN Raag r USING(RaagID)
+        LEFT JOIN Source src USING(SourceID)`;
+
+    const placeholders = verseArray.map(() => '?').join(',');
+    const q = `SELECT ${allColumns} ${allFrom}
+                 WHERE v.ID IN (${placeholders}) ORDER BY field(v.ID, ${placeholders})`;
+
+    let conn;
+    try {
+      conn = await req.app.locals.pool.getConnection();
+      const row = await conn.query(`SELECT COUNT(*) FROM (${q}) AS count`, [
+        ...verseArray,
+        ...verseArray,
+      ]);
+      const totalResults = row[0]['COUNT(*)'];
+      const totalPages = Math.ceil(totalResults / resultsPerPage);
+      if (page > totalPages) page = totalPages;
+
+      const resultRows = await conn.query(`${q} LIMIT ?, ?`, [
+        ...verseArray,
+        ...verseArray,
+        (page - 1) * resultsPerPage,
+        resultsPerPage,
+      ]);
+
+      const verses = resultRows.map(verse => prepVerse(verse, true, false));
+
+      return {
+        resultsInfo: {
+          totalResults,
+          pageResults: verses.length,
+          pages: { page, resultsPerPage, totalPages },
+        },
+        verses,
+      };
+    } finally {
+      if (conn) conn.release();
+    }
+  } catch (error) {
+    console.error('Search error:', error);
+    return [];
+  }
+};
+
 module.exports = {
+  prepResults,
   prepVerse,
   prepBanis,
   prepAKIndex,
