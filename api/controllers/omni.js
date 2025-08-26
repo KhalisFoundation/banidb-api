@@ -3,19 +3,31 @@ const lib = require('../lib');
 
 const client = new MeiliSearch({
   host: process.env.MEILI_HOST || 'http://localhost:7700',
-  apiKey: process.env.MEILI_API_KEY || 'dhangurunanak',
+  apiKey: process.env.MEILI_API_KEY || 'master-key',
 });
 
 const GURMUKHI_CHARS = 'aAeshkKgG|cCjJ\\tTfFxqQdDnpPbBmXrlvS^Zz&LV';
 
-const omniSearch = async (req, query, isGurmukhi) => {
+const omniSearch = async (req, query, isGurmukhi, SourceID, writer) => {
   try {
     let processedQuery = query.trim();
+
+    const activeFilters = [];
+    if (SourceID !== 'a') {
+      activeFilters.push(`Source=${SourceID}`);
+    }
+    if (writer !== null) {
+      activeFilters.push(`Writer=${writer}`);
+    }
 
     const searchParams = {
       limit: 20,
       attributesToRetrieve: ['ID'],
     };
+
+    if (activeFilters.length > 0) {
+      searchParams.filter = activeFilters.join(' AND ');
+    }
 
     if (isGurmukhi) {
       if (query.split('').every(char => GURMUKHI_CHARS.includes(char))) {

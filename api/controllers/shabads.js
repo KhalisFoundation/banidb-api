@@ -184,7 +184,7 @@ exports.search = async (req, res) => {
         conditions.push('v.PageNo = ?');
         parameters.push(searchQuery);
       } else {
-        const omniResults = await omniSearch(req, searchQuery, isGurmukhi);
+        const omniResults = await omniSearch(req, searchQuery, isGurmukhi, SourceID, writer);
         res.json(omniResults);
         return;
       }
