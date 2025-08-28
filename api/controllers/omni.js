@@ -2,15 +2,15 @@ const { MeiliSearch } = require('meilisearch');
 const lib = require('../lib');
 
 const client = new MeiliSearch({
-  host: process.env.MEILI_HOST || 'http://localhost:7700',
-  apiKey: process.env.MEILI_API_KEY || 'master-key',
+  host: process.env.MEILI_HOST,
+  apiKey: process.env.MEILI_API_KEY,
 });
 
 const GURMUKHI_CHARS = 'aAeshkKgG|cCjJ\\tTfFxqQdDnpPbBmXrlvS^Zz&LV';
 
-const omniSearch = async (req, query, isGurmukhi, SourceID, writer) => {
+const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) => {
   try {
-    let processedQuery = query.trim();
+    let processedQuery = query.trim().replaceAll('*', ',');
 
     const activeFilters = [];
     if (SourceID !== 'a') {
@@ -70,7 +70,7 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer) => {
       .map(hit => hit.ID)
       .filter(id => id !== null && id !== undefined);
 
-    const preppedResults = await lib.prepResults(req, verseArray);
+    const preppedResults = await lib.prepResults(req, verseArray, liveSearch);
     return preppedResults;
   } catch (error) {
     console.error('Search error:', error);

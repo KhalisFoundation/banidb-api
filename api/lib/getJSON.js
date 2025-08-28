@@ -218,7 +218,7 @@ const prepAKIndex = row => {
   return akIndexRow;
 };
 
-const prepResults = async (req, verseArray) => {
+const prepResults = async (req, verseArray, liveSearch) => {
   try {
     const output = {
       resultsInfo: {
@@ -273,7 +273,7 @@ const prepResults = async (req, verseArray) => {
         resultsPerPage,
       ]);
 
-      const verses = resultRows.map(verse => prepVerse(verse, true, false));
+      const verses = resultRows.map(verse => prepVerse(verse, true, liveSearch));
 
       return {
         resultsInfo: {
