@@ -43,6 +43,8 @@ BaniDB's vision is to create a single, universally accessible Gurbani Database f
 
 In order to make this vision possible, members of this collaborative effort work to ensure that the platform is selfsustaining, tested, and secure.
 
+BaniDB and SikhiToTheMax now power the captioning you see on live broadcasts from Sri Darbar Sahib Amritsar (Harimandir Sahib, Golden Temple).
+
 # Precision and Recall
 
 BaniDB is the most precise Sikh Gurbani database with over 43,000 corrections/changes (and counting!). It is simply the most accurate database in the world with Sri Guru Granth Sahib Ji data having been checked on numerous occaisions.
@@ -513,6 +515,10 @@ Below is a list of sources used for translations. We have digitized sources via 
   <tr>
     <th> Date       </th>
     <th> Verified Changes  </th>
+  </tr>
+  <tr>
+    <td> 04/13/2024 </td>
+    <td align="right">46,810</td>
   </tr>
   <tr>
     <td> 11/18/2020 </td>
