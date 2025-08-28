@@ -49,7 +49,7 @@ const metadata = {
 };
 
 if (process.env.SSL_CA) {
-  metadata.ssl = { ca: fs.readFileSync(process.env.SSL_CA, 'utf8') };
+  metadata.ssl = { ca: fs.readFileSync(process.env.SSL_CA, 'utf8'), rejectUnauthorized: false };
 }
 
 const standbyMetadata = {
