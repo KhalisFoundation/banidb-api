@@ -34,6 +34,7 @@ exports.search = async (req, res) => {
   let results = parseInt(req.query.results, 10) || 20;
   const sinceDate = req.query.updatedsince ? lib.isValidDatetime(req.query.updatedsince) : null;
   const liveSearch = req.query.livesearch ? parseInt(req.query.livesearch, 10) : 0;
+  const simplify = req.query.simplify ? parseInt(req.query.simplify, 10) === 1 : false;
 
   SourceID = SourceID.substr(0, 1);
 
@@ -76,7 +77,7 @@ exports.search = async (req, res) => {
     searchQuery = searchQuery.replace(/\s+/g, '');
 
     // convert unicode to ascii
-    searchQuery = anvaad.unicode(searchQuery, true);
+    searchQuery = anvaad.unicode(searchQuery, true, simplify);
 
     for (let x = 0, len = searchQuery.length; x < len; x += 1) {
       let charCode = searchQuery.charCodeAt(x);
@@ -130,7 +131,7 @@ exports.search = async (req, res) => {
     } else if (searchType === 2) {
       // Full word (Gurmukhi)
       // convert unicode to ascii
-      searchQuery = anvaad.unicode(searchQuery, true);
+      searchQuery = anvaad.unicode(searchQuery, true, simplify);
 
       const queryObj = lib.searchOperators.fullWordGurmukhiToQuery(searchQuery);
       conditions.push(queryObj.condition);
@@ -159,7 +160,7 @@ exports.search = async (req, res) => {
     } else if (searchType === 6) {
       // Main letters
       // convert unicode to ascii
-      searchQuery = anvaad.unicode(searchQuery, true);
+      searchQuery = anvaad.unicode(searchQuery, true, simplify);
       const words = searchQuery.split(' ').join('%');
 
       const queryObj = lib.searchOperators.mainLettersToQuery(words);
