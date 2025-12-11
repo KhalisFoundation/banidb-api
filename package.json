@@ -45,6 +45,7 @@
     "mariadb": "^2.4.1",
     "meilisearch": "^0.52.0",
     "memory-cache": "^0.2.0",
+    "natural": "^8.1.0",
     "node-fetch": "^2.6.1",
     "swagger-ui-express": "^4.1.3"
   },

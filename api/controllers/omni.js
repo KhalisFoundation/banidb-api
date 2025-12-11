@@ -1,5 +1,9 @@
 const { MeiliSearch } = require('meilisearch');
+const natural = require('natural');
+
 const lib = require('../lib');
+
+const metaphone = new natural.Metaphone();
 
 const client = new MeiliSearch({
   host: process.env.MEILI_HOST,
@@ -11,6 +15,7 @@ const GURMUKHI_CHARS = 'aAeshkKgG|cCjJ\\tTfFxqQdDnpPbBmXrlvS^Zz&LV';
 const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) => {
   try {
     let processedQuery = query.trim().replaceAll('*', ',');
+    let results = [];
 
     const activeFilters = [];
     if (SourceID !== 'a') {
@@ -22,7 +27,8 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
 
     const searchParams = {
       limit: 20,
-      attributesToRetrieve: ['ID'],
+      attributesToRetrieve: ['ID', 'RankingScore'],
+      showRankingScore: true,
     };
 
     if (activeFilters.length > 0) {
@@ -41,6 +47,13 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
       } else {
         searchParams.attributesToSearchOn = ['FirstLetterStr', 'MainLetters', 'Gurmukhi'];
       }
+    } else if (processedQuery.includes(' ')) {
+      searchParams.attributesToSearchOn = [
+        'Phonetic',
+        'Translation_bdb',
+        'Translation_ms',
+        'Translation_ssk',
+      ];
     } else {
       searchParams.attributesToSearchOn = [
         'FirstLetterEng',
@@ -50,25 +63,42 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
       ];
     }
 
-    let results = await client.index('verses').search(processedQuery || '', searchParams);
-    if (!isGurmukhi && results.estimatedTotalHits === 0) {
+    const resultsSimple = await client.index('verses').search(processedQuery || '', searchParams);
+
+    if (!isGurmukhi && processedQuery.includes(' ')) {
+      const phoneticQuery = metaphone.process(processedQuery);
+      const phoneticParams = {
+        limit: 20,
+        attributesToRetrieve: ['ID', 'RankingScore'],
+        attributesToSearchOn: ['Phonetic', 'Transliteration'],
+        showRankingScore: true,
+      };
+      const resultsPhonetic = await client.index('verses').search(phoneticQuery, phoneticParams);
+
       const words = (processedQuery || '')
         .trim()
         .split(/\s+/)
         .filter(Boolean);
       const firstLetters = words.map(w => w[0]).join('');
-      if (firstLetters) {
-        const fallbackParams = {
-          limit: 20,
-          attributesToRetrieve: ['ID'],
-          attributesToSearchOn: ['FirstLetterEng'],
-        };
-        results = await client.index('verses').search(firstLetters, fallbackParams);
-      }
+      const firstLettersParams = {
+        limit: 20,
+        attributesToRetrieve: ['ID', 'RankingScore'],
+        attributesToSearchOn: ['FirstLetterEng'],
+        showRankingScore: true,
+      };
+      const resultsFirstLetters = await client
+        .index('verses')
+        .search(firstLetters, firstLettersParams);
+
+      results = [...resultsSimple.hits, ...resultsPhonetic.hits, ...resultsFirstLetters.hits].sort(
+        // eslint-disable-next-line no-underscore-dangle
+        (a, b) => (b._rankingScore || 0) - (a._rankingScore || 0),
+      );
+    } else {
+      results = resultsSimple.hits;
     }
-    const verseArray = results.hits
-      .map(hit => hit.ID)
-      .filter(id => id !== null && id !== undefined);
+
+    const verseArray = results.map(hit => hit.ID).filter(id => id !== null && id !== undefined);
 
     const preppedResults = await lib.prepResults(req, verseArray, liveSearch);
     return preppedResults;
