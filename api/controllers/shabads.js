@@ -582,7 +582,7 @@ const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
         AND v.SourceID = ?
         ${sinceQuery}
         ${allColumnsWhere}
-      ORDER BY PageNo,v.LineNo ASC, ShabadID ASC, v.ID ASC`;
+      ORDER BY PageNo,v.LineNo ASC, v.ID ASC`;
 
     const rows = await conn.query(q, parameters);
     if (rows.length > 0 && PageNoQuery.totalPages === 1) {
