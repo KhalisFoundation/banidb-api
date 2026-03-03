@@ -25,7 +25,7 @@ const port = process.env.NODE_ENV === 'development' ? '3001' : '3000';
 // database
 if (config.length > 1) {
   const dbCluster = createPoolCluster();
-  config.forEach(dbConfig => dbCluster.add(dbConfig.host, dbConfig));
+  config.forEach((dbConfig) => dbCluster.add(dbConfig.host, dbConfig));
   app.locals.pool = dbCluster.of(/.*?/, 'ORDER');
 } else {
   app.locals.pool = createPool(config[0]);
