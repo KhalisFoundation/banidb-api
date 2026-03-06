@@ -1,9 +1,7 @@
 const { MeiliSearch } = require('meilisearch');
-const natural = require('natural');
 
 const lib = require('../lib');
-
-const metaphone = new natural.DoubleMetaphone();
+const { preprocessGurbaniRoman, convertToPhonetic, searchRank } = require('./phonetic-helpers');
 
 const client = new MeiliSearch({
   host: process.env.MEILI_HOST,
@@ -11,69 +9,6 @@ const client = new MeiliSearch({
 });
 
 const GURMUKHI_CHARS = 'aAeshkKgG|cCjJ\\tTfFxqQdDnpPbBmXrlvS^Zz&LV';
-
-const preprocessGurbaniRoman = (text) =>
-  text
-    .toLowerCase()
-    .trim()
-
-    // ── Vowel normalization ──────────────────────────────
-    // Long/doubled vowels → short
-    .replace(/aa+/g, 'a') // naam → nam, saas → sas
-    .replace(/ee+/g, 'i') // teerath → tirath
-    .replace(/oo+/g, 'u') // soorat → surat
-    .replace(/ii+/g, 'i')
-    .replace(/uu+/g, 'u')
-
-    // Schwa variations
-    .replace(/ae/g, 'e') // vaegaa → vega
-    .replace(/ai/g, 'e') // main → men
-    .replace(/ao/g, 'o')
-    .replace(/au/g, 'o') // aukh → okh
-
-    // ── Consonant normalization ──────────────────────────
-    // Retroflex/dental collapse (rr, tt, dd, nn, ll → single)
-    .replace(/([tdrnl])\1+/g, '$1') // thakurr→thakur, maangee→mangi etc.
-
-    // Hard aspirates: kh, gh, ch, jh, th, dh, ph, bh
-    // Keep as-is — they carry meaning in Punjabi
-    // BUT collapse doubled versions
-    .replace(/([kgcjtdpb])h\1h/g, '$1h') // tthh → th
-
-    // Nasalization marks often written as ng/n/m interchangeably
-    .replace(/ng(?=[^aeiou])/g, 'n') // sang → san (before consonant)
-    .replace(/(?<=[aeiou])m(?=[^aeiou])/g, 'n') // optional: treat trailing m/n as same
-
-    // w / v interchangeable in Punjabi transliteration
-    .replace(/w/g, 'v')
-
-    // Common spelling variants
-    .replace(/qu/g, 'k')
-    .replace(/x/g, 'ks')
-
-    // ── Strip punctuation/extra spaces ──────────────────
-    .replace(/[^a-z\s]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-const convertToPhonetic = (text) => {
-  const primary = [];
-  const secondary = [];
-
-  preprocessGurbaniRoman(text)
-    .split(' ')
-    .forEach((word) => {
-      const [p1, p2] = metaphone.process(word);
-
-      if (p1) primary.push(p1);
-      if (p2) secondary.push(p2);
-    });
-
-  return {
-    PhoneticPrimary: primary.join(' '),
-    PhoneticSecondary: secondary.join(' '),
-  };
-};
 
 const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) => {
   try {
@@ -99,13 +34,13 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
     }
 
     if (isGurmukhi) {
-      if (query.split('').every((char) => GURMUKHI_CHARS.includes(char))) {
-        processedQuery = '';
-        query.split('').forEach((q) => {
-          const code = q.charCodeAt(0);
-          const padded = code.toString().padStart(3, '0');
-          processedQuery += `${padded},`;
-        });
+      const isStrictGurmukhi = query.split('').every((char) => GURMUKHI_CHARS.includes(char));
+      if (isStrictGurmukhi) {
+        processedQuery = query
+          .split('')
+          .map((char) => char.charCodeAt(0).toString().padStart(3, '0'))
+          .join(',');
+        processedQuery += ',';
         searchParams.attributesToSearchOn = ['FirstLetterChar'];
       } else {
         searchParams.attributesToSearchOn = [
@@ -115,52 +50,74 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
           'GurmukhiUnicode',
         ];
       }
-    } else if (processedQuery.includes(' ')) {
-      searchParams.attributesToSearchOn = [
-        'Translation_bdb',
-        'Translation_ms',
-        'Translation_ssk',
-        'Transliteration',
-      ];
     } else {
-      searchParams.attributesToSearchOn = [
-        'FirstLetterEng',
-        'Translation_bdb',
-        'Translation_ms',
-        'Translation_ssk',
-      ];
+      const isSingleWord = !processedQuery.includes(' ');
+      const translationAttrs = ['Translation_bdb', 'Translation_ms', 'Translation_ssk'];
+
+      if (isSingleWord) {
+        searchParams.attributesToSearchOn = ['FirstLetterEng', ...translationAttrs];
+      } else {
+        searchParams.attributesToSearchOn = [...translationAttrs];
+        searchParams.attributesToRetrieve = ['ID', 'RankingScore'];
+      }
     }
 
     const resultsSimple = await client.index('verses').search(processedQuery || '', searchParams);
 
     if (!isGurmukhi && processedQuery.includes(' ')) {
       const { PhoneticPrimary } = convertToPhonetic(processedQuery);
-      const primaryParams = {
-        limit: 20,
-        attributesToRetrieve: ['ID', 'RankingScore'],
-        attributesToSearchOn: ['PhoneticPrimary', 'PhoneticSecondary'],
+      const processedPhonetic = preprocessGurbaniRoman(processedQuery);
+      const words = (processedQuery || '').trim().split(/\s+/).filter(Boolean);
+      const firstLetters = words.map((w) => w[0]).join('');
+
+      const manualParams = {
+        limit: 40,
+        attributesToRetrieve: ['ID', 'RankingScore', 'ManualPhonetic'],
+        attributesToSearchOn: ['ManualPhonetic', 'Transliteration'],
         showRankingScore: true,
         matchingStrategy: 'all',
       };
-      const resultsPhonetic = await client.index('verses').search(PhoneticPrimary, primaryParams);
 
-      const words = (processedQuery || '').trim().split(/\s+/).filter(Boolean);
-      const firstLetters = words.map((w) => w[0]).join('');
+      const phonticParams = {
+        limit: 40,
+        attributesToRetrieve: ['ID', 'RankingScore', 'Phonetic'],
+        attributesToSearchOn: ['Phonetic'],
+        showRankingScore: true,
+        matchingStrategy: 'frequency',
+      };
+
       const firstLettersParams = {
-        limit: 20,
-        attributesToRetrieve: ['ID', 'RankingScore'],
+        limit: 10,
+        attributesToRetrieve: ['ID', 'RankingScore', 'FirstLetterEng'],
         attributesToSearchOn: ['FirstLetterEng'],
         showRankingScore: true,
         matchingStrategy: 'all',
       };
-      const resultsFirstLetters = await client
-        .index('verses')
-        .search(firstLetters, firstLettersParams);
 
-      results = [...resultsSimple.hits, ...resultsPhonetic.hits, ...resultsFirstLetters.hits].sort(
-        // eslint-disable-next-line no-underscore-dangle
-        (a, b) => (b._rankingScore || 0) - (a._rankingScore || 0),
-      );
+      const multipleSearches = await client.multiSearch({
+        queries: [
+          {
+            q: processedPhonetic,
+            indexUid: 'verses',
+            ...manualParams,
+            showRankingScoreDetails: true,
+          },
+          {
+            q: PhoneticPrimary.replaceAll(' ', ''),
+            indexUid: 'verses',
+            ...phonticParams,
+            showRankingScoreDetails: true,
+          },
+          {
+            q: firstLetters,
+            indexUid: 'verses',
+            ...firstLettersParams,
+            showRankingScoreDetails: true,
+          },
+        ],
+      });
+
+      results = searchRank(PhoneticPrimary, multipleSearches.results);
     } else {
       results = resultsSimple.hits;
     }
