@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 const { MeiliSearch } = require('meilisearch');
 
 const lib = require('../lib');
@@ -117,7 +119,10 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
         ],
       });
 
-      results = searchRank(PhoneticPrimary, multipleSearches.results);
+      const phoneticResults = searchRank(PhoneticPrimary, multipleSearches.results);
+      results = [...resultsSimple.hits, ...phoneticResults].sort(
+        (a, b) => b._rankingScore - a._rankingScore,
+      );
     } else {
       results = resultsSimple.hits;
     }
