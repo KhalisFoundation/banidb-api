@@ -1,170 +1,268 @@
 /* eslint-disable no-underscore-dangle */
+
+/**
+ * phonetic-helpers.js — Punjabi romanization search helpers
+ *
+ * Three-layer approach:
+ *   Layer 1 — normalizePunjabiRoman():  colloquial ↔ academic bridging
+ *   Layer 2 — toConsonantSkeleton():    vowel-stripped fallback for heavy variants
+ *   Layer 3 — phraseScore():            Jaro-Winkler word similarity for re-ranking
+ */
+
 const natural = require('natural');
 
-const metaphone = new natural.DoubleMetaphone();
-
-const preprocessGurbaniRoman = (text) =>
-  text
+// ─────────────────────────────────────────────────────────────────────────────
+// LAYER 1 — PUNJABI ROMANIZATION NORMALIZER
+// ─────────────────────────────────────────────────────────────────────────────
+const normalizePunjabiRoman = (text) => {
+  if (!text) return '';
+  return text
     .toLowerCase()
     .trim()
 
-    // ── Vowel normalization ──────────────────────────────
-    // Long/doubled vowels → short
-    .replace(/aa+/g, 'a') // naam → nam, saas → sas
-    .replace(/ee+/g, 'i') // teerath → tirath
-    .replace(/oo+/g, 'u') // soorat → surat
-    .replace(/ii+/g, 'i')
+    // ── 1. Strip non-alpha FIRST ──────────────────────────────────────────────
+    // Transliterations contain ||, digits, parentheses — remove them before
+    // any phonetic rules so they don't interfere with h-stripping or
+    // vowel patterns.  E.g. "dha(n)n" → "dhann" → dedup → "dhan"
+    .replace(/[^a-z\s]/g, '')
+
+    // ── 2. H-stripping (BEFORE vowel collapse) ───────────────────────────────
+    //
+    // This MUST happen before vowel digraph collapse. 
+    //
+    // Academic transliteration uses 'h' as:
+    //   a) aspirate marker:  kh, gh, th, dh, ph, bh, chh
+    //   b) syllable separator: mahagee (h between vowels)
+    //   c) vowel lengthener:  naahu → nau
+    //
+    // Strip h between two vowels (case b):
+    .replace(/([aeiou])h([aeiou])/g, '$1$2')
+    // Strip h after vowel before consonant or end (case c):
+    .replace(/([aeiou])h(?=[^aeiou]|$)/g, '$1')
+
+    // ── 3. Long / repeated vowels → short ────────────────────────────────────
+    // After h-stripping, new doubles may appear: mahagee → maagee → here → magee
+    .replace(/aa+/g, 'a')         // naam → nam,  maagee → magee
+    .replace(/ee+/g, 'i')         // magee → magi, teerath → tirath
+    .replace(/oo+/g, 'u')         // soorat → surat
+    .replace(/ii+/g, 'i')         // lii → li
     .replace(/uu+/g, 'u')
 
-    // Schwa variations
-    .replace(/ae/g, 'e') // vaegaa → vega
-    .replace(/ai/g, 'e') // main → men
-    .replace(/ao/g, 'o')
-    .replace(/au/g, 'o') // aukh → okh
+    // ── 4. Vowel digraph collapse ─────────────────────────────────────────────
+    // Map romanization variants to base vowels: a / i / u
+    .replace(/ei/g, 'i')          // mein → min  (ਮੈਂ)
+    .replace(/ai/g, 'i')          // main → min,  saTai → saTi
+    .replace(/ae/g, 'i')          // saibha(n) → sibhan
+    .replace(/ay/g, 'i')          // satay → sati
+    .replace(/ey/g, 'i')          // tey → ti  (ਤੇ)
+    .replace(/ao/g, 'u')
+    .replace(/au/g, 'u')          // aukh → ukh  (ਔਖ),  tau → tu
+    .replace(/aw/g, 'u')
+    .replace(/oa/g, 'u')
+    .replace(/oe/g, 'u')
+    .replace(/ou/g, 'u')
 
-    // ── Consonant normalization ──────────────────────────
-    // Retroflex/dental collapse (rr, tt, dd, nn, ll → single)
-    .replace(/([tdrnl])\1+/g, '$1') // thakurr→thakur, maangee→mangi etc.
+    // ── 5. Collapse standalone o → u ──────────────────────────────────────────
+    // In Gurmukhi romanization, ੋ (hora, "o") and ੁ/ੂ (aunkar/dulainkar, "u")
+    // are distinct vowels, but colloquial writers interchange them freely.
+    // E.g. "toh" → "to" after h-strip, but "tau" → "tu" after digraph collapse.
+    // Without this rule they'd stay divergent.
+    .replace(/o/g, 'u')
 
-    // Hard aspirates: kh, gh, ch, jh, th, dh, ph, bh
-    // Keep as-is — they carry meaning in Punjabi
-    // BUT collapse doubled versions
-    .replace(/([kgcjtdpb])h\1h/g, '$1h') // tthh → th
+    // ── 6. Aspirate simplification ────────────────────────────────────────────
+    // ph / bh are almost universally collapsed in colloquial writing.
+    // kh / gh / th / dh are more distinctive — kept for now.
+    .replace(/ph/g, 'p')          // phul → pul,  phir → pir
+    .replace(/bh/g, 'b')          // bhavsagar → bavsagar
 
-    // Nasalization marks often written as ng/n/m interchangeably
-    .replace(/ng(?=[^aeiou])/g, 'n') // sang → san (before consonant)
-    .replace(/(?<=[aeiou])m(?=[^aeiou])/g, 'n') // optional: treat trailing m/n as same
+    // ── 7. Nasal normalization ────────────────────────────────────────────────
+    // ਂ (bindi) romanized as m, n, ng, nh, ṃ — collapse to 'n'
+    .replace(/ng(?=[^aeiou]|$)/g, 'n')  // sang → san
+    .replace(/m(?=[^aeiou\s]|$)/g, 'n') // pre-consonant/terminal m → n
+    .replace(/nh/g, 'n')
 
-    // w / v interchangeable in Punjabi transliteration
-    .replace(/w/g, 'v')
-
-    // Common spelling variants
+    // ── 8. Consonant variant normalization ───────────────────────────────────
+    .replace(/w/g, 'v')           // waheguru → vaheguru
+    .replace(/z/g, 's')
     .replace(/qu/g, 'k')
     .replace(/x/g, 'ks')
 
-    // ── Strip punctuation/extra spaces ──────────────────
-    .replace(/[^a-z\s]/g, '')
+    // ── 9. Y normalization ────────────────────────────────────────────────────
+    .replace(/y(?=[aeiou])/g, '') // yaar → ar
+    .replace(/([aeiou])y/g, '$1i') // layi → laii
+
+    // ── 10. Dedup repeated characters (catches doubles from all transforms) ──
+    .replace(/([a-z])\1+/g, '$1')
+
+    // ── 11. Final whitespace cleanup ──────────────────────────────────────────
     .replace(/\s+/g, ' ')
     .trim();
+};
 
-const convertToPhonetic = (text) => {
-  const primary = [];
-  const secondary = [];
-
-  preprocessGurbaniRoman(text)
+// ─────────────────────────────────────────────────────────────────────────────
+// LAYER 2 — CONSONANT SKELETON
+// ─────────────────────────────────────────────────────────────────────────────
+const toConsonantSkeleton = (normalizedText) =>
+  normalizedText
     .split(' ')
-    .forEach((word) => {
-      const [p1, p2] = metaphone.process(word);
+    .map((word) => {
+      const stripped = word.replace(/[aeiou]/g, '');
+      return stripped || word[0] || '';
+    })
+    .join(' ');
 
-      if (p1) primary.push(p1);
-      if (p2) secondary.push(p2);
-    });
+// ─────────────────────────────────────────────────────────────────────────────
+// LAYER 3 — PHRASE-LEVEL JARO-WINKLER RE-RANKING
+// ─────────────────────────────────────────────────────────────────────────────
+const jaroWinkler = (s1, s2) =>
+  natural.JaroWinklerDistance(s1, s2, { ignoreCase: true });
+
+/**
+ * Score how well `queryNorm` (normalized user query) matches `docNorm`
+ * (normalized stored ManualPhonetic field).
+ *
+ * Returns 0.0 – 1.0
+ */
+const phraseScore = (queryNorm, docNorm) => {
+  if (!queryNorm || !docNorm) return 0;
+
+  const qWords = queryNorm.split(' ').filter(Boolean);
+  const dWords = docNorm.split(' ').filter(Boolean);
+
+  if (qWords.length === 0 || dWords.length === 0) return 0;
+
+  let totalSim = 0;
+  let matchedCount = 0;
+  const usedDocIndices = new Set();
+
+  for (const qWord of qWords) {
+    let bestSim = 0;
+    let bestIdx = -1;
+
+    for (let i = 0; i < dWords.length; i++) {
+      if (usedDocIndices.has(i)) continue;
+      const sim = jaroWinkler(qWord, dWords[i]);
+      if (sim > bestSim) {
+        bestSim = sim;
+        bestIdx = i;
+      }
+    }
+
+    // FIX: Lowered threshold from 0.72 to 0.65
+    // Old threshold rejected valid matches on short words:
+    //   JW("to","tu") = 0.70 → was rejected, causing coverage to tank
+    // Short normalized Punjabi words (2-3 chars) naturally produce
+    // lower JW scores even for genuine matches.
+    if (bestSim >= 0.65) {
+      totalSim += bestSim;
+      matchedCount++;
+      if (bestIdx >= 0) usedDocIndices.add(bestIdx);
+    }
+  }
+
+  if (matchedCount === 0) return 0;
+
+  const avgSim = totalSim / matchedCount;
+  const coverage = matchedCount / qWords.length;
+
+  return avgSim * coverage;
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INDEX-TIME FIELD GENERATOR
+// ─────────────────────────────────────────────────────────────────────────────
+const generatePhoneticFields = (transliteration) => {
+  if (!transliteration) {
+    return {
+      ManualPhonetic: '',
+      ConsonantSkeleton: '',
+      PhoneticPrimary: '',
+      PhoneticSecondary: '',
+      Phonetic: '',
+    };
+  }
+
+  const normalized = normalizePunjabiRoman(transliteration);
+  const skeleton = toConsonantSkeleton(normalized);
 
   return {
-    PhoneticPrimary: primary.join(' '),
-    PhoneticSecondary: secondary.join(' '),
+    ManualPhonetic: normalized,
+    ConsonantSkeleton: skeleton,
+    PhoneticPrimary: normalized,
+    PhoneticSecondary: skeleton,
+    Phonetic: normalized.replace(/\s+/g, ''),
   };
 };
 
-const phoneticBoost = (
-  query,
-  db,
-  { streakWeight = 0.5, streakCap = 4, gapThreshold = 2, gapPenaltyFactor = 0.4 } = {},
-) => {
-  // ── Step 1: Greedy alignment ──────────────────────────────────
-  const { matchedDbIndices } = query.split('').reduce(
-    (acc, qChar) => {
-      const matchIndex = db.indexOf(qChar, acc.dbPos);
-      if (matchIndex === -1) return acc;
-      return {
-        dbPos: matchIndex + 1,
-        matchedDbIndices: [...acc.matchedDbIndices, matchIndex],
-      };
-    },
-    { dbPos: 0, matchedDbIndices: [] },
-  );
+// ─────────────────────────────────────────────────────────────────────────────
+// SEARCH RESULT MERGING & RE-RANKING
+// ─────────────────────────────────────────────────────────────────────────────
 
-  if (matchedDbIndices.length === 0) return 0.0;
+/**
+ * @param {string}   userQuery     Raw user query (un-normalized)
+ * @param {object[]} meiliResults  Array of Meili result sets from multiSearch
+ *   Expects: [manualResults, skeletonResults, firstLetterResults]
+ * @returns {object[]} Merged and re-ranked hit array
+ */
+const searchRank = (userQuery, meiliResults) => {
+  const [manualResults, skeletonResults, firstLetterResults] = meiliResults;
 
-  // ── Step 2: Score the alignment ───────────────────────────────
-  const { rawScore } = matchedDbIndices.reduce(
-    (acc, di, i) => {
-      const baseScore = acc.rawScore + 1.0;
-
-      if (i === 0) return { rawScore: baseScore, streak: 0 };
-
-      const gap = di - matchedDbIndices[i - 1] - 1;
-
-      if (gap === 0) {
-        const newStreak = Math.min(acc.streak + 1, streakCap);
-        return { rawScore: baseScore + streakWeight * newStreak, streak: newStreak };
-      }
-
-      if (gap <= gapThreshold) {
-        return { rawScore: baseScore, streak: 0 };
-      }
-
-      const penalty = gapPenaltyFactor * Math.log(1 + gap - gapThreshold);
-      return { rawScore: baseScore - penalty, streak: 0 };
-    },
-    { rawScore: 0.0, streak: 0 },
-  );
-
-  // ── Step 3: Compute ratios ────────────────────────────────────
-  const matchedCount = matchedDbIndices.length;
-  const normalizedRaw = rawScore / matchedCount;
-  const globalCoverage = matchedCount / db.length;
-  const queryUtilization = matchedCount / query.length;
-
-  // ── Final boost ───────────────────────────────────────────────
-  return normalizedRaw * globalCoverage * queryUtilization;
-};
-
-const searchRank = (phoneticQuery, results) => {
-  const [manualResults, phoneticResults, firstLettersResults] = results;
+  const userNorm = normalizePunjabiRoman(userQuery);
 
   const combinedResults = new Map();
 
-  manualResults.hits.forEach((result) => {
-    if (!combinedResults.has(result.ID)) {
-      combinedResults.set(result.ID, result);
-    }
-  });
+  const upsert = (result, baseScore) => {
+    const docNorm = result.ManualPhonetic || '';
+    const sim = phraseScore(userNorm, docNorm);
 
-  phoneticResults.hits.forEach((result) => {
-    const boost = phoneticBoost(phoneticQuery.replace(' ', ''), result.Phonetic);
+    // sim=1.0 → 3× boost,  sim=0.5 → 2× boost,  sim=0 → 1× (no change)
+    const boosted = baseScore * (1 + sim * 2);
+
     if (!combinedResults.has(result.ID)) {
       combinedResults.set(result.ID, {
         ...result,
-        _rankingScore: result._rankingScore + boost,
+        _rankingScore: boosted,
+        _simScore: sim,
       });
     } else {
-      const existingResult = combinedResults.get(result.ID);
+      const existing = combinedResults.get(result.ID);
       combinedResults.set(result.ID, {
-        ...result,
-        _rankingScore: existingResult._rankingScore + result._rankingScore + boost,
+        ...existing,
+        _rankingScore: existing._rankingScore + boosted,
+        _simScore: Math.max(existing._simScore, sim),
       });
     }
-  });
+  };
 
-  firstLettersResults.hits.forEach((result) => {
-    if (!combinedResults.has(result.ID)) {
-      combinedResults.set(result.ID, result);
-    } else {
-      const existingResult = combinedResults.get(result.ID);
-      combinedResults.set(result.ID, {
-        ...result,
-        _rankingScore: existingResult._rankingScore + result._rankingScore,
-      });
-    }
-  });
+  // Search 1: Normalized romanization (highest weight)
+  if (manualResults?.hits) {
+    manualResults.hits.forEach((r) => upsert(r, r._rankingScore));
+  }
 
-  return Array.from(combinedResults.values()).sort((a, b) => b._rankingScore - a._rankingScore);
+  // Search 2: Consonant skeleton (slight downweight)
+  if (skeletonResults?.hits) {
+    skeletonResults.hits.forEach((r) => upsert(r, r._rankingScore * 0.7));
+  }
+
+  // Search 3: FirstLetterEng fallback
+  // These results don't have ManualPhonetic, so JW sim will be 0 and
+  // boosted = baseScore * 1.  That's fine — they're a low-priority fallback.
+  if (firstLetterResults?.hits) {
+    firstLetterResults.hits.forEach((r) => upsert(r, r._rankingScore * 0.4));
+  }
+
+  return Array.from(combinedResults.values()).sort(
+    (a, b) => b._rankingScore - a._rankingScore,
+  );
 };
 
 module.exports = {
-  preprocessGurbaniRoman,
-  convertToPhonetic,
-  phoneticBoost,
+  normalizePunjabiRoman,
+  toConsonantSkeleton,
+  generatePhoneticFields,
+  phraseScore,
   searchRank,
+  // Backward-compatible aliases
+  preprocessGurbaniRoman: normalizePunjabiRoman,
+  convertToPhonetic: generatePhoneticFields,
 };
