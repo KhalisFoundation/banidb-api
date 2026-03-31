@@ -46,7 +46,7 @@ LEFT JOIN Writer w USING(WriterID)
 LEFT JOIN Raag r USING(RaagID)
 LEFT JOIN Source src USING(SourceID)`;
 
-const getAll = async req => {
+const getAll = async (req) => {
   let conn;
   try {
     conn = await req.app.locals.pool.getConnection();
@@ -54,7 +54,7 @@ const getAll = async req => {
       'SELECT ID, Token as token, Gurmukhi as gurmukhi, GurmukhiUni as gurmukhiUni, Transliterations as transliterations, Updated as updated FROM Banis WHERE ID < 1000 ORDER BY ID ASC';
     const rows = await conn.query(q, []);
 
-    return { rows: rows.map(banis => lib.prepBanis(banis)) };
+    return { rows: rows.map((banis) => lib.prepBanis(banis)) };
   } catch (err) {
     throw new Error(err);
   } finally {
@@ -115,7 +115,7 @@ const prepResults = ({ rows, exists, BaniID }) => {
     writer: lib.getWriter(rows[0]),
   };
 
-  const verses = rows.map(row => prepBaniVerse(row, exists));
+  const verses = rows.map((row) => prepBaniVerse(row, exists));
 
   return {
     baniInfo,

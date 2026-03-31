@@ -1,5 +1,5 @@
 const os = require('os');
-const graphqlHTTP = require('express-graphql');
+const { createHandler } = require('graphql-http/lib/use/express');
 const { Router } = require('express');
 const limiter = require('../controllers/limiter');
 const pjson = require('../../package.json');
@@ -78,31 +78,16 @@ route.get('/raags', limiter.rate100, metadata.raags);
 
 route.get('/sources', limiter.rate100, metadata.sources);
 
-// Graphql Routes
-route.post(
-  '/graphql',
-  graphqlHTTP((req, res) => ({
-    schema,
-    rootValue: resolvers,
-    graphiql: false,
-    context: {
-      req,
-      res,
-    },
-  })),
-);
-
-route.get(
-  '/graphql',
-  graphqlHTTP((req, res) => ({
-    schema,
-    rootValue: resolvers,
-    graphiql: true,
-    context: {
-      req,
-      res,
-    },
-  })),
-);
+// Graphql Routes (graphql-http: GET for queries, POST for mutations; no built-in GraphiQL)
+const graphqlHandler = createHandler({
+  schema,
+  rootValue: resolvers,
+  context: (request) => ({
+    req: request.raw,
+    res: request.context && request.context.res,
+  }),
+});
+route.post('/graphql', graphqlHandler);
+route.get('/graphql', graphqlHandler);
 
 module.exports = route;
