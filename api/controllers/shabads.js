@@ -157,7 +157,7 @@ exports.search = async (req, res) => {
           END
         ) ASC,
      `;
-      parameters.push(searchQuery, `${searchQuery}%`);
+      parameters.push(searchQuery, searchQuery);
 
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 4) {
