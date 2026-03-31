@@ -148,6 +148,17 @@ exports.search = async (req, res) => {
       conditions.push(queryObj.condition);
       parameters.push(...queryObj.parameters);
 
+      orderBy = `
+        MIN(
+          CASE
+            WHEN t.token REGEXP CONCAT('^', ?, '[.,;:!?]?$')  THEN 1
+            WHEN t.token REGEXP CONCAT('^', ?)                THEN 2
+            ELSE 3
+          END
+        ) ASC,
+     `;
+      parameters.push(searchQuery, `${searchQuery}%`);
+
       groupBy = 'GROUP BY v.ID';
     } else if (searchType === 4) {
       const queryObj = lib.searchOperators.fullWordRomanizedToQuery(searchQuery);
