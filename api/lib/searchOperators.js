@@ -99,7 +99,7 @@ const generateBindiQuery = queryObj => {
 
   return {
     ...queryObj,
-    condition: `${queryObj.condition} OR ${queryObj.condition}`,
+    condition: `(${queryObj.condition} OR ${queryObj.condition})`,
     parameters: [...queryObj.parameters, ...updatedBindiQueries],
   };
 };
