@@ -6,6 +6,10 @@ const cors = require('cors');
 const cacheControl = require('express-cache-controller');
 const { createPool, createPoolCluster } = require('mariadb');
 const swaggerUi = require('swagger-ui-express');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const config = require('./api/config');
 const routes = require('./api/routes');
 const swaggerDocument = require('./swagger.json');
