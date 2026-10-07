@@ -16,7 +16,7 @@ const lib = {
     }
     res.status(code).json(ret);
   },
-  isListOfNumbers: str => {
+  isListOfNumbers: (str) => {
     if (typeof str !== 'string') {
       return false;
     }
@@ -30,7 +30,7 @@ const lib = {
 
     return false;
   },
-  isRangeOfNumbers: str => {
+  isRangeOfNumbers: (str) => {
     if (typeof str !== 'string') {
       return false;
     }
@@ -44,12 +44,13 @@ const lib = {
 
     return false;
   },
-  isValidDatetime: str => {
+  isValidDatetime: (str) => {
     if (typeof str !== 'string') {
       return null;
     }
 
-    const mariadbDateTimeRegEx = /^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?(.[0-9]{1,6})?$/;
+    const mariadbDateTimeRegEx =
+      /^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?(.[0-9]{1,6})?$/;
 
     if (str.match(mariadbDateTimeRegEx)) {
       return str;

@@ -2,18 +2,17 @@ const { RateLimiter } = require('limiter');
 const cache = require('memory-cache');
 
 const isLimited = (req, res, next, rate) => {
-  if (cache.get(req.ip)) {
-    const cachedLimiter = cache.get(req.ip);
-    if (cachedLimiter.getTokensRemaining() > 1) {
-      cachedLimiter.removeTokens(1, () => {});
-      cache.put(req.ip, cachedLimiter, 10000);
-      return next();
-    }
-    return res.status(429).send('Too Many Requests');
+  let cachedLimiter = cache.get(req.ip);
+  if (!cachedLimiter) {
+    // limiter v2: constructor takes { tokensPerInterval, interval }
+    cachedLimiter = new RateLimiter({ tokensPerInterval: rate, interval: 'minute' });
+    cache.put(req.ip, cachedLimiter, 10000);
   }
-  const cachedLimiter = new RateLimiter(rate, 'minute');
-  cache.put(req.ip, cachedLimiter, 10000);
-  return next();
+  // tryRemoveTokens is sync and returns true if a token was consumed
+  if (cachedLimiter.tryRemoveTokens(1)) {
+    return next();
+  }
+  return res.status(429).send('Too Many Requests');
 };
 
 module.exports = {

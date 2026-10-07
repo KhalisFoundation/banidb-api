@@ -250,7 +250,7 @@ exports.search = async (req, res) => {
         resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${
           req.path
         }?${Object.keys(req.query)
-          .map(key => `${key}=${encodeURIComponent(req.query[key])}`)
+          .map((key) => `${key}=${encodeURIComponent(req.query[key])}`)
           .join('&')}`;
       }
       const rows = await conn.query(`${q} LIMIT ?, ?`, [
@@ -258,7 +258,7 @@ exports.search = async (req, res) => {
         (page - 1) * results,
         results,
       ]);
-      const verses = rows.map(verse => lib.prepVerse(verse, true, liveSearch));
+      const verses = rows.map((verse) => lib.prepVerse(verse, true, liveSearch));
       resultsInfo.pageResults = verses.length;
       res.json({
         resultsInfo,
@@ -316,7 +316,7 @@ exports.resultsInfo = async (req, res) => {
           resultsInfo.pages.nextPage = `${req.protocol}://${req.get('host')}${req.baseUrl}${
             req.path
           }?${Object.keys(req.query)
-            .map(key => `${key}=${encodeURIComponent(req.query[key])}`)
+            .map((key) => `${key}=${encodeURIComponent(req.query[key])}`)
             .join('&')}`;
         }
         const rows = await conn.query(`${q} LIMIT ?, ?`, [
@@ -325,7 +325,7 @@ exports.resultsInfo = async (req, res) => {
           (page - 1) * results,
           results,
         ]);
-        const verses = rows.map(verse => lib.prepVerse(verse, true, false));
+        const verses = rows.map((verse) => lib.prepVerse(verse, true, false));
         resultsInfo.pageResults = verses.length;
         res.json({
           resultsInfo,
@@ -485,7 +485,7 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
   new Promise((resolve, reject) => {
     req.app.locals.pool
       .getConnection()
-      .then(conn => {
+      .then((conn) => {
         const parameters = [...ShabadIDQ];
         const ShabadIDQLength = ShabadIDQ.length;
         const tokens = new Array(ShabadIDQLength).fill('?').join(',');
@@ -509,7 +509,7 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
 
         conn
           .query(q, parameters)
-          .then(async rows => {
+          .then(async (rows) => {
             if (rows.length > 0 && ShabadIDQLength === 1 && forceMulti === false) {
               // single shabad
               const retShabad = await getShabadSingle(req, res, rows);
@@ -522,7 +522,7 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
               };
               let curShabadID = -1;
               let counter = 0;
-              rows.forEach(row => {
+              rows.forEach((row) => {
                 if (row.ShabadID !== curShabadID) {
                   curShabadID = row.ShabadID;
                   output.shabadIds.push(curShabadID);
@@ -531,7 +531,7 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
                 output.shabads[counter].push(row);
               });
 
-              const outputShabadPromises = output.shabads.map(row =>
+              const outputShabadPromises = output.shabads.map((row) =>
                 getShabadSingle(req, res, row),
               );
               output.shabads = await Promise.all(outputShabadPromises);
@@ -541,9 +541,9 @@ const getShabad = (req, res, ShabadIDQ, sinceDate = null, forceMulti = false) =>
             }
             if (conn) conn.release();
           })
-          .catch(err => reject(err));
+          .catch((err) => reject(err));
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 
 const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
@@ -597,7 +597,7 @@ const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
       };
       let curPage = -1;
       let counter = 0;
-      rows.forEach(row => {
+      rows.forEach((row) => {
         if (row.PageNo !== curPage) {
           curPage = row.PageNo;
           output.pageNos.push(curPage);
@@ -606,13 +606,11 @@ const getAngs = async (req, res, { pageNo, sinceDate, sourceID }) => {
         output.pages[counter].push(row);
       });
 
-      const outputPagePromises = output.pages.map(row => getAngSingle(req, res, row));
+      const outputPagePromises = output.pages.map((row) => getAngSingle(req, res, row));
       output.pages = await Promise.all(outputPagePromises);
       results = output;
     }
     return results;
-  } catch (e) {
-    throw e;
   } finally {
     if (conn) conn.release();
   }
@@ -626,7 +624,7 @@ const getAngSingle = async (req, res, rows) => {
   const { PageNo, SourceID } = rows[0];
   const source = lib.getSource(rows[0]);
   const count = rows.length;
-  const page = rows.map(row => {
+  const page = rows.map((row) => {
     const rowData = lib.prepVerse(row);
     rowData.writer = lib.getWriter(row);
     rowData.raag = lib.getRaag(row);
@@ -691,7 +689,7 @@ const getNavigation = async (req, res, type, first, last, source = '') => {
     const rows1 = await conn.query(q1, parameters);
     let previous = null;
     let next = null;
-    rows1.forEach(row => {
+    rows1.forEach((row) => {
       if (row.navigation === 'previous') {
         previous = row[column];
       }

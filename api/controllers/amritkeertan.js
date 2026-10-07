@@ -72,7 +72,7 @@ exports.headers = async (req, res) => {
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders ORDER BY HeaderID ASC';
     const rows = await conn.query(q, []);
     res.json({
-      headers: rows.map(items => lib.prepAKIndex(items)),
+      headers: rows.map((items) => lib.prepAKIndex(items)),
     });
   } catch (err) {
     lib.error(err, res, 500);
@@ -107,7 +107,7 @@ exports.index = async (req, res) => {
 
     const q = `SELECT ${allIndexColumns} WHERE 1 ${header} ${sinceQuery} ORDER BY IndexID ASC`;
     const rows = await conn.query(q, parameters);
-    out.index = rows.map(items => lib.prepAKIndex(items));
+    out.index = rows.map((items) => lib.prepAKIndex(items));
     res.json(out);
   } catch (err) {
     lib.error(err, res, 500);
@@ -135,7 +135,7 @@ exports.shabad = async (req, res) => {
 
     if (rows && rows.length > 0) {
       const header = await getHeaderInfo(rows[0].HeaderID, conn);
-      const verses = rows.map(row => lib.prepVerse(row));
+      const verses = rows.map((row) => lib.prepVerse(row));
 
       res.json({
         header,
@@ -157,7 +157,7 @@ const getHeaderInfo = async (headerID, conn, res) => {
     const q =
       'SELECT HeaderID, Gurmukhi, GurmukhiUni, Translations, Transliterations, Updated FROM AKHeaders WHERE HeaderID = ? ORDER BY HeaderID ASC';
     const row = await conn.query(q, [headerID]);
-    return row.map(items => lib.prepAKIndex(items));
+    return row.map((items) => lib.prepAKIndex(items));
   } catch (err) {
     lib.error(err, res, 500);
   } finally {

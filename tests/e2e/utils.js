@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+// Native fetch is available in Node 18+
 import config from './config';
 
 const env = process.env.API_ENV || 'dev';
@@ -8,7 +8,7 @@ if (process.env.API_PATH_OVERRIDE) {
   API = process.env.API_PATH_OVERRIDE;
 }
 
-const geturl = async path => {
+const geturl = async (path) => {
   const url = `${API}${path}`;
 
   console.log(`Feteching ${url}`);

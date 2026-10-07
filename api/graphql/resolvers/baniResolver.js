@@ -6,8 +6,6 @@ module.exports = {
       const { rows } = await getAll(req);
       return rows;
     },
-    bani: async ({ id, length, sinceDate }, { req }) => {
-      return getBani({ id, length, sinceDate }, req);
-    },
+    bani: async ({ id, length, sinceDate }, { req }) => getBani({ id, length, sinceDate }, req),
   },
 };

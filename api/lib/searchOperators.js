@@ -10,14 +10,14 @@ const constantsObj = {
 };
 
 const bindiCharacters = {
-  '103': '090', //  ਸ: 'ਸ਼'
-  '106': '122', //  ਖ: 'ਖ਼'
-  '115': '083', //  ਗ: 'ਗ਼'
+  103: '090', //  ਸ: 'ਸ਼'
+  106: '122', //  ਖ: 'ਖ਼'
+  115: '083', //  ਗ: 'ਗ਼'
   '075': '094', //  ਜ: 'ਜ਼'
   '080': '038', //  ਫ: 'ਫ਼'
 };
 
-const replaceAsterisksAndQuotes = str => {
+const replaceAsterisksAndQuotes = (str) => {
   let res = str;
 
   if (str.includes('*')) {
@@ -42,7 +42,7 @@ const getQueryConditionsAndParams = (
   const conditions = [];
   const parameters = [];
 
-  matches.forEach(match => {
+  matches.forEach((match) => {
     let modifiedMatch = removeSpaces ? match.replace(/\s+/g, '') : match;
     modifiedMatch = replaceAsterisksAndQuotes(modifiedMatch);
 
@@ -78,9 +78,9 @@ const getQueryConditionsAndParams = (
   };
 };
 
-const hasBindiCharacter = charCode => bindiCharacters[charCode] || false;
+const hasBindiCharacter = (charCode) => bindiCharacters[charCode] || false;
 
-const generateBindiQuery = queryObj => {
+const generateBindiQuery = (queryObj) => {
   const [charCodeQuery, charCodeQueryWildcard] = queryObj.parameters;
 
   const updatedBindiQueries = charCodeQuery.split(',').reduce(
@@ -110,7 +110,7 @@ module.exports = {
   SearchOperators: constantsObj.SearchOperators,
   DecSearchOperators: constantsObj.DecSearchOperators,
   firstLetterStartToQuery: (charCodeQuery, charCodeQueryWildcard) => {
-    if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
+    if (constantsObj.SearchOperators.some((operator) => charCodeQuery.includes(operator))) {
       // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = charCodeQuery.match(seperateAtPlusorMinus);
@@ -142,7 +142,7 @@ module.exports = {
     return generateBindiQuery(queryObj);
   },
   firstLetterAnywhereToQuery: (charCodeQuery, charCodeQueryWildcard) => {
-    if (constantsObj.SearchOperators.some(operator => charCodeQuery.includes(operator))) {
+    if (constantsObj.SearchOperators.some((operator) => charCodeQuery.includes(operator))) {
       // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
       const matches = charCodeQuery.match(seperateAtPlusorMinus);
@@ -175,8 +175,8 @@ module.exports = {
     };
     return generateBindiQuery(queryObj);
   },
-  fullWordRomanizedToQuery: searchQuery => {
-    if (constantsObj.SearchOperators.some(operator => searchQuery.includes(operator))) {
+  fullWordRomanizedToQuery: (searchQuery) => {
+    if (constantsObj.SearchOperators.some((operator) => searchQuery.includes(operator))) {
       let modifiedSearchQuery = searchQuery.toLowerCase();
 
       // eslint-disable-next-line no-control-regex
@@ -189,7 +189,7 @@ module.exports = {
       // this is a little bit different than what happens in the non-search operators path
       //  in that path, we split on the words and then construct the parameters
       //  in this path we'll split on the search operators and then construct the params
-      matches.forEach(match => {
+      matches.forEach((match) => {
         if (match.includes('+') || (!match.includes('+') && !match.includes('-'))) {
           let modifiedMatch = match.replace(/\++/g, '');
           conditions.push('v.FirstLetterEng LIKE ?');
@@ -204,7 +204,7 @@ module.exports = {
           }
 
           let spicyWords = modifiedMatch.split(' ');
-          spicyWords = spicyWords.map(word => word.substr(0, 1));
+          spicyWords = spicyWords.map((word) => word.substr(0, 1));
 
           modifiedMatch = `%${spicyWords.join('')}%`;
           parameters.push(modifiedMatch);
@@ -222,7 +222,7 @@ module.exports = {
           }
 
           let spicyWords = modifiedMatch.split(' ');
-          spicyWords = spicyWords.map(word => word.substr(0, 1));
+          spicyWords = spicyWords.map((word) => word.substr(0, 1));
 
           modifiedMatch = `%${spicyWords.join('')}%`;
           parameters.push(modifiedMatch);
@@ -240,7 +240,7 @@ module.exports = {
       modifiedSearchQuery = replaceAsterisksAndQuotes(modifiedSearchQuery);
 
       let spicyWords = modifiedSearchQuery.split(' ');
-      spicyWords = spicyWords.map(word => word.substr(0, 1));
+      spicyWords = spicyWords.map((word) => word.substr(0, 1));
 
       modifiedSearchQuery = `%${spicyWords.join('')}%`;
 
@@ -252,18 +252,18 @@ module.exports = {
 
     // modifiedMatch.replace(/\s+/g, '')}
     let spicy = searchQuery.toLowerCase().split(' ');
-    spicy = spicy.map(word => word.substr(0, 1));
+    spicy = spicy.map((word) => word.substr(0, 1));
 
     return {
       condition: 'v.FirstLetterEng LIKE ?',
       parameters: [`%${spicy.join('')}%`],
     };
   },
-  fullWordGurmukhiToQuery: searchQuery => {
+  fullWordGurmukhiToQuery: (searchQuery) => {
     // check if one or more of the search operators are in the searchQuery
     let modifiedSearchQuery = searchQuery.replace(/(\[|\])/g, '');
 
-    if (constantsObj.SearchOperators.some(operator => modifiedSearchQuery.includes(operator))) {
+    if (constantsObj.SearchOperators.some((operator) => modifiedSearchQuery.includes(operator))) {
       // pretty much the entire ascii range EXCEPT plus (\x2B) and minus (\x2D) which serve as seperators
       // have to disable linter here until we find a better regex
       // eslint-disable-next-line no-control-regex
@@ -297,9 +297,9 @@ module.exports = {
       parameters: [`%${modifiedSearchQuery}%`],
     };
   },
-  fullWordEnglishToQuery: searchQuery => {
+  fullWordEnglishToQuery: (searchQuery) => {
     let modifiedSearchQuery = searchQuery;
-    if (constantsObj.SearchOperators.some(operator => modifiedSearchQuery.includes(operator))) {
+    if (constantsObj.SearchOperators.some((operator) => modifiedSearchQuery.includes(operator))) {
       // refer to above method (uses same regex) for an explanation
       // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
@@ -333,9 +333,9 @@ module.exports = {
       parameters: [`${lodash.upperFirst(searchQuery)}%`, `${lodash.lowerFirst(searchQuery)}%`],
     };
   },
-  mainLettersToQuery: words => {
+  mainLettersToQuery: (words) => {
     let modifiedWords = words;
-    if (constantsObj.SearchOperators.some(operator => modifiedWords.includes(operator))) {
+    if (constantsObj.SearchOperators.some((operator) => modifiedWords.includes(operator))) {
       // refer to above method (uses same regex) for an explanation
       // eslint-disable-next-line no-control-regex
       const seperateAtPlusorMinus = /[+-]?[\x00-\x2A\x2C\x2A\x2E-\x7F]+/g;
@@ -386,7 +386,7 @@ module.exports = {
    *       totalPages: null
    *       }
    */
-  angToQuery: PageNo => {
+  angToQuery: (PageNo) => {
     const hasOperatorsRegEx = /[<>+-]/g;
 
     if (!PageNo.match(hasOperatorsRegEx)) {
@@ -411,7 +411,7 @@ module.exports = {
     const ltgt = PageNo.match(ltgtRegEx);
     if (ltgt) {
       let loopnum = 0;
-      ltgt.forEach(num => {
+      ltgt.forEach((num) => {
         if (!num.match(/-$/)) {
           loopnum = num.slice(1);
           parameters.push(loopnum);
@@ -432,11 +432,11 @@ module.exports = {
     const between = PageNo.match(betweenRegEx);
     if (between) {
       let numbers = [];
-      between.forEach(range => {
+      between.forEach((range) => {
         numbers = range.match(/[0-9]+/g);
         parameters.push(...numbers);
         qOR.push('v.PageNo BETWEEN ? AND ?');
-        numbers.forEach(num => {
+        numbers.forEach((num) => {
           if (num < least || num === '0') {
             least = num;
           }
@@ -452,7 +452,7 @@ module.exports = {
     const equals = PageNo.match(equalsRegEx);
 
     if (equals) {
-      equals.forEach(num => {
+      equals.forEach((num) => {
         if (!num.match(/-$/)) {
           parameters.push(num.replace(/\+/, ''));
           qIn.push('?');
