@@ -13,8 +13,8 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
     let processedQuery = query.trim().replaceAll('*', ',');
 
     const activeFilters = [];
-    if (SourceID !== 'a') {
-      activeFilters.push(`Source=${SourceID}`);
+    if (SourceID) {
+      activeFilters.push(`Source="${SourceID}"`);
     }
     if (writer !== null) {
       activeFilters.push(`Writer=${writer}`);
@@ -74,7 +74,7 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
     return preppedResults;
   } catch (error) {
     console.error('Search error:', error);
-    return [];
+    throw error;
   }
 };
 

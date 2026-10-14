@@ -184,15 +184,19 @@ exports.search = async (req, res) => {
         conditions.push('v.PageNo = ?');
         parameters.push(searchQuery);
       } else {
-        const omniResults = await omniSearch(
-          req,
-          searchQuery,
-          isGurmukhi,
-          SourceID,
-          writer,
-          liveSearch,
-        );
-        res.json(omniResults);
+        try {
+          const omniResults = await omniSearch(
+            req,
+            searchQuery,
+            isGurmukhi,
+            sources[SourceID] ? SourceID : null,
+            writer,
+            liveSearch,
+          );
+          res.json(omniResults);
+        } catch (err) {
+          lib.error(err, res, 500);
+        }
         return;
       }
     }
