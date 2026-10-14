@@ -7,6 +7,12 @@ const client = new MeiliSearch({
 });
 
 const GURMUKHI_CHARS = 'aAeshkKgG|cCjJ\\tTfFxqQdDnpPbBmXrlvS^Zz&LV';
+const RESULT_LIMIT = 20;
+
+// Words starting with ੳ/ਅ/ੲ get their English first letter from the
+// transliteration (ਉਤਰਸਿ → "u"), but people type them as any vowel. The index's
+// FirstLetterEngLoose field treats every vowel as "a"; the query must match.
+const looseFirstLetters = letters => letters.toLowerCase().replace(/[aeiou]/g, 'a');
 
 const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) => {
   try {
@@ -21,7 +27,7 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
     }
 
     const searchParams = {
-      limit: 20,
+      limit: RESULT_LIMIT,
       attributesToRetrieve: ['ID'],
     };
 
@@ -42,6 +48,7 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
         searchParams.attributesToSearchOn = ['FirstLetterStr', 'MainLetters', 'Gurmukhi'];
       }
     } else {
+      searchParams.showRankingScore = true;
       searchParams.attributesToSearchOn = [
         'FirstLetterEng',
         'Translation_bdb',
@@ -50,20 +57,29 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
       ];
     }
 
-    let results = await client.index('verses').search(processedQuery || '', searchParams);
-    if (!isGurmukhi && results.estimatedTotalHits === 0) {
+    const results = await client.index('verses').search(processedQuery || '', searchParams);
+    if (!isGurmukhi && results.hits.length < RESULT_LIMIT) {
       const words = (processedQuery || '')
         .trim()
         .split(/\s+/)
         .filter(Boolean);
-      const firstLetters = words.map(w => w[0]).join('');
+      // One word is typed first letters; several words are romanized Gurbani,
+      // so search the first letter of each word, but only when nothing matched.
+      const firstLetters =
+        words.length === 1 ? words[0] : results.hits.length === 0 && words.map(w => w[0]).join('');
       if (firstLetters) {
-        const fallbackParams = {
-          limit: 20,
-          attributesToRetrieve: ['ID'],
-          attributesToSearchOn: ['FirstLetterEng'],
-        };
-        results = await client.index('verses').search(firstLetters, fallbackParams);
+        const looseResults = await client.index('verses').search(looseFirstLetters(firstLetters), {
+          ...searchParams,
+          attributesToSearchOn: ['FirstLetterEngLoose'],
+        });
+        // Rank by score so a loose first-letter match beats a weak (typo)
+        // translation match; the sort is stable, so ties keep exact hits first.
+        const seen = new Set(results.hits.map(hit => hit.ID));
+        results.hits = results.hits
+          .concat(looseResults.hits.filter(hit => !seen.has(hit.ID)))
+          // eslint-disable-next-line no-underscore-dangle
+          .sort((a, b) => b._rankingScore - a._rankingScore)
+          .slice(0, RESULT_LIMIT);
       }
     }
     const verseArray = results.hits
