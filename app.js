@@ -32,6 +32,10 @@ if (config.length > 1) {
 }
 
 // app
+app.use((req, res, next) => {
+  res.vary('Origin');
+  next();
+});
 app.use(cors());
 app.use(cacheControl({ maxAge: 21600 }));
 app.use(bodyParser.urlencoded({ extended: true }));
