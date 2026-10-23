@@ -14,11 +14,6 @@ const TRANSLATIONS = ['Translation_bdb', 'Translation_ms', 'Translation_ssk'];
 // match, so romanized single-word scores are scaled just below translation ones.
 const SINGLE_WORD_ROMAN_WEIGHT = 0.8;
 
-// Words starting with ੳ/ਅ/ੲ get their English first letter from the
-// transliteration (ਉਤਰਸਿ → "u"), but people type them as any vowel. The index's
-// FirstLetterEngLoose field treats every vowel as "a"; the query must match.
-const looseFirstLetters = letters => letters.toLowerCase().replace(/[aeiou]/g, 'a');
-
 const uniqueHits = hitLists => {
   const seen = new Set();
   return hitLists.flat().filter(hit => !seen.has(hit.ID) && seen.add(hit.ID));
@@ -64,14 +59,9 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
         ({ hits } = await search(processedQuery, ['FirstLetterStr', 'MainLetters', 'Gurmukhi']));
       }
     } else {
-      const firstLetterTiers = async letters => {
-        const [exact, loose] = await Promise.all([
-          search(letters, ['FirstLetterEng']),
-          // Optional until the index has FirstLetterEngLoose (omni-controller).
-          search(looseFirstLetters(letters), ['FirstLetterEngLoose']).catch(() => ({ hits: [] })),
-        ]);
-        return uniqueHits([exact.hits, loose.hits]);
-      };
+      // Typed first letters: each letter is the first letter of a word, as
+      // the transliteration spells it (ਉਤਰਸਿ → "u").
+      const firstLetters = async letters => (await search(letters, ['FirstLetterEng'])).hits;
       // Whole words, romanized Gurbani or English: search the normalised
       // romanization, its consonant skeleton and the translations, and rank
       // everything by how well each line matched.
@@ -104,20 +94,20 @@ const omniSearch = async (req, query, isGurmukhi, SourceID, writer, liveSearch) 
       };
 
       if (words.length === 1) {
-        // No space: typed first letters come first (exact, then with every
-        // vowel alike). Whole-word matches (romanized or English, ranked by
-        // score) follow; for a long real word there are rarely first-letter
-        // matches, so they rise to the top. The consonant skeleton is too
-        // loose for a single word, so it's left out here.
+        // No space: typed first letters come first. Whole-word matches
+        // (romanized or English, ranked by score) follow; for a long real word
+        // there are rarely first-letter matches, so they rise to the top. The
+        // consonant skeleton is too loose for a single word, so it's left out
+        // here.
         const [letters, wordHits] = await Promise.all([
-          firstLetterTiers(words[0]),
+          firstLetters(words[0]),
           wordMatches({ skeleton: false, romanWeight: SINGLE_WORD_ROMAN_WEIGHT }),
         ]);
         hits = uniqueHits([letters, wordHits]);
       } else {
         hits = await wordMatches();
         // Nothing matched as words: try the first letter of each word.
-        if (hits.length === 0) hits = await firstLetterTiers(words.map(w => w[0]).join(''));
+        if (hits.length === 0) hits = await firstLetters(words.map(w => w[0]).join(''));
       }
     }
 
