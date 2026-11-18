@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { loadConfig, missingSettings } from './config/config';
+import { setupDocs } from './docs/openapi';
 
 export function configureApp(app: NestExpressApplication, trustProxy: number) {
   // Behind the proxy: take the client IP (rate limits) from X-Forwarded-For.
@@ -20,6 +21,7 @@ export function configureApp(app: NestExpressApplication, trustProxy: number) {
   app.enableCors();
   app.setGlobalPrefix('v2');
   app.enableShutdownHooks();
+  setupDocs(app);
 }
 
 async function bootstrap() {

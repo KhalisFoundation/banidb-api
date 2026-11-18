@@ -1,15 +1,20 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { int } from '../common/input';
 import { Limit100, Limit250 } from '../common/throttle';
 import { DatabaseService } from '../database/database.service';
+import { Docs, IdParam, ServerError } from '../docs/decorators';
 
 // Rehat maryadas (codes of conduct) and their chapters.
+@ApiTags('Rehat maryadas')
+@ServerError()
 @Controller('rehats')
 export class RehatsController {
   constructor(private readonly db: DatabaseService) {}
 
   @Get()
   @Limit100()
+  @Docs('All rehat maryadas', 'Rehats')
   async all() {
     const maryadas = await this.db.query(
       'SELECT id as rehatID, maryada_name as rehatName, alphabet FROM maryadas',
@@ -20,6 +25,8 @@ export class RehatsController {
   // Declared before :RehatID so that /rehats/search/… isn't read as a rehat.
   @Get('search/:string')
   @Limit250()
+  @Docs('Chapters containing the text', 'RehatSearch')
+  @IdParam('string', 'Text to find.', 'Khalsa')
   async search(@Param('string') text: string) {
     const rows = await this.db.query(
       'SELECT c.id as chapterID, c.chapter_name as chapterName, c.chapter_content as chapterContent, c.maryada_id as rehatID, m.maryada_name as rehatName FROM maryada_chapters c JOIN maryadas m ON c.maryada_id = m.id WHERE chapter_content LIKE ?',
@@ -31,6 +38,13 @@ export class RehatsController {
   // The chapter list, without their content.
   @Get(':RehatID')
   @Limit100()
+  @Docs(
+    "A rehat maryada's chapters",
+    'RehatChapterList',
+    {},
+    'An ID that is not a number has no chapters.',
+  )
+  @IdParam('RehatID', 'A rehat maryada ID.')
   async chapterList(@Param('RehatID') rehatId: string) {
     const id = int(rehatId);
     // Not a number (e.g. /rehats/search): no chapters, as for a rehat that doesn't exist.
@@ -45,6 +59,8 @@ export class RehatsController {
 
   @Get(':RehatID/chapters')
   @Limit100()
+  @Docs("A rehat maryada's chapters, with their content", 'RehatChapters')
+  @IdParam('RehatID', 'A rehat maryada ID.')
   chapters(@Param('RehatID') rehatId: string) {
     return this.chaptersOf(rehatId, undefined);
   }
@@ -52,6 +68,9 @@ export class RehatsController {
   // One chapter (a ChapterID above 0), or all of them, with their content.
   @Get(':RehatID/chapters/:ChapterID')
   @Limit100()
+  @Docs('A chapter, with its content', 'RehatChapters', {}, 'A ChapterID of 0 gives every chapter.')
+  @IdParam('RehatID', 'A rehat maryada ID.')
+  @IdParam('ChapterID', 'A chapter ID.', 2)
   async chaptersOf(
     @Param('RehatID') rehatId: string,
     @Param('ChapterID') chapterId: string | undefined,

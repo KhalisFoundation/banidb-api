@@ -47,6 +47,15 @@ checks this API answers the same, apart from the changes listed in
 `test/contract.e2e-spec.ts`. To record it again from a running API:
 `node test/contract/capture.mjs http://localhost:3001 > test/contract/old-api.json`.
 
+### API docs
+
+`/v2/docs` is Swagger UI, where every route can be tried out; `/v2/openapi.json`
+and `/v2/openapi.yaml` are the OpenAPI 3 spec it reads (the old `/v2/api-docs`
+leads there). The spec is built from the `@Api…` decorators on the controllers
+and the response shapes in `src/docs/schemas.ts`. When a route or its response
+changes, change those too: `test/openapi.e2e-spec.ts` fails if a route isn't
+documented or answers differently from its schema.
+
 ### Configuration
 
 Same environment variables as before; see `.env.example` and

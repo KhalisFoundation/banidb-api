@@ -1,9 +1,11 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { prepAKIndex, prepVerse } from '../banidb/mappers';
 import { ApiError } from '../common/api-error';
 import { int, parseDateTime } from '../common/input';
 import { Limit100 } from '../common/throttle';
 import { DatabaseService } from '../database/database.service';
+import { Docs, IdParam, ServerError, UpdatedSince } from '../docs/decorators';
 
 const SHABAD_COLUMNS = `
 aki.IndexID,
@@ -73,12 +75,15 @@ const HEADER_COLUMNS = 'HeaderID, Gurmukhi, GurmukhiUni, Translations, Translite
 
 // Amrit Keertan (the kirtan pothi): headers (sections), the index of shabads
 // under them, and each shabad.
+@ApiTags('Amrit Keertan')
+@ServerError()
 @Controller('amritkeertan')
 export class AmritKeertanController {
   constructor(private readonly db: DatabaseService) {}
 
   @Get()
   @Limit100()
+  @Docs('The sections (headers)', 'AmritKeertanHeaders')
   async headers() {
     const rows = await this.db.query(
       `SELECT ${HEADER_COLUMNS} FROM AKHeaders ORDER BY HeaderID ASC`,
@@ -88,6 +93,8 @@ export class AmritKeertanController {
 
   @Get('index')
   @Limit100()
+  @Docs('Every shabad in the pothi, by section', 'AmritKeertanIndex')
+  @UpdatedSince()
   index(@Query('updatedsince') updatedsince: unknown) {
     return this.indexOf(undefined, updatedsince);
   }
@@ -95,6 +102,9 @@ export class AmritKeertanController {
   // With a header: { header: [that header], index }.
   @Get('index/:HeaderID')
   @Limit100()
+  @Docs('The shabads of a section, with the section', 'AmritKeertanIndex')
+  @IdParam('HeaderID', 'A section (header) ID.', 7)
+  @UpdatedSince()
   async indexOf(
     @Param('HeaderID') headerId: string | undefined,
     @Query('updatedsince') updatedsince: unknown,
@@ -126,6 +136,11 @@ export class AmritKeertanController {
 
   @Get('shabads/:ShabadID')
   @Limit100()
+  @Docs('A shabad of the pothi, with its section', 'AmritKeertanShabad', {
+    404: 'No such shabad, or nothing changed since `updatedsince`.',
+  })
+  @IdParam('ShabadID', 'An index ID (`IndexID` in the index).', 147)
+  @UpdatedSince()
   async shabad(@Param('ShabadID') shabadId: string, @Query('updatedsince') updatedsince: unknown) {
     const id = int(shabadId);
     if (Number.isNaN(id)) throw new ApiError('Shabad does not exist or has no updates.', 404);
