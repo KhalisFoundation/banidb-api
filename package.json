@@ -1,75 +1,89 @@
 {
   "name": "banidb-api",
-  "version": "2.10.3",
+  "version": "3.0.0",
   "description": "BaniDB API",
-  "main": "index.js",
-  "scripts": {
-    "dev": " NODE_ENV=development pm2 start process-dev.json",
-    "docker:clean": "npm run docker:stop && ./bin/clean-up-docker-containers.sh",
-    "docker:start": "DB_PORT=3002 ./bin/start-docker.sh",
-    "docker:stop": "./bin/stop-docker.sh",
-    "e2e-local": "API_ENV=local jest --rootDir ./tests/e2e ",
-    "e2e-dev": "API_ENV=dev jest --rootDir ./tests/e2e ",
-    "e2e": "API_ENV=prod jest --rootDir ./tests/e2e ",
-    "local": "npm run docker:start && npm run local:api",
-    "local:api": "DB_PORT=3002 DB_HOST='127.0.0.1' NODE_ENV=development node app.js",
-    "postinstall": "npm run test && npm run graphql",
-    "start": "pm2 start process.json",
-    "test": "eslint .",
-    "validate": "./bin/validation-graphql.sh",
-    "graphql": "npm run graphql:clean && npm run graphql:generate",
-    "graphql:clean": "rimraf ./api/graphql/__generated__/schema-defs.js",
-    "graphql:generate": "node bin/generateGraphql.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@bitbucket.org/khalisfoundation/khajana-api.git"
-  },
   "author": "Khalis, Inc. <techsupport@khalisfoundation.org>",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/khalisfoundation/khajana-api#readme",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KhalisFoundation/banidb-api.git"
+  },
+  "homepage": "https://github.com/KhalisFoundation/banidb-api#readme",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "dev": "nest start --watch",
+    "start:prod": "node dist/main.js",
+    "db": "docker compose up -d --wait db meili",
+    "db:mysql": "docker compose --profile mysql up -d --wait mysql meili",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
+    "contract:capture": "node test/contract/capture.mjs",
+    "test:live": "jest --config ./test/live/jest-live.json"
+  },
   "dependencies": {
-    "@graphql-tools/load-files": "^6.0.12",
-    "@graphql-tools/merge": "^6.0.12",
-    "@sttm/banidb": "^3.0.1",
-    "anvaad-js": "^1.4.3",
-    "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
-    "dotenv": "^16.0.1",
-    "express": "^4.16.2",
-    "express-cache-controller": "^1.1.0",
-    "express-graphql": "^0.9.0",
-    "graphql": "^15.2.0",
-    "limiter": "^1.1.3",
-    "lodash": "^4.17.21",
-    "mariadb": "^2.4.1",
-    "meilisearch": "^0.52.0",
-    "memory-cache": "^0.2.0",
-    "node-fetch": "^2.6.1",
-    "swagger-ui-express": "^4.1.3"
+    "@nestjs/common": "^11.2.11",
+    "@nestjs/core": "^11.2.11",
+    "@nestjs/platform-express": "^11.2.11",
+    "@nestjs/swagger": "^11.4.8",
+    "@nestjs/throttler": "^6.8.0",
+    "@sttm/banidb": "3.0.1",
+    "anvaad-js": "1.4.3",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.11.0",
+    "lodash": "^4.18.1",
+    "mariadb": "^3.5.5",
+    "meilisearch": "0.52.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "babel-jest": "^25.4.0",
-    "eslint": "^5.3.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-jest": "^23.8.2",
-    "eslint-plugin-prettier": "^3.0.1",
-    "husky": "^1.3.1",
-    "jest": "^25.4.0",
-    "nodemon": "^1.18.9",
-    "pm2": "^2.10.4",
-    "prettier": "^1.16.4",
-    "pretty-quick": "^1.10.0",
-    "rimraf": "^3.0.2"
+    "@eslint/js": "^9.39.5",
+    "@nestjs/cli": "^11.0.24",
+    "@nestjs/schematics": "^11.1.0",
+    "@nestjs/testing": "^11.2.11",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/lodash": "^4.17.27",
+    "@types/node": "^24.19.2",
+    "@types/supertest": "^7.2.1",
+    "ajv": "^8.20.0",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7",
+    "globals": "^17.14.0",
+    "jest": "^30.5.2",
+    "prettier": "^3.10.1",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.3.2",
+    "ts-jest": "^29.4.15",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "pre-push": "npm test"
-    }
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   }
 }

@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run db
+      - run: npm run test:e2e
+      # Same tests on MySQL 8 (MariaDB and MySQL differ, e.g. on invalid dates).
+      - run: npm run db:mysql
+      - run: npm run test:e2e
+        env:
+          DB_PORT: 33317
+          DB_KIND: mysql

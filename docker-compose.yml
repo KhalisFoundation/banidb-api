@@ -1,0 +1,46 @@
+name: banidb-api
+# Local services for development and tests (a BaniDB subset from test/db):
+#   docker compose up -d db meili     MariaDB on 33316, Meilisearch on 37700
+#   docker compose --profile mysql up -d mysql    MySQL 8 on 33317 (DB_PORT=33317 npm run test:e2e)
+services:
+  db:
+    image: mariadb:10.6
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - '${DB_PORT:-33316}:3306'
+    volumes:
+      - ./test/db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 2s
+      retries: 30
+  mysql:
+    image: mysql:8.4
+    profiles: [mysql]
+    # MySQL's default sql_mode minus ONLY_FULL_GROUP_BY: several searches group
+    # by verse while selecting its shabad, which BaniDB's servers allow.
+    command: --sql-mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '${MYSQL_PORT:-33317}:3306'
+    volumes:
+      - ./test/db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-proot']
+      interval: 2s
+      retries: 60
+  # Auto-detect search (searchtype 8). The tests fill its `verses` index from
+  # the database, as omni-controller does in production.
+  meili:
+    image: getmeili/meilisearch:v1.37.0
+    environment:
+      MEILI_MASTER_KEY: local-test-key-0123456789
+      MEILI_NO_ANALYTICS: 'true'
+    ports:
+      - '${MEILI_PORT:-37700}:7700'
+    healthcheck:
+      test: ['CMD', 'curl', '-sf', 'http://127.0.0.1:7700/health']
+      interval: 2s
+      retries: 30

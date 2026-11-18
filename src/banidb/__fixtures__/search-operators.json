@@ -1,0 +1,724 @@
+[
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",104,104,104",
+   ",104,104,104,z"
+  ],
+  "out": {
+   "condition": "(v.FirstLetterStr BETWEEN ? AND ? OR v.FirstLetterStr BETWEEN ? AND ?)",
+   "parameters": [
+    ",104,104,104",
+    ",104,104,104,z",
+    ",104,104,104",
+    ",104,104,104,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",104,104,104",
+   ",104,104,104,z"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID",
+   "condition": "(t.token BETWEEN ? AND ? OR t.token BETWEEN ? AND ?)",
+   "parameters": [
+    ",104,104,104",
+    ",104,104,104,z",
+    ",104,104,104",
+    ",104,104,104,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",103,103",
+   ",103,103,z"
+  ],
+  "out": {
+   "condition": "(v.FirstLetterStr BETWEEN ? AND ? OR v.FirstLetterStr BETWEEN ? AND ?)",
+   "parameters": [
+    ",103,103",
+    ",103,103,z",
+    ",090,090",
+    ",090,090,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",103,103",
+   ",103,103,z"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID",
+   "condition": "(t.token BETWEEN ? AND ? OR t.token BETWEEN ? AND ?)",
+   "parameters": [
+    ",103,103",
+    ",103,103,z",
+    ",090,090",
+    ",090,090,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",106,115",
+   ",106,115,z"
+  ],
+  "out": {
+   "condition": "(v.FirstLetterStr BETWEEN ? AND ? OR v.FirstLetterStr BETWEEN ? AND ?)",
+   "parameters": [
+    ",106,115",
+    ",106,115,z",
+    ",122,083",
+    ",122,083,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",106,115",
+   ",106,115,z"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID",
+   "condition": "(t.token BETWEEN ? AND ? OR t.token BETWEEN ? AND ?)",
+   "parameters": [
+    ",106,115",
+    ",106,115,z",
+    ",122,083",
+    ",122,083,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",104*,104",
+   ",104*,104,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    ",104%,104%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",104*,104",
+   ",104*,104,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%,104%,104%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",104,104\"",
+   ",104,104\",z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    ",104,104%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",104,104\"",
+   ",104,104\",z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%,104,104%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",104,104+,103,103",
+   ",104,104+,103,103,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ? AND v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%,104,104%",
+    "%,103,103%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",104,104+,103,103",
+   ",104,104+,103,103,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ? AND v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%,104,104%",
+    "%,103,103%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",104,104-,103",
+   ",104,104-,103,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ? AND v.FirstLetterStr NOT LIKE ?",
+   "parameters": [
+    "%,104,104%",
+    "%,103%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",104,104-,103",
+   ",104,104-,103,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ? AND v.FirstLetterStr NOT LIKE ?",
+   "parameters": [
+    "%,104,104%",
+    "%,103%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   "*",
+   "*,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   "*",
+   "*,z"
+  ],
+  "out": {
+   "condition": "v.FirstLetterStr LIKE ?",
+   "parameters": [
+    "%%%"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterStartToQuery",
+  "args": [
+   ",075,080,115",
+   ",075,080,115,z"
+  ],
+  "out": {
+   "condition": "(v.FirstLetterStr BETWEEN ? AND ? OR v.FirstLetterStr BETWEEN ? AND ?)",
+   "parameters": [
+    ",075,080,115",
+    ",075,080,115,z",
+    ",094,038,083",
+    ",094,038,083,z"
+   ]
+  }
+ },
+ {
+  "fn": "firstLetterAnywhereToQuery",
+  "args": [
+   ",075,080,115",
+   ",075,080,115,z"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_firstletters t ON t.verseid = v.ID",
+   "condition": "(t.token BETWEEN ? AND ? OR t.token BETWEEN ? AND ?)",
+   "parameters": [
+    ",075,080,115",
+    ",075,080,115,z",
+    ",094,038,083",
+    ",094,038,083,z"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "har har"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ?",
+   "parameters": [
+    "%hh%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "Sat Naam"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ?",
+   "parameters": [
+    "%sn%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "har+gobind"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ? AND v.FirstLetterEng LIKE ?",
+   "parameters": [
+    "%h%",
+    "%g%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "ek -onkar"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ? AND v.FirstLetterEng NOT LIKE ?",
+   "parameters": [
+    "%e%",
+    "%o%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "h* g"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ?",
+   "parameters": [
+    "%hg%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "\"har\""
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ?",
+   "parameters": [
+    "%h%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordRomanizedToQuery",
+  "args": [
+   "har +gobind -nanak"
+  ],
+  "out": {
+   "condition": "v.FirstLetterEng LIKE ? AND v.FirstLetterEng LIKE ? AND v.FirstLetterEng NOT LIKE ?",
+   "parameters": [
+    "%h%",
+    "%g%",
+    "%n%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "hir"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%hir%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "[nwnk]"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%nwnk%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "hir+nwm"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ? AND v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%hir%",
+    "%nwm%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "hir -nwm"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ? AND v.Gurmukhi NOT LIKE BINARY ?",
+   "parameters": [
+    "%hir%",
+    "%nwm%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "hir*"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%hir%%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "\"hir nwm\""
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%hirnwm%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordGurmukhiToQuery",
+  "args": [
+   "hir nwm"
+  ],
+  "out": {
+   "condition": "v.Gurmukhi LIKE BINARY ?",
+   "parameters": [
+    "%hir nwm%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "god"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_english t ON t.verseid = v.ID",
+   "condition": "(t.token LIKE ? OR t.token LIKE ?)",
+   "parameters": [
+    "God%",
+    "god%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "God"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_english t ON t.verseid = v.ID",
+   "condition": "(t.token LIKE ? OR t.token LIKE ?)",
+   "parameters": [
+    "God%",
+    "god%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "god+love"
+  ],
+  "out": {
+   "condition": "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci AND json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci",
+   "parameters": [
+    "%god%",
+    "%love%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "god -love"
+  ],
+  "out": {
+   "condition": "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci AND json_extract(v.Translations, '$.en.bdb') NOT LIKE ? COLLATE utf8mb4_general_ci",
+   "parameters": [
+    "%god %",
+    "%love%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "\"true name\""
+  ],
+  "out": {
+   "condition": "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci",
+   "parameters": [
+    "%true name%"
+   ]
+  }
+ },
+ {
+  "fn": "fullWordEnglishToQuery",
+  "args": [
+   "the*"
+  ],
+  "out": {
+   "condition": "json_extract(v.Translations, '$.en.bdb') LIKE ? COLLATE utf8mb4_general_ci",
+   "parameters": [
+    "%the%%"
+   ]
+  }
+ },
+ {
+  "fn": "mainLettersToQuery",
+  "args": [
+   "gr"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID",
+   "condition": "t.token LIKE BINARY ?",
+   "parameters": [
+    "gr%"
+   ]
+  }
+ },
+ {
+  "fn": "mainLettersToQuery",
+  "args": [
+   "gr%nk"
+  ],
+  "out": {
+   "columns": " LEFT JOIN tokenized_mainletters t ON t.verseid = v.ID",
+   "condition": "t.token LIKE BINARY ?",
+   "parameters": [
+    "gr%nk%"
+   ]
+  }
+ },
+ {
+  "fn": "mainLettersToQuery",
+  "args": [
+   "h*r"
+  ],
+  "out": {
+   "condition": "v.MainLetters LIKE BINARY ?",
+   "parameters": [
+    "%h%r%"
+   ]
+  }
+ },
+ {
+  "fn": "mainLettersToQuery",
+  "args": [
+   "gr+nk"
+  ],
+  "out": {
+   "condition": "v.MainLetters LIKE BINARY ? AND v.MainLetters LIKE BINARY ?",
+   "parameters": [
+    "%gr%",
+    "%nk%"
+   ]
+  }
+ },
+ {
+  "fn": "mainLettersToQuery",
+  "args": [
+   "gr -nk"
+  ],
+  "out": {
+   "condition": "v.MainLetters LIKE BINARY ? AND v.MainLetters NOT LIKE BINARY ?",
+   "parameters": [
+    "%gr%",
+    "%nk%"
+   ]
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "1"
+  ],
+  "out": {
+   "q": "v.PageNo = ?",
+   "parameters": [
+    "1"
+   ],
+   "totalPages": 1
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "917"
+  ],
+  "out": {
+   "q": "v.PageNo = ?",
+   "parameters": [
+    "917"
+   ],
+   "totalPages": 1
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "1-3"
+  ],
+  "out": {
+   "q": "(v.PageNo BETWEEN ? AND ?)",
+   "parameters": [
+    "1",
+    "3"
+   ],
+   "totalPages": 2
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "1+5+9"
+  ],
+  "out": {
+   "q": "(v.PageNo IN (?,?,?))",
+   "parameters": [
+    "1",
+    "5",
+    "9"
+   ],
+   "totalPages": 3
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "<1000+105+900-905"
+  ],
+  "out": {
+   "q": "v.PageNo < ? AND (v.PageNo BETWEEN ? AND ? OR v.PageNo IN (?))",
+   "parameters": [
+    "1000",
+    "900",
+    "905",
+    "105"
+   ],
+   "totalPages": null
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "1428-1432"
+  ],
+  "out": {
+   "q": "(v.PageNo BETWEEN ? AND ?)",
+   "parameters": [
+    "1428",
+    "1432"
+   ],
+   "totalPages": 2
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "5+"
+  ],
+  "out": {
+   "q": "(v.PageNo IN (?))",
+   "parameters": [
+    "5"
+   ],
+   "totalPages": 1
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "1-3+7"
+  ],
+  "out": {
+   "q": "(v.PageNo BETWEEN ? AND ? OR v.PageNo IN (?))",
+   "parameters": [
+    "1",
+    "3",
+    "7"
+   ],
+   "totalPages": 3
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   ">1425+1"
+  ],
+  "out": {
+   "q": "v.PageNo > ? AND (v.PageNo IN (?))",
+   "parameters": [
+    "1425",
+    "1"
+   ],
+   "totalPages": null
+  }
+ },
+ {
+  "fn": "angToQuery",
+  "args": [
+   "<5"
+  ],
+  "out": {
+   "q": "v.PageNo < ? AND ()",
+   "parameters": [
+    "5"
+   ],
+   "totalPages": null
+  }
+ }
+]
