@@ -11,31 +11,47 @@
 
 ## Contributing
 
-### Prerequisites
+The API is NestJS + TypeScript (Node 24), reading BaniDB from MariaDB or MySQL
+and, for auto-detect search, Meilisearch.
 
-1.  [Node](https://nodejs.org/en/download/) (10+)
-    - `nvm` can be used for mac/linux
-2.  [Docker](https://www.docker.com/get-started)
+### Running locally
 
-#### Optional
+Needs Node 24 and Docker.
 
-- [MariaDB](https://mariadb.org/download/)
-- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+```sh
+npm ci
+npm run db            # MariaDB with a BaniDB subset (port 33316) and Meilisearch (37700)
+npx ts-node test/seed-meili.ts   # fill Meilisearch's index from that database
+cp .env.example .env
+npm run dev           # http://localhost:3001/v2/
+```
 
-### Installation
+### Tests
 
-- Run `npm ci` in the repository root
+```sh
+npm run lint && npm run typecheck
+npm test              # unit tests
+npm run test:e2e      # against `npm run db`: every route, bad input, rate limits
 
-### Running
+npm run db:mysql      # the same data on MySQL 8, port 33317
+DB_KIND=mysql DB_PORT=33317 npm run test:e2e
 
-- Run `npm run local` in the repository root
-  - This starts the khalisfoundation/banidb-dev image in a docker container
-- API will run on `http://localhost:3001/v2/`
+npm run test:live     # smoke tests against the deployed dev API (API_ENV=prod for production)
+```
 
-#### Stopping
+`test/db` is a small part of BaniDB (a few Angs of each source, whole shabads
+for them, four banis, three Amrit Keertan sections, four hukamnamas, some Mahan
+Kosh words). `test/contract/old-api.json` is what the Express API answered for
+each request in `test/contract/requests.json` on that data; the contract test
+checks this API answers the same, apart from the changes listed in
+`test/contract.e2e-spec.ts`. To record it again from a running API:
+`node test/contract/capture.mjs http://localhost:3001 > test/contract/old-api.json`.
 
-- Run `npm run docker:stop` to stop the container
-- Run `npm run docker:clean` to remove the image
+### Configuration
+
+Same environment variables as before; see `.env.example` and
+`src/config/config.ts`. The API listens on 3001 when `NODE_ENV=development` and
+3000 otherwise (`PORT` overrides both).
 
 # Vision Statement
 

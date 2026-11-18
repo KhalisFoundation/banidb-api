@@ -1,5 +1,6 @@
 **/.git
-**/.svn
-**/.hg
 **/node_modules
-api/config/index.js
+dist
+coverage
+test/db
+test/contract/*.json
