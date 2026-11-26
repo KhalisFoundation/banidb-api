@@ -69,11 +69,11 @@ describe('search endpoint - short', () => {
 
   test('resultsInfo', () => {
     const { resultsInfo } = json;
-    expect(resultsInfo.totalResults).toBe(467);
+    expect(resultsInfo.totalResults).toBe(481);
     expect(resultsInfo.pageResults).toBe(20);
     expect(resultsInfo.pages.page).toBe(1);
     expect(resultsInfo.pages.resultsPerPage).toBe(20);
-    expect(resultsInfo.pages.totalPages).toBe(24);
+    expect(resultsInfo.pages.totalPages).toBe(25);
     expect(resultsInfo.pages.nextPage).toMatch('?page=2');
   });
 
