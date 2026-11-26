@@ -42,4 +42,10 @@ async function bootstrap() {
   logger.log(`BaniDB API start on port ${config.port}`);
 }
 
-if (require.main === module) void bootstrap();
+if (require.main === module) {
+  bootstrap().catch((error: unknown) => {
+    // e.g. SSL_CA not set: stop with the reason rather than an unhandled rejection.
+    new Logger('Bootstrap').error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}

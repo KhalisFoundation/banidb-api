@@ -5,6 +5,8 @@ const defaults: Record<string, string> = {
   BDB_DATABASE: 'banidb',
   BDB_USER: 'root',
   BDB_PASSWORD: 'root',
+  // The docker databases have no TLS.
+  DB_ALLOW_NO_TLS: 'true',
   DB_POOL_SIZE: '4',
   MEILI_HOST: `http://127.0.0.1:${process.env.MEILI_PORT ?? '37700'}`,
   MEILI_API_KEY: 'local-test-key-0123456789',
