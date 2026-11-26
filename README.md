@@ -62,6 +62,10 @@ Same environment variables as before; see `.env.example` and
 `src/config/config.ts`. The API listens on 3001 when `NODE_ENV=development` and
 3000 otherwise (`PORT` overrides both).
 
+`SSL_CA` (the database's CA file) is required: without it the API refuses to
+start rather than log in to the database without TLS. Only a local database
+without TLS (`npm run db`, the tests) may set `DB_ALLOW_NO_TLS=true` instead.
+
 # Vision Statement
 
 BaniDB's vision is to create a single, universally accessible Gurbani Database for Sikh websites and applications. BaniDB is, and will continue to be, the most accurate and complete Gurbani database ever created for use by Sikhs around the world.

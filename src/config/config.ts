@@ -57,10 +57,20 @@ function poolConfigs(env: Env): PoolConfig[] {
     database: env.BDB_DATABASE,
     connectionLimit: int(env.DB_POOL_SIZE, 10),
   };
-  if (env.SSL_CA) base.ssl = { ca: readFileSync(env.SSL_CA, 'utf8') };
-  // MySQL 8's default login (caching_sha2_password) needs the server's RSA key
-  // when the connection isn't TLS; without this, logging in fails.
-  else base.allowPublicKeyRetrieval = true;
+  if (env.SSL_CA) {
+    base.ssl = { ca: readFileSync(env.SSL_CA, 'utf8') };
+  } else if (env.DB_ALLOW_NO_TLS === 'true') {
+    // Local docker databases only (`npm run db`, the e2e tests, CI): they have
+    // no TLS, and MySQL 8's default login then needs the server's RSA key.
+    base.allowPublicKeyRetrieval = true;
+  } else {
+    // Never log in to a real database without TLS: the password would cross
+    // the network unprotected.
+    throw new Error(
+      'SSL_CA is not set: refusing to connect to the database without TLS. ' +
+        'Set SSL_CA to the CA file, or DB_ALLOW_NO_TLS=true for a local database.',
+    );
+  }
 
   if (env.DB_NODES) {
     return (JSON.parse(env.DB_NODES) as DbNode[]).map((node) => ({
