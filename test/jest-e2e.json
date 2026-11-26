@@ -1,0 +1,11 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "setupFiles": ["<rootDir>/e2e-env.ts"],
+  "globalSetup": "<rootDir>/seed-meili.ts",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}

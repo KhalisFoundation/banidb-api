@@ -1,0 +1,440 @@
+{
+ "base": {
+  "ID": 7,
+  "ShabadID": 2,
+  "Gurmukhi": "Awid scu ]",
+  "GurmukhiUni": "ਆਦਿ ਸਚੁ ॥",
+  "PageNo": 1,
+  "LineNo": 2,
+  "Updated": "2020-01-01 00:00:00",
+  "Translations": "{\"en\":{\"bdb\":\"True\",\"ms\":\"True.\"},\"pu\":{\"ss\":\"sc\",\"ft\":\"ft\"},\"puu\":{\"ss\":\"ਸਚ\",\"ft\":\"ਫ\"},\"es\":{\"sn\":\"Verdad\"},\"hi\":{\"ss\":\"सच\"}}",
+  "Transliterations": "{\"en\":\"aadh sach\",\"hi\":\"आदि सचु\",\"ipa\":\"ɑd̪ sət͡ʃ\",\"ur\":\"آد سچ\"}",
+  "Visraam": "{\"sttm\":[{\"p\":\"1\",\"t\":\"v\"}],\"igurbani\":[]}",
+  "WriterID": 1,
+  "WriterEnglish": "Guru Nanak Dev Ji",
+  "WriterGurmukhi": "gurU nwnk dyv jI",
+  "WriterUnicode": "ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ",
+  "RaagID": 1,
+  "RaagGurmukhi": "jp",
+  "RaagUnicode": "ਜਪ",
+  "RaagEnglish": "Jap",
+  "RaagWithPage": "Jap (1-8)",
+  "SourceID": "G",
+  "SourceGurmukhi": "sRI gurU gRMQ swihb jI",
+  "SourceUnicode": "ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ",
+  "SourceEnglish": "Sri Guru Granth Sahib Ji",
+  "ShabadName": 3
+ },
+ "range": {
+  "ID": 7,
+  "ShabadID": 2,
+  "Gurmukhi": "Awid scu ]",
+  "GurmukhiUni": "ਆਦਿ ਸਚੁ ॥",
+  "PageNo": 1,
+  "LineNo": 2,
+  "Updated": "2020-01-01 00:00:00",
+  "Translations": "[{\"en\":{\"bdb\":\"One\"},\"pu\":{\"ss\":\"a\"},\"puu\":{\"ss\":\"ਅ\"}},{\"en\":{\"bdb\":\"Two\"},\"pu\":{\"ss\":\"b\"},\"puu\":{\"ss\":\"ਬ\"}}]",
+  "Transliterations": "[{\"en\":\"ik\"},{\"en\":\"do\"}]",
+  "Visraam": "[{\"sttm\":[{\"p\":\"1\",\"t\":\"v\"}]},{\"sttm\":[{\"p\":\"0\",\"t\":\"y\"}]}]",
+  "WriterID": 1,
+  "WriterEnglish": "Guru Nanak Dev Ji",
+  "WriterGurmukhi": "gurU nwnk dyv jI",
+  "WriterUnicode": "ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ",
+  "RaagID": 1,
+  "RaagGurmukhi": "jp",
+  "RaagUnicode": "ਜਪ",
+  "RaagEnglish": "Jap",
+  "RaagWithPage": "Jap (1-8)",
+  "SourceID": "G",
+  "SourceGurmukhi": "sRI gurU gRMQ swihb jI",
+  "SourceUnicode": "ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ",
+  "SourceEnglish": "Sri Guru Granth Sahib Ji",
+  "ShabadName": 3,
+  "WordCount": "[3,2]"
+ },
+ "noWriter": {
+  "ID": 7,
+  "ShabadID": 2,
+  "Gurmukhi": "Awid scu ]",
+  "GurmukhiUni": "ਆਦਿ ਸਚੁ ॥",
+  "PageNo": 1,
+  "LineNo": 2,
+  "Updated": "2020-01-01 00:00:00",
+  "Translations": "{\"en\":{\"bdb\":\"True\",\"ms\":\"True.\"},\"pu\":{\"ss\":\"sc\",\"ft\":\"ft\"},\"puu\":{\"ss\":\"ਸਚ\",\"ft\":\"ਫ\"},\"es\":{\"sn\":\"Verdad\"},\"hi\":{\"ss\":\"सच\"}}",
+  "Transliterations": "{\"en\":\"aadh sach\",\"hi\":\"आदि सचु\",\"ipa\":\"ɑd̪ sət͡ʃ\",\"ur\":\"آد سچ\"}",
+  "Visraam": "{\"sttm\":[{\"p\":\"1\",\"t\":\"v\"}],\"igurbani\":[]}",
+  "WriterID": null,
+  "WriterEnglish": "Guru Nanak Dev Ji",
+  "WriterGurmukhi": "gurU nwnk dyv jI",
+  "WriterUnicode": "ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ",
+  "RaagID": 1,
+  "RaagGurmukhi": "jp",
+  "RaagUnicode": "ਜਪ",
+  "RaagEnglish": "Jap",
+  "RaagWithPage": "Jap (1-8)",
+  "SourceID": "G",
+  "SourceGurmukhi": "sRI gurU gRMQ swihb jI",
+  "SourceUnicode": "ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ",
+  "SourceEnglish": "Sri Guru Granth Sahib Ji",
+  "ShabadName": 3
+ },
+ "prepVerse": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "True",
+    "ms": "True."
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "sc",
+     "unicode": "ਸਚ"
+    },
+    "ft": {
+     "gurmukhi": "ft",
+     "unicode": "ਫ"
+    }
+   },
+   "es": {
+    "sn": "Verdad"
+   },
+   "hi": {
+    "ss": "सच"
+   }
+  },
+  "transliteration": {
+   "english": "aadh sach",
+   "hindi": "आदि सचु",
+   "en": "aadh sach",
+   "hi": "आदि सचु",
+   "ipa": "ɑd̪ sət͡ʃ",
+   "ur": "آد سچ"
+  },
+  "pageNo": 1,
+  "lineNo": 2,
+  "updated": "2020-01-01 00:00:00",
+  "visraam": {
+   "sttm": [
+    {
+     "p": "1",
+     "t": "v"
+    }
+   ],
+   "igurbani": []
+  }
+ },
+ "prepVerseMeta": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "True",
+    "ms": "True."
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "sc",
+     "unicode": "ਸਚ"
+    },
+    "ft": {
+     "gurmukhi": "ft",
+     "unicode": "ਫ"
+    }
+   },
+   "es": {
+    "sn": "Verdad"
+   },
+   "hi": {
+    "ss": "सच"
+   }
+  },
+  "transliteration": {
+   "english": "aadh sach",
+   "hindi": "आदि सचु",
+   "en": "aadh sach",
+   "hi": "आदि सचु",
+   "ipa": "ɑd̪ sət͡ʃ",
+   "ur": "آد سچ"
+  },
+  "pageNo": 1,
+  "lineNo": 2,
+  "updated": "2020-01-01 00:00:00",
+  "visraam": {
+   "sttm": [
+    {
+     "p": "1",
+     "t": "v"
+    }
+   ],
+   "igurbani": []
+  },
+  "writer": {
+   "writerId": 1,
+   "gurmukhi": "gurU nwnk dyv jI",
+   "unicode": "ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ",
+   "english": "Guru Nanak Dev Ji"
+  },
+  "source": {
+   "sourceId": "G",
+   "gurmukhi": "sRI gurU gRMQ swihb jI",
+   "unicode": "ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ",
+   "english": "Sri Guru Granth Sahib Ji",
+   "pageNo": 1
+  },
+  "raag": {
+   "raagId": 1,
+   "gurmukhi": "jp",
+   "unicode": "ਜਪ",
+   "english": "Jap",
+   "raagWithPage": "Jap (1-8)"
+  }
+ },
+ "prepVerseLive": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "True",
+    "ms": "True."
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "sc",
+     "unicode": "ਸਚ"
+    },
+    "ft": {
+     "gurmukhi": "ft",
+     "unicode": "ਫ"
+    }
+   },
+   "es": {
+    "sn": "Verdad"
+   },
+   "hi": {
+    "ss": "सच"
+   }
+  }
+ },
+ "prepVerseRange": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "One Two"
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "a b",
+     "unicode": "ਅ ਬ"
+    }
+   },
+   "es": {},
+   "hi": {}
+  },
+  "transliteration": {
+   "english": "ik do",
+   "en": "ik do"
+  },
+  "pageNo": 1,
+  "lineNo": 2,
+  "updated": "2020-01-01 00:00:00",
+  "visraam": {
+   "sttm": [
+    {
+     "p": "1",
+     "t": "v"
+    },
+    {
+     "p": 3,
+     "t": "y"
+    }
+   ]
+  }
+ },
+ "prepVerseNullVisraam": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "True",
+    "ms": "True."
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "sc",
+     "unicode": "ਸਚ"
+    },
+    "ft": {
+     "gurmukhi": "ft",
+     "unicode": "ਫ"
+    }
+   },
+   "es": {
+    "sn": "Verdad"
+   },
+   "hi": {
+    "ss": "सच"
+   }
+  },
+  "transliteration": {
+   "english": "aadh sach",
+   "hindi": "आदि सचु",
+   "en": "aadh sach",
+   "hi": "आदि सचु",
+   "ipa": "ɑd̪ sət͡ʃ",
+   "ur": "آد سچ"
+  },
+  "pageNo": 1,
+  "lineNo": 2,
+  "updated": "2020-01-01 00:00:00",
+  "visraam": null
+ },
+ "prepVerseBadVisraam": {
+  "verseId": 7,
+  "shabadId": 2,
+  "verse": {
+   "gurmukhi": "Awid scu ]",
+   "unicode": "ਆਦਿ ਸਚੁ ॥"
+  },
+  "larivaar": {
+   "gurmukhi": "Awidscu]",
+   "unicode": "ਆਦਿਸਚੁ॥"
+  },
+  "translation": {
+   "en": {
+    "bdb": "True",
+    "ms": "True."
+   },
+   "pu": {
+    "ss": {
+     "gurmukhi": "sc",
+     "unicode": "ਸਚ"
+    },
+    "ft": {
+     "gurmukhi": "ft",
+     "unicode": "ਫ"
+    }
+   },
+   "es": {
+    "sn": "Verdad"
+   },
+   "hi": {
+    "ss": "सच"
+   }
+  },
+  "transliteration": {
+   "english": "aadh sach",
+   "hindi": "आदि सचु",
+   "en": "aadh sach",
+   "hi": "आदि सचु",
+   "ipa": "ɑd̪ sət͡ʃ",
+   "ur": "آد سچ"
+  },
+  "pageNo": 1,
+  "lineNo": 2,
+  "updated": "2020-01-01 00:00:00",
+  "visraam": {}
+ },
+ "shabadInfo": {
+  "shabadId": 2,
+  "shabadName": 3,
+  "pageNo": 1,
+  "source": {
+   "sourceId": "G",
+   "gurmukhi": "sRI gurU gRMQ swihb jI",
+   "unicode": "ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ",
+   "english": "Sri Guru Granth Sahib Ji",
+   "pageNo": 1
+  },
+  "raag": {
+   "raagId": 1,
+   "gurmukhi": "jp",
+   "unicode": "ਜਪ",
+   "english": "Jap",
+   "raagWithPage": "Jap (1-8)"
+  },
+  "writer": {
+   "writerId": 1,
+   "gurmukhi": "gurU nwnk dyv jI",
+   "unicode": "ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ",
+   "english": "Guru Nanak Dev Ji"
+  }
+ },
+ "writerNone": {
+  "writerId": null,
+  "gurmukhi": null,
+  "unicode": null,
+  "english": null
+ },
+ "prepBanis": {
+  "ID": 2,
+  "token": "japji",
+  "gurmukhi": "jpujI",
+  "gurmukhiUni": "ਜਪੁਜੀ",
+  "transliteration": "aadh sach",
+  "transliterations": {
+   "english": "aadh sach",
+   "hindi": "आदि सचु",
+   "en": "aadh sach",
+   "hi": "आदि सचु",
+   "ipa": "ɑd̪ sət͡ʃ",
+   "ur": "آد سچ"
+  },
+  "updated": "2020-01-01 00:00:00"
+ },
+ "raag": {
+  "RaagID": 1,
+  "SourceInfo": [
+   {
+    "SourceID": "G"
+   }
+  ],
+  "Sargun": null,
+  "WritersGuru": [
+   1
+  ],
+  "WritersBhagat": null,
+  "Writers": []
+ }
+}
